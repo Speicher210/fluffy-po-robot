@@ -7,14 +7,14 @@ namespace Wingu\FluffyPoRobot\POEditor;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\Loader\PoFileLoader;
-use Wingu\FluffyPoRobot\POEditor\Dumper\CsvDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\DumperInterface;
-use Wingu\FluffyPoRobot\POEditor\Dumper\JsonDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\MoDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\PoDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\StringsDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\XliffDumper;
-use Wingu\FluffyPoRobot\POEditor\Dumper\YamlDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\CsvDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\DumperInterface;
+use Wingu\FluffyPoRobot\TranslationDumper\JsonDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\MoDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\PoDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\StringsDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\XliffDumper;
+use Wingu\FluffyPoRobot\TranslationDumper\YamlDumper;
 use Wingu\FluffyPoRobot\TranslationLoader\StringsLoader;
 
 /**

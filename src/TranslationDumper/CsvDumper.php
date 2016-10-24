@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\POEditor\Dumper;
+namespace Wingu\FluffyPoRobot\TranslationDumper;
 
 use Symfony\Component\Translation\Dumper\CsvFileDumper;
 
 /**
- * CSV POEditor dumper.
+ * CSV dumper.
  */
 class CsvDumper extends CsvFileDumper implements DumperInterface
 {

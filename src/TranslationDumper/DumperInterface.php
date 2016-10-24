@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\POEditor\Dumper;
+namespace Wingu\FluffyPoRobot\TranslationDumper;
 
 interface DumperInterface extends \Symfony\Component\Translation\Dumper\DumperInterface
 {

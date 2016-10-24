@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\POEditor\Dumper;
+namespace Wingu\FluffyPoRobot\TranslationDumper;
 
 use Symfony\Component\Translation\Dumper\MoFileDumper;
 
 /**
- * Mo POEditor dumper.
+ * Mo dumper.
  */
 class MoDumper extends MoFileDumper implements DumperInterface
 {

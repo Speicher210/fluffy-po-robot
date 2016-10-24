@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\POEditor\Dumper;
+namespace Wingu\FluffyPoRobot\TranslationDumper;
 
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
 /**
- * JSON POEditor dumper.
+ * JSON dumper.
  */
 class JsonDumper extends JsonFileDumper implements DumperInterface
 {

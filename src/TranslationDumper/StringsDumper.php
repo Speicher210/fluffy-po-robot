@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\POEditor\Dumper;
+namespace Wingu\FluffyPoRobot\TranslationDumper;
 
 use Symfony\Component\Translation\Dumper\IniFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
 /**
- * Strings POEditor dumper.
+ * Strings dumper.
  */
 class StringsDumper extends IniFileDumper implements DumperInterface
 {
