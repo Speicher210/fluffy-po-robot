@@ -6,15 +6,13 @@
   "compression": "GZ",
   "directories": [
     "src",
+    "bin",
     "vendor"
   ],
   "extract": true,
-  "files": [
-    "app.php"
-  ],
   "git-commit": "git-commit",
   "git-version": "git-version",
-  "main": "app.php",
+  "main": "bin/fpr",
   "output": "fpr-@git-version@.phar",
   "replacements": {
     "manifest_url": "https://raw.githubusercontent.com/Speicher210/fluffy-po-robot/master/manifest.json"

@@ -9,8 +9,7 @@
   ],
   "require": {
     "php": "~7.0",
-    "ext-intl": "*",
-    "ext-mbstring": "*",
+
     "symfony/console": "^3.1",
     "kherge/amend": "dev-master",
     "guzzlehttp/guzzle": "^6.2",
@@ -25,5 +24,8 @@
     "psr-4": {
       "Wingu\\FluffyPoRobot\\": "src"
     }
-  }
+  },
+  "bin": [
+    "bin/fpr"
+  ]
 }
