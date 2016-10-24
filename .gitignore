@@ -1,0 +1,4 @@
+.idea
+functional-tests/
+vendor/
+/*.phar
