@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\TranslationDumper;
+namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;

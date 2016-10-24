@@ -7,15 +7,15 @@ namespace Wingu\FluffyPoRobot\POEditor;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\Loader\PoFileLoader;
-use Wingu\FluffyPoRobot\TranslationDumper\CsvDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\DumperInterface;
-use Wingu\FluffyPoRobot\TranslationDumper\JsonDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\MoDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\PoDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\StringsDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\XliffDumper;
-use Wingu\FluffyPoRobot\TranslationDumper\YamlDumper;
-use Wingu\FluffyPoRobot\TranslationLoader\StringsLoader;
+use Wingu\FluffyPoRobot\Translation\Dumper\CsvDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\DumperInterface;
+use Wingu\FluffyPoRobot\Translation\Dumper\JsonDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\MoDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\PoDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\StringsDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\XliffDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\YamlDumper;
+use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 
 /**
  * Try to guess the format from the filename.

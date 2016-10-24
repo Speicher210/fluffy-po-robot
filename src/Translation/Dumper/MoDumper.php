@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\TranslationDumper;
+namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
-use Symfony\Component\Translation\Dumper\PoFileDumper;
+use Symfony\Component\Translation\Dumper\MoFileDumper;
 
 /**
- * PO dumper.
+ * Mo dumper.
  */
-class PoDumper extends PoFileDumper implements DumperInterface
+class MoDumper extends MoFileDumper implements DumperInterface
 {
     /**
      * {@inheritdoc}

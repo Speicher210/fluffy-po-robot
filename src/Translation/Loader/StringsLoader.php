@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Wingu\FluffyPoRobot\TranslationLoader;
+namespace Wingu\FluffyPoRobot\Translation\Loader;
 
 use Symfony\Component\Translation\Loader\CsvFileLoader;
 
