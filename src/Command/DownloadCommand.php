@@ -38,16 +38,12 @@ class DownloadCommand extends AbstractApiCommand
         foreach ($files as $file) {
             $finder = Finder::create()->in($this->config['base_path'])->path($file['source']);
             foreach ($finder as $item) {
-                $tag = $item->getRelativePathname();
-                $tag = base64_encode($tag);
-                $tag = str_replace('=', '_', $tag);
-
                 $fileDumper = FormatGuesser::fileDumperFromFile($item->getFilename());
                 foreach ($languages as $originalLanguageCode => $mappedLanguageCode) {
                     $exportFileUrl = $this->apiClient->export(
                         $this->config['project_id'],
                         $originalLanguageCode,
-                        $tag
+                        $file['tag']
                     );
 
                     $filename = strtr(

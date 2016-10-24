@@ -43,9 +43,7 @@ class UploadCommand extends AbstractApiCommand
         foreach ($files as $file) {
             $finder = Finder::create()->in($this->config['base_path'])->path($file['source']);
             foreach ($finder as $item) {
-                $tag = $item->getRelativePathname();
-                $tag = base64_encode($tag);
-                $foundFiles[$tag] = $item;
+                $foundFiles[$file['tag']] = $item;
             }
         }
 

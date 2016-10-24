@@ -136,6 +136,8 @@ class InitCommand extends AbstractCommand
     private function getFiles() : array
     {
         $files = array();
+        $tags = array();
+
         while (true) {
             $source = $this->io->ask(
                 'Source',
@@ -151,10 +153,25 @@ class InitCommand extends AbstractCommand
                 break;
             }
 
+            $tag = $this->io->ask(
+                'Tag',
+                pathinfo($source, PATHINFO_FILENAME),
+                function ($input) use ($tags) {
+                    if (in_array($input, $tags, true)) {
+                        throw new \RuntimeException(sprintf('The tag "%s" is not unique', $input));
+                    }
+
+                    return $input;
+                }
+            );
+
+            $tags[] = $tag;
+
             $translation = $this->io->ask('Translation');
 
             $files[] = array(
                 'source' => $source,
+                'tag' => $tag,
                 'translation' => $translation
             );
         }
