@@ -69,7 +69,7 @@ class InitCommand extends AbstractCommand
         $config = array(
             'project_id' => $idProject,
             'api_token' => $apiToken,
-            'base_path' => $basePath . ' # absolute path or relative to the configuration file',
+            'base_path' => $basePath,
             'languages' => $languages,
             'reference_language' => $referenceLanguage,
             'files' => $files
@@ -140,12 +140,15 @@ class InitCommand extends AbstractCommand
 
         while (true) {
             $source = $this->io->ask(
-                'Source',
+                'Source (leave empty to skip)',
                 null,
                 function ($input) use ($files) {
-                    // We require at least one source.
                     $hasSource = count($files) > 0;
-                    return $input ?: ($hasSource ? false : $input);
+                    if ($input === null && $hasSource === false) {
+                        throw new \InvalidArgumentException('At least one source file is needed.');
+                    }
+
+                    return $input ?: false;
                 }
             );
 
@@ -158,7 +161,7 @@ class InitCommand extends AbstractCommand
                 pathinfo($source, PATHINFO_FILENAME),
                 function ($input) use ($tags) {
                     if (in_array($input, $tags, true)) {
-                        throw new \RuntimeException(sprintf('The tag "%s" is not unique', $input));
+                        throw new \InvalidArgumentException(sprintf('The tag "%s" must be unique', $input));
                     }
 
                     return $input;
