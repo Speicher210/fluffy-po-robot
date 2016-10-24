@@ -69,7 +69,7 @@ class InitCommand extends AbstractCommand
         $config = array(
             'project_id' => $idProject,
             'api_token' => $apiToken,
-            'base_path' => $basePath,
+            'base_path' => $basePath . ' # absolute path or relative to the configuration file',
             'languages' => $languages,
             'reference_language' => $referenceLanguage,
             'files' => $files
@@ -186,7 +186,7 @@ class InitCommand extends AbstractCommand
     {
         $basePath = $this->input->getOption('base-path');
         if (!$basePath) {
-            $basePath = $this->io->ask('Base path name or ID', '.');
+            $basePath = $this->io->ask('Base path name (absolute path or relative to the configuration file)', '.');
         }
 
         return $basePath;

@@ -44,8 +44,16 @@ abstract class AbstractApiCommand extends AbstractCommand
     {
         parent::execute($input, $output);
 
-        $this->config = Yaml::parse(file_get_contents($this->input->getArgument('config-file')));
-        $this->config['base_path'] = realpath($this->config['base_path']);
+        $configFilePath = realpath($this->input->getArgument('config-file'));
+
+        $this->config = Yaml::parse(file_get_contents($configFilePath));
+
+        $basePath = $this->config['base_path'];
+        if ($basePath[0] !== '/') {
+            $basePath = dirname($configFilePath) . '/' . $basePath;
+        }
+
+        $this->config['base_path'] = realpath($basePath);
 
         $this->apiClient = new Client($this->config['api_token']);
 
