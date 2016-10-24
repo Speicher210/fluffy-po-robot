@@ -14,8 +14,10 @@ use Wingu\FluffyPoRobot\Translation\Dumper\MoDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\PoDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\StringsDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\XliffDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\XmlDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\YamlDumper;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
+use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 
 /**
  * Try to guess the format from the filename.
@@ -55,6 +57,8 @@ class FormatGuesser
                 return new StringsLoader();
             case 'key_value_json':
                 return new JsonFileLoader();
+            case 'android_strings':
+                return new XmlLoader();
         }
 
         throw new \RuntimeException('Can not find a file loader.');
@@ -84,7 +88,7 @@ class FormatGuesser
             case 'key_value_json':
                 return new JsonDumper();
             case 'android_strings':
-                throw new \RuntimeException('Not yet implemented.');
+                return new XmlDumper();
         }
 
         throw new \RuntimeException('Can not find a dumper.');
