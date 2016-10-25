@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
+use Gettext\Languages\Language;
 use Symfony\Component\Translation\Dumper\FileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
@@ -27,6 +28,8 @@ class XmlDumper extends FileDumper implements DumperInterface
         $root = $this->domDoc->createElement('resources');
         $rootNode = $this->domDoc->appendChild($root);
 
+        $languageRules = Language::getById($messages->getLocale());
+
         foreach ($messages->all($domain) as $source => $target) {
             if (is_string($target)) {
                 $translationElement = $this->createTranslationElement('string', 'name', $source);
@@ -37,7 +40,8 @@ class XmlDumper extends FileDumper implements DumperInterface
                 $translationElement = $this->createTranslationElement('plurals', 'name', $source);
                 $translationNode = $rootNode->appendChild($translationElement);
 
-                foreach ($target as $quantity => $plural) {
+                foreach ($target as $key => $plural) {
+                    $quantity = $languageRules->categories[$key]->id;
                     $translationElement = $this->createTranslationElement('item', 'quantity', $quantity);
                     $subNode = $translationNode->appendChild($translationElement);
                     $subNode->appendChild($this->addTranslation($plural));

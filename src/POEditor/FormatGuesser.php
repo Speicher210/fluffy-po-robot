@@ -6,7 +6,6 @@ namespace Wingu\FluffyPoRobot\POEditor;
 
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Component\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Dumper\CsvDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\DumperInterface;
 use Wingu\FluffyPoRobot\Translation\Dumper\JsonDumper;
@@ -16,6 +15,7 @@ use Wingu\FluffyPoRobot\Translation\Dumper\StringsDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\XliffDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\XmlDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\YamlDumper;
+use Wingu\FluffyPoRobot\Translation\Loader\PoLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 
@@ -52,7 +52,7 @@ class FormatGuesser
 
         switch ($format) {
             case 'po':
-                return new PoFileLoader();
+                return new PoLoader();
             case 'apple_strings':
                 return new StringsLoader();
             case 'key_value_json':
