@@ -9,7 +9,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
-use Wingu\FluffyPoRobot\Translation\Dumper\XmlDumper;
+use Wingu\FluffyPoRobot\Translation\Dumper\PoDumper;
 
 /**
  * Command to upload the translations to POEditor.
@@ -92,12 +92,12 @@ class UploadCommand extends AbstractApiCommand
                 $translator->addResource($fileFormat, $foundFile, $this->config->referenceLanguage());
             }
 
-            $dumper = new XmlDumper();
+            $dumper = new PoDumper();
             $options = array(
                 'path' => uniqid(sys_get_temp_dir() . '/', true)
             );
             $dumper->dump($translator->getCatalogue($this->config->referenceLanguage()), $options);
-            $file = $options['path'] . '/messages.' . $this->config->referenceLanguage() . '.xml';
+            $file = $options['path'] . '/messages.' . $this->config->referenceLanguage() . '.po';
 
             $response = $this->apiClient->upload(
                 $this->config->projectId(),
