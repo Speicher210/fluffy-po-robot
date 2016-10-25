@@ -13,34 +13,44 @@ use Symfony\Component\Translation\MessageCatalogue;
 class XmlDumper extends FileDumper implements DumperInterface
 {
     /**
+     * @var \DOMDocument
+     */
+    private $domDoc;
+
+    public function __construct()
+    {
+        $this->domDoc = new \DOMDocument('1.0', 'utf-8');
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
-        $domDoc = new \DOMDocument('1.0', 'utf-8');
-
-        $root = $domDoc->createElement('resources');
-        $rootNode = $domDoc->appendChild($root);
+        $root = $this->domDoc->createElement('resources');
+        $rootNode = $this->domDoc->appendChild($root);
 
         foreach ($messages->all($domain) as $source => $target) {
-            $subElt = $domDoc->createElement('string');
-            $attr = $domDoc->createAttribute('name');
-            $attrVal = $domDoc->createTextNode($source);
-            $attr->appendChild($attrVal);
-            $subElt->appendChild($attr);
-            $subNode = $rootNode->appendChild($subElt);
+            if (strpos($target, '|') === false) {
+                $translationElement = $this->createTranslationElement('string', 'name', $source);
+                $translationNode = $rootNode->appendChild($translationElement);
 
-            // If there are tags in target we create a CDATA section.
-            if ($target !== strip_tags($target)) {
-                $textNode = $domDoc->createCDATASection($target);
+                $translationNode->appendChild($this->addTranslation($target));
             } else {
-                $textNode = $domDoc->createTextNode($target);
-            }
+                $translationElement = $this->createTranslationElement('plurals', 'name', $source);
+                $translationNode = $rootNode->appendChild($translationElement);
 
-            $subNode->appendChild($textNode);
+                $plurals = explode('|', $target);
+                foreach ($plurals as $i => $plural) {
+                    $quantity = $i === 0 ? 'one' : 'other';
+                    $translationElement = $this->createTranslationElement('item', 'quantity', $quantity);
+                    $subNode = $translationNode->appendChild($translationElement);
+                    $subNode->appendChild($this->addTranslation($plural));
+                }
+            }
         }
 
-        return $domDoc->saveXML();
+        return $this->domDoc->saveXML();
     }
 
     /**
@@ -57,5 +67,37 @@ class XmlDumper extends FileDumper implements DumperInterface
     public function getFileExtension() : string
     {
         return $this->getExtension();
+    }
+
+    /**
+     * @param string $name
+     * @param string $attributeName
+     * @param string $attributeValue
+     * @return \DOMElement
+     */
+    private function createTranslationElement(string $name, string $attributeName, string $attributeValue)
+    {
+        $translationElement = $this->domDoc->createElement($name);
+        $attribute = $this->domDoc->createAttribute($attributeName);
+        $attribute->appendChild($this->domDoc->createTextNode($attributeValue));
+        $translationElement->appendChild($attribute);
+
+        return $translationElement;
+    }
+
+    /**
+     * @param string $target
+     * @return \DOMCdataSection|\DOMText
+     */
+    private function addTranslation(string $target)
+    {
+        // If there are tags in target we create a CDATA section.
+        if ($target !== strip_tags($target)) {
+            $translationValue = $this->domDoc->createCDATASection($target);
+        } else {
+            $translationValue = $this->domDoc->createTextNode($target);
+        }
+
+        return $translationValue;
     }
 }
