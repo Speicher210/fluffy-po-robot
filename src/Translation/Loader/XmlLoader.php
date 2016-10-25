@@ -27,8 +27,7 @@ class XmlLoader extends FileLoader
             } elseif ($element->getName() === 'plurals') {
                 $plurals = array();
                 foreach ($element->item as $item) {
-                    $quantity = $this->getAttribute($item, 'quantity');
-                    $plurals[$quantity] = (string)$item;
+                    $plurals[] = (string)$item;
                 }
                 $data[$name] = $plurals;
             }
