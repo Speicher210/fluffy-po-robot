@@ -58,10 +58,18 @@ class UploadCommand extends AbstractApiCommand
             $translator->addResource($fileFormat, $foundFile, $this->config['reference_language'], $tag);
             $messages = $translator->getCatalogue($this->config['reference_language'])->all($tag);
             foreach ($messages as $term => $message) {
-                $terms[] = array(
-                    'term' => $term,
-                    'tags' => array($tag)
-                );
+                if (is_array($message)) {
+                    $terms[] = array(
+                        'term' => $term,
+                        'tags' => array($tag),
+                        'plural' => $term
+                    );
+                } else{
+                    $terms[] = array(
+                        'term' => $term,
+                        'tags' => array($tag)
+                    );
+                }
             }
         }
 
