@@ -7,8 +7,8 @@ namespace Wingu\FluffyPoRobot\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 use Wingu\FluffyPoRobot\POEditor\Client;
+use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 
 abstract class AbstractApiCommand extends AbstractCommand
 {
@@ -18,7 +18,7 @@ abstract class AbstractApiCommand extends AbstractCommand
     protected $apiClient;
 
     /**
-     * @var array
+     * @var Configuration
      */
     protected $config;
 
@@ -34,7 +34,6 @@ abstract class AbstractApiCommand extends AbstractCommand
                 'Configuration for the translations.',
                 getcwd() . '/poeditor.yml'
             );
-
     }
 
     /**
@@ -44,18 +43,8 @@ abstract class AbstractApiCommand extends AbstractCommand
     {
         parent::execute($input, $output);
 
-        $configFilePath = realpath($this->input->getArgument('config-file'));
-
-        $this->config = Yaml::parse(file_get_contents($configFilePath));
-
-        $basePath = $this->config['base_path'];
-        if ($basePath[0] !== '/') {
-            $basePath = dirname($configFilePath) . '/' . $basePath;
-        }
-
-        $this->config['base_path'] = realpath($basePath);
-
-        $this->apiClient = new Client($this->config['api_token']);
+        $this->config = Configuration::fromYamlFile($this->input->getArgument('config-file'));
+        $this->apiClient = new Client($this->config->apiToken());
 
         return $this->doRun();
     }

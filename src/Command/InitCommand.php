@@ -7,8 +7,8 @@ namespace Wingu\FluffyPoRobot\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 use Wingu\FluffyPoRobot\POEditor\Client;
+use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 
 /**
  * Command to init the configuration.
@@ -58,24 +58,16 @@ class InitCommand extends AbstractCommand
 
         $idProject = $this->getProjectID();
 
-        $basePath = $this->getBasePath();
-
-        $languages = $this->getProjectLanguagesMap($idProject);
-
-        $referenceLanguage = $this->getReferenceLanguage($idProject);
-
-        $files = $this->getFiles();
-
-        $config = array(
-            'project_id' => $idProject,
-            'api_token' => $apiToken,
-            'base_path' => $basePath,
-            'languages' => $languages,
-            'reference_language' => $referenceLanguage,
-            'files' => $files
+        $config = new Configuration(
+            $apiToken,
+            $idProject,
+            $this->getBasePath(),
+            $this->getReferenceLanguage($idProject),
+            $this->getProjectLanguagesMap($idProject),
+            $this->getFiles()
         );
 
-        file_put_contents($this->input->getOption('output-file'), Yaml::dump($config));
+        file_put_contents($this->input->getOption('output-file'), $config->toYaml());
     }
 
     /**

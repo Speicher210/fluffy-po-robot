@@ -7,6 +7,7 @@ namespace Wingu\FluffyPoRobot\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
+use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 use Wingu\FluffyPoRobot\Translation\Dumper\XmlDumper;
 
@@ -38,25 +39,25 @@ class UploadCommand extends AbstractApiCommand
      */
     protected function doRun()
     {
-        $files = $this->config['files'];
         $foundFiles = array();
-        foreach ($files as $file) {
-            $finder = Finder::create()->in($this->config['base_path'])->path($file['source']);
+        foreach ($this->config->files() as $file) {
+            /** @var File $file */
+            $finder = Finder::create()->in($this->config->basePath())->path($file->source());
             foreach ($finder as $item) {
-                $foundFiles[$file['tag']] = $item;
+                $foundFiles[$file->tag()] = $item;
             }
         }
 
         $terms = array();
         foreach ($foundFiles as $tag => $foundFile) {
-            $translator = new Translator($this->config['reference_language']);
+            $translator = new Translator($this->config->referenceLanguage());
 
             $fileFormat = FormatGuesser::formatFromFile($foundFile);
             $fileLoader = FormatGuesser::fileLoaderFromFile($foundFile->getFilename());
             $translator->addLoader($fileFormat, $fileLoader);
 
-            $translator->addResource($fileFormat, $foundFile, $this->config['reference_language'], $tag);
-            $messages = $translator->getCatalogue($this->config['reference_language'])->all($tag);
+            $translator->addResource($fileFormat, $foundFile, $this->config->referenceLanguage(), $tag);
+            $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($tag);
             foreach ($messages as $term => $message) {
                 if (is_array($message)) {
                     $terms[] = array(
@@ -64,7 +65,7 @@ class UploadCommand extends AbstractApiCommand
                         'tags' => array($tag),
                         'plural' => $term
                     );
-                } else{
+                } else {
                     $terms[] = array(
                         'term' => $term,
                         'tags' => array($tag)
@@ -75,32 +76,32 @@ class UploadCommand extends AbstractApiCommand
 
         $this->io->text('Synchronizing terms ... ');
 
-        $result = $this->apiClient->sync($this->config['project_id'], $terms);
+        $result = $this->apiClient->sync($this->config->projectId(), $terms);
 
         $this->io->table(array('Parsed', 'Added', 'Updated', 'Deleted'), array($result));
 
         if ($this->input->getOption('include-reference-language')) {
             $this->io->text('Uploading reference language translations ... ');
 
-            $translator = new Translator($this->config['reference_language']);
+            $translator = new Translator($this->config->referenceLanguage());
             foreach ($foundFiles as $tag => $foundFile) {
                 $fileFormat = FormatGuesser::formatFromFile($foundFile);
                 $fileLoader = FormatGuesser::fileLoaderFromFile($foundFile->getFilename());
 
                 $translator->addLoader($fileFormat, $fileLoader);
-                $translator->addResource($fileFormat, $foundFile, $this->config['reference_language']);
+                $translator->addResource($fileFormat, $foundFile, $this->config->referenceLanguage());
             }
 
             $dumper = new XmlDumper();
             $options = array(
                 'path' => uniqid(sys_get_temp_dir() . '/', true)
             );
-            $dumper->dump($translator->getCatalogue($this->config['reference_language']), $options);
-            $file = $options['path'] . '/messages.' . $this->config['reference_language'] . '.xml';
+            $dumper->dump($translator->getCatalogue($this->config->referenceLanguage()), $options);
+            $file = $options['path'] . '/messages.' . $this->config->referenceLanguage() . '.xml';
 
             $response = $this->apiClient->upload(
-                $this->config['project_id'],
-                $this->config['reference_language'],
+                $this->config->projectId(),
+                $this->config->referenceLanguage(),
                 $file
             );
 
