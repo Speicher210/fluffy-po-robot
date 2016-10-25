@@ -24,6 +24,7 @@ class XmlDumper extends FileDumper implements DumperInterface
     public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
         $this->domDoc = new \DOMDocument('1.0', 'utf-8');
+        $this->domDoc->formatOutput = true;
 
         $root = $this->domDoc->createElement('resources');
         $rootNode = $this->domDoc->appendChild($root);
@@ -94,7 +95,7 @@ class XmlDumper extends FileDumper implements DumperInterface
         if ($target !== strip_tags($target)) {
             $translationValue = $this->domDoc->createCDATASection($target);
         } else {
-            $translationValue = $this->domDoc->createTextNode($target);
+            $translationValue = $this->domDoc->createTextNode('"' . addcslashes($target, '"') .'"');
         }
 
         return $translationValue;

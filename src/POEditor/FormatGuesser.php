@@ -15,7 +15,7 @@ use Wingu\FluffyPoRobot\Translation\Dumper\StringsDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\XliffDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\XmlDumper;
 use Wingu\FluffyPoRobot\Translation\Dumper\YamlDumper;
-use Wingu\FluffyPoRobot\Translation\Loader\PoLoader;
+use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 
@@ -52,7 +52,7 @@ class FormatGuesser
 
         switch ($format) {
             case 'po':
-                return new PoLoader();
+                return new PoFileLoader();
             case 'apple_strings':
                 return new StringsLoader();
             case 'key_value_json':

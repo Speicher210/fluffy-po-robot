@@ -53,5 +53,5 @@ abstract class FileLoader extends ArrayLoader
      * @param string $resource
      * @return array
      */
-    abstract protected function loadResource(string $resource):array;
+    abstract protected function loadResource(string $resource) : array;
 }

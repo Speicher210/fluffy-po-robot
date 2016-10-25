@@ -23,11 +23,11 @@ class XmlLoader extends FileLoader
             $name = $this->getAttribute($element, 'name');
 
             if ($element->getName() === 'string') {
-                $data[$name] = (string)$element[0];
+                $data[$name] = $this->cleanTranslation((string)$element[0]);
             } elseif ($element->getName() === 'plurals') {
                 $plurals = array();
                 foreach ($element->item as $item) {
-                    $plurals[] = (string)$item;
+                    $plurals[] = $this->cleanTranslation((string)$item);
                 }
                 $data[$name] = $plurals;
             }
@@ -46,5 +46,18 @@ class XmlLoader extends FileLoader
         $attributes = $element->attributes();
 
         return (string)$attributes[$attributeName];
+    }
+
+    /**
+     * @param string $translation
+     * @return string
+     */
+    private function cleanTranslation(string $translation) : string
+    {
+        if (0 === strpos($translation, '"') && substr($translation, -1) === '"' && substr($translation, -2) !== '\"') {
+            $translation = substr($translation, 1, -1);
+        }
+
+        return stripcslashes($translation);
     }
 }

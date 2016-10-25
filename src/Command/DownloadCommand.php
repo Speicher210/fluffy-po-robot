@@ -8,7 +8,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
-use Wingu\FluffyPoRobot\Translation\Loader\PoLoader;
+use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 
 /**
  * Command to download from POEditor.
@@ -71,7 +71,7 @@ class DownloadCommand extends AbstractApiCommand
                 file_put_contents($tmpFile, file_get_contents($exportFileUrl));
 
                 $translator = new Translator($originalLanguageCode);
-                $translator->addLoader('po', new PoLoader());
+                $translator->addLoader('po', new PoFileLoader());
                 $translator->addResource('po', $tmpFile, $originalLanguageCode);
 
                 $options = array(

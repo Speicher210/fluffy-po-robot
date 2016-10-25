@@ -37,7 +37,7 @@ class PoDumper extends PoFileDumper implements DumperInterface
                 $output .= sprintf('msgid_plural "%s"' . "\n", $this->escape($source));
                 $length = count($target) - 1;
                 foreach ($target as $key => $plural) {
-                    $output .= sprintf('msgstr[%d] %s', $key, $plural);
+                    $output .= sprintf('msgstr[%d] "%s"', $key, $this->escape($plural));
                     if ($key < $length) {
                         $output .= "\n";
                     }
