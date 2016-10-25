@@ -17,32 +17,27 @@ class XmlDumper extends FileDumper implements DumperInterface
      */
     private $domDoc;
 
-    public function __construct()
-    {
-        $this->domDoc = new \DOMDocument('1.0', 'utf-8');
-    }
-
     /**
      * {@inheritdoc}
      */
     public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
+        $this->domDoc = new \DOMDocument('1.0', 'utf-8');
+
         $root = $this->domDoc->createElement('resources');
         $rootNode = $this->domDoc->appendChild($root);
 
         foreach ($messages->all($domain) as $source => $target) {
-            if (strpos($target, '|') === false) {
+            if (is_string($target)) {
                 $translationElement = $this->createTranslationElement('string', 'name', $source);
                 $translationNode = $rootNode->appendChild($translationElement);
 
                 $translationNode->appendChild($this->addTranslation($target));
-            } else {
+            } elseif (is_array($target)) {
                 $translationElement = $this->createTranslationElement('plurals', 'name', $source);
                 $translationNode = $rootNode->appendChild($translationElement);
 
-                $plurals = explode('|', $target);
-                foreach ($plurals as $i => $plural) {
-                    $quantity = $i === 0 ? 'one' : 'other';
+                foreach ($target as $quantity => $plural) {
                     $translationElement = $this->createTranslationElement('item', 'quantity', $quantity);
                     $subNode = $translationNode->appendChild($translationElement);
                     $subNode->appendChild($this->addTranslation($plural));
