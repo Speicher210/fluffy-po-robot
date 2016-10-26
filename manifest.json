@@ -1,6 +1,12 @@
 [
   {
     "name": "fpr.phar",
+    "sha1": "5dec8ac6b7dad17ebe4a53ed424151892011d466",
+    "url": "https://github.com/Speicher210/fluffy-po-robot/releases/download/0.3.1/fpr-0.3.1.phar",
+    "version": "0.3.1"
+  },
+  {
+    "name": "fpr.phar",
     "sha1": "fd80a8cdec1b3caf30feafa6c615863f81c94daf",
     "url": "https://github.com/Speicher210/fluffy-po-robot/releases/download/0.3.0/fpr-0.3.0.phar",
     "version": "0.3.0"
