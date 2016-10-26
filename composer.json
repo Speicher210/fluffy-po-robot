@@ -5,6 +5,9 @@
   "type": "project",
   "keywords": [
     "poeditor",
+    "poeditor.com",
+    "android strings",
+    "ios strings",
     "translation"
   ],
   "require": {
