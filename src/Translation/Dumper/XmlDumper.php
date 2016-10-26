@@ -33,7 +33,8 @@ class XmlDumper extends FileDumper implements DumperInterface
 
         foreach ($messages->all($domain) as $source => $target) {
             if (is_string($target)) {
-                $translationElement = $this->createTranslationElement('string', 'name', $source);
+                $translationElement = $this->createTranslationElement('string', 'name',
+                    $this->escapeTranslation($source));
                 $translationNode = $rootNode->appendChild($translationElement);
 
                 $translationNode->appendChild($this->addTranslation($target));
@@ -93,11 +94,20 @@ class XmlDumper extends FileDumper implements DumperInterface
     {
         // If there are tags in target we create a CDATA section.
         if ($target !== strip_tags($target)) {
-            $translationValue = $this->domDoc->createCDATASection($target);
+            $translationValue = $this->domDoc->createCDATASection($this->escapeTranslation($target));
         } else {
-            $translationValue = $this->domDoc->createTextNode('"' . addcslashes($target, '"') .'"');
+            $translationValue = $this->domDoc->createTextNode('"' . $this->escapeTranslation($target) . '"');
         }
 
         return $translationValue;
+    }
+
+    /**
+     * @param string $translation
+     * @return string
+     */
+    private function escapeTranslation(string $translation) : string
+    {
+        return addcslashes($translation, '"\'');
     }
 }
