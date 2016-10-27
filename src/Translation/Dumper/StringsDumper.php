@@ -12,6 +12,8 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class StringsDumper extends IniFileDumper implements DumperInterface
 {
+    use DumperTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -32,13 +34,5 @@ class StringsDumper extends IniFileDumper implements DumperInterface
     protected function getExtension()
     {
         return 'strings';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
     }
 }

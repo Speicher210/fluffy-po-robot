@@ -11,11 +11,5 @@ use Symfony\Component\Translation\Dumper\XliffFileDumper;
  */
 class XliffDumper extends XliffFileDumper implements DumperInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
-    }
+    use DumperTrait;
 }

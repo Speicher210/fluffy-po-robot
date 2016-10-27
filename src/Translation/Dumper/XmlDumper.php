@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
-use Gettext\Languages\Language;
 use Symfony\Component\Translation\Dumper\FileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
@@ -13,6 +12,8 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class XmlDumper extends FileDumper implements DumperInterface
 {
+    use DumperTrait;
+
     /**
      * @var \DOMDocument
      */
@@ -29,12 +30,13 @@ class XmlDumper extends FileDumper implements DumperInterface
         $root = $this->domDoc->createElement('resources');
         $rootNode = $this->domDoc->appendChild($root);
 
-        $languageRules = Language::getById($messages->getLocale());
-
         foreach ($messages->all($domain) as $source => $target) {
             if (is_string($target)) {
-                $translationElement = $this->createTranslationElement('string', 'name',
-                    $this->escapeTranslation($source));
+                $translationElement = $this->createTranslationElement(
+                    'string',
+                    'name',
+                    $this->escapeTranslation($source)
+                );
                 $translationNode = $rootNode->appendChild($translationElement);
 
                 $translationNode->appendChild($this->addTranslation($target));
@@ -43,8 +45,7 @@ class XmlDumper extends FileDumper implements DumperInterface
                 $translationNode = $rootNode->appendChild($translationElement);
 
                 foreach ($target as $key => $plural) {
-                    $quantity = $languageRules->categories[$key]->id;
-                    $translationElement = $this->createTranslationElement('item', 'quantity', $quantity);
+                    $translationElement = $this->createTranslationElement('item', 'quantity', $key);
                     $subNode = $translationNode->appendChild($translationElement);
                     $subNode->appendChild($this->addTranslation($plural));
                 }
@@ -60,14 +61,6 @@ class XmlDumper extends FileDumper implements DumperInterface
     protected function getExtension()
     {
         return 'xml';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
     }
 
     /**

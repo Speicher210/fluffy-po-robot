@@ -12,52 +12,41 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class PoDumper extends PoFileDumper implements DumperInterface
 {
+    use DumperTrait;
+
     /**
      * {@inheritdoc}
      */
     public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
     {
-        $output = 'msgid ""' . "\n";
-        $output .= 'msgstr ""' . "\n";
-        $output .= '"Content-Type: text/plain; charset=UTF-8\n"' . "\n";
-        $output .= '"Content-Transfer-Encoding: 8bit\n"' . "\n";
-        $output .= '"Language: ' . $messages->getLocale() . '\n"' . "\n";
-        $output .= "\n";
+        $output = array();
+        $output[] = 'msgid ""';
+        $output[] = 'msgstr ""';
+        $output[] = '"Content-Type: text/plain; charset=UTF-8\n"';
+        $output[] = '"Content-Transfer-Encoding: 8bit\n"';
+        $output[] = '"Language: ' . $messages->getLocale() . '\n"';
+        $output[] = '';
 
-        $newLine = false;
         foreach ($messages->all($domain) as $source => $target) {
-            if ($newLine) {
-                $output .= "\n";
-            } else {
-                $newLine = true;
-            }
-
-            $output .= sprintf('msgid "%s"' . "\n", $this->escape($source));
+            $output[] = sprintf('msgid "%s"', $this->escape($source));
             if (is_array($target)) {
-                $output .= sprintf('msgid_plural "%s"' . "\n", $this->escape($source));
-                $length = count($target) - 1;
-                foreach ($target as $key => $plural) {
-                    $output .= sprintf('msgstr[%d] "%s"', $key, $this->escape($plural));
-                    if ($key < $length) {
-                        $output .= "\n";
-                    }
+                $output[] = sprintf('msgid_plural "%s"', $this->escape($source));
+                $i = 0;
+                foreach ($target as $plural) {
+                    $output[] = sprintf('msgstr[%d] "%s"', $i++, $this->escape($plural));
                 }
             } else {
-                $output .= sprintf('msgstr "%s"', $this->escape($target));
+                $output[] = sprintf('msgstr "%s"', $this->escape($target));
             }
         }
 
-        return $output;
+        return implode("\n", $output);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $str
+     * @return string
      */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
-    }
-
     private function escape($str)
     {
         return addcslashes($str, "\0..\37\42\134");

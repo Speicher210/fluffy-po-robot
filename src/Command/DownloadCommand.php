@@ -5,10 +5,9 @@ declare(strict_types = 1);
 namespace Wingu\FluffyPoRobot\Command;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\MessageCatalogue;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
-use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 
 /**
  * Command to download from POEditor.
@@ -50,7 +49,7 @@ class DownloadCommand extends AbstractApiCommand
         foreach ($finder as $item) {
             $fileDumper = FormatGuesser::fileDumperFromFile($item->getFilename());
             foreach ($this->config->languages() as $originalLanguageCode => $mappedLanguageCode) {
-                $exportFileUrl = $this->apiClient->export(
+                $translations = $this->apiClient->export(
                     $this->config->projectId(),
                     $originalLanguageCode,
                     $file->tag()
@@ -67,19 +66,13 @@ class DownloadCommand extends AbstractApiCommand
                     )
                 );
 
-                $tmpFile = tempnam(sys_get_temp_dir(), 'fluffy_po_robot');
-                file_put_contents($tmpFile, file_get_contents($exportFileUrl));
+                $catalog = new MessageCatalogue($originalLanguageCode);
 
-                $translator = new Translator($originalLanguageCode);
-                $translator->addLoader('po', new PoFileLoader());
-                $translator->addResource('po', $tmpFile, $originalLanguageCode);
+                foreach ($translations as $translation) {
+                    $catalog->set($translation['term'], $translation['definition']);
+                }
 
-                $options = array(
-                    'path' => uniqid(sys_get_temp_dir() . '/', true)
-                );
-                $fileDumper->dump($translator->getCatalogue(), $options);
-                $dumpedFile = $options['path'] . '/messages.' . $originalLanguageCode . '.' . $fileDumper->getFileExtension();
-                rename($dumpedFile, $filename);
+                $fileDumper->dumpToFile($catalog, 'messages', $filename);
 
                 $this->io->text(sprintf('Updated file: %s', $filename));
             }

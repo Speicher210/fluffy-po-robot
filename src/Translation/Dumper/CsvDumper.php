@@ -11,11 +11,5 @@ use Symfony\Component\Translation\Dumper\CsvFileDumper;
  */
 class CsvDumper extends CsvFileDumper implements DumperInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
-    }
+    use DumperTrait;
 }

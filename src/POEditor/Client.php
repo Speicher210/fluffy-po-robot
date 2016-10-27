@@ -110,22 +110,28 @@ class Client
      * @param int $idProject
      * @param string $language
      * @param string $tag
-     * @return string
+     * @return array
      */
-    public function export(int $idProject, string $language, string $tag) : string
+    public function export(int $idProject, string $language, string $tag) : array
     {
         $response = $this->callAction(
             'export',
             array(
                 'id' => $idProject,
                 'language' => $language,
-                'type' => 'po',
+                'type' => 'json',
                 'filters' => 'translated',
                 'tags' => $tag
             )
         );
 
-        return $response['item'];
+        $content = file_get_contents($response['item']);
+        if ($content !== '') {
+            // There can be no translations.
+            return \GuzzleHttp\json_decode(file_get_contents($response['item']), true);
+        }
+
+        return array();
     }
 
     /**

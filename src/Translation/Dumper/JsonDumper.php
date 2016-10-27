@@ -12,6 +12,8 @@ use Symfony\Component\Translation\MessageCatalogue;
  */
 class JsonDumper extends JsonFileDumper implements DumperInterface
 {
+    use DumperTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -48,13 +50,5 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
         }
 
         $arr = $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
     }
 }

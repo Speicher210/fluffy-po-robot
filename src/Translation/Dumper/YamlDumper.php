@@ -11,11 +11,5 @@ use Symfony\Component\Translation\Dumper\YamlFileDumper;
  */
 class YamlDumper extends YamlFileDumper implements DumperInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getFileExtension() : string
-    {
-        return $this->getExtension();
-    }
+    use DumperTrait;
 }

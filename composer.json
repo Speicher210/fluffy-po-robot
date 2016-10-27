@@ -18,8 +18,7 @@
     "guzzlehttp/guzzle": "^6.2",
     "symfony/yaml": "^3.1",
     "symfony/finder": "^3.1",
-    "symfony/translation": "^3.1",
-    "gettext/languages": "^2.1"
+    "symfony/translation": "^3.1"
   },
   "require-dev": {
     "symfony/var-dumper": "^3.1"
