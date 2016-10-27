@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
+use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 
 abstract class AbstractApiCommand extends AbstractCommand
 {
@@ -59,4 +60,24 @@ abstract class AbstractApiCommand extends AbstractCommand
      * @return integer
      */
     abstract protected function doRun();
+
+    /**
+     * @param File $fileConfiguration
+     * @param \SplFileInfo $sourceFile
+     * @param string $languageCode
+     * @return string
+     */
+    protected function buildTranslationFile(File $fileConfiguration, \SplFileInfo $sourceFile, string $languageCode) : string
+    {
+        return strtr(
+            $fileConfiguration->translation(),
+            array(
+                '%base_path%' => $this->config->basePath(),
+                '%original_path%' => $sourceFile->getPath(),
+                '%language_code%' => $languageCode,
+                '%file_name%' => $sourceFile->getFilename(),
+                '%file_extension%' => $sourceFile->getExtension()
+            )
+        );
+    }
 }

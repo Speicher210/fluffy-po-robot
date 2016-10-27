@@ -39,62 +39,93 @@ class UploadCommand extends AbstractApiCommand
      */
     protected function doRun()
     {
-        $foundFiles = array();
+        $terms = array();
+        $sourceFiles = array();
         foreach ($this->config->files() as $file) {
             /** @var File $file */
             $finder = Finder::create()->in($this->config->basePath())->path($file->source());
-            foreach ($finder as $item) {
-                $foundFiles[$file->tag()] = $item;
+            if ($finder->count() !== 1) {
+                if ($finder->count() === 0) {
+                    throw new \RuntimeException(sprintf('No source file found for "%s".', $file->source()));
+                } else {
+                    throw new \RuntimeException(sprintf('More than one source file found for "%s"', $file->source()));
+                }
             }
-        }
+            $iterator = $finder->getIterator();
+            $iterator->rewind();
+            $sourceTranslationFile = $iterator->current();
+            $sourceFiles[] = array(
+                'sourceTranslationFile' => $sourceTranslationFile,
+                'configFile' => $file
+            );
 
-        $terms = array();
-        foreach ($foundFiles as $tag => $foundFile) {
             $translator = new Translator($this->config->referenceLanguage());
-
-            $fileFormat = FormatGuesser::formatFromFile($foundFile);
-            $fileLoader = FormatGuesser::fileLoaderFromFile($foundFile->getFilename());
+            $fileFormat = FormatGuesser::formatFromFile($sourceTranslationFile);
+            $fileLoader = FormatGuesser::fileLoaderFromFile($sourceTranslationFile->getFilename());
             $translator->addLoader($fileFormat, $fileLoader);
+            $translator->addResource($fileFormat, $sourceTranslationFile, $this->config->referenceLanguage(),
+                $file->tag());
 
-            $translator->addResource($fileFormat, $foundFile, $this->config->referenceLanguage(), $tag);
-            $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($tag);
+            $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->tag());
             foreach ($messages as $term => $message) {
                 $terms[] = array(
                     'term' => $term,
                     'plural' => is_array($message) ? $term : null,
-                    'tags' => array($tag)
+                    'tags' => array($file->tag())
                 );
             }
         }
 
-        $this->io->text('Synchronizing terms ... ');
-
+        $this->io->section('Synchronizing terms ... ');
         $result = $this->apiClient->sync($this->config->projectId(), $terms);
-
         $this->io->table(array('Parsed', 'Added', 'Updated', 'Deleted'), array($result));
 
         if ($this->input->getOption('include-reference-language')) {
-            $this->io->text('Uploading reference language translations ... ');
+            $this->uploadTranslations($sourceFiles);
+        }
+    }
 
-            $translator = new Translator($this->config->referenceLanguage());
-            foreach ($foundFiles as $tag => $foundFile) {
-                $fileFormat = FormatGuesser::formatFromFile($foundFile);
-                $fileLoader = FormatGuesser::fileLoaderFromFile($foundFile->getFilename());
+    /**
+     * Upload the translations.
+     *
+     * @param array $sourceFiles
+     */
+    private function uploadTranslations(array $sourceFiles)
+    {
+//        $languages = $this->config->languages();
+        // Temporary only upload source because of rate limiting.
+        $languages = array($this->config->referenceLanguage() => $this->config->languageMap($this->config->referenceLanguage()));
+        foreach ($languages as $language => $mappedLanguage) {
+            $this->io->section(sprintf('Uploading "%s" language from files ...', $language));
+
+            $translator = new Translator($language);
+            $translationFiles = array();
+            foreach ($sourceFiles as $sourceFile) {
+                $translationFile = $this->buildTranslationFile(
+                    $sourceFile['configFile'],
+                    $sourceFile['sourceTranslationFile'],
+                    $mappedLanguage
+                );
+                $translationFiles[] = $translationFile;
+
+                $fileFormat = FormatGuesser::formatFromFile($translationFile);
+                $fileLoader = FormatGuesser::fileLoaderFromFile($sourceFile['sourceTranslationFile']->getFilename());
 
                 $translator->addLoader($fileFormat, $fileLoader);
-                $translator->addResource($fileFormat, $foundFile, $this->config->referenceLanguage());
+                $translator->addResource($fileFormat, $translationFile, $language);
             }
+            $this->io->listing($translationFiles);
 
             $dumper = new PoDumper();
             $options = array(
                 'path' => uniqid(sys_get_temp_dir() . '/', true)
             );
-            $dumper->dump($translator->getCatalogue($this->config->referenceLanguage()), $options);
-            $file = $options['path'] . '/messages.' . $this->config->referenceLanguage() . '.po';
+            $dumper->dump($translator->getCatalogue($language), $options);
+            $file = $options['path'] . '/messages.' . $language . '.po';
 
             $response = $this->apiClient->upload(
                 $this->config->projectId(),
-                $this->config->referenceLanguage(),
+                $language,
                 $file
             );
 

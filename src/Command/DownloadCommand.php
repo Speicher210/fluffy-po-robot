@@ -55,19 +55,9 @@ class DownloadCommand extends AbstractApiCommand
                     $file->tag()
                 );
 
-                $filename = strtr(
-                    $file->translation(),
-                    array(
-                        '%base_path%' => $this->config->basePath(),
-                        '%original_path%' => $item->getPath(),
-                        '%language_code%' => $mappedLanguageCode,
-                        '%file_name%' => $item->getFilename(),
-                        '%file_extension%' => $item->getExtension()
-                    )
-                );
+                $filename = $this->buildTranslationFile($file, $item, $mappedLanguageCode);
 
                 $catalog = new MessageCatalogue($originalLanguageCode);
-
                 foreach ($translations as $translation) {
                     $catalog->set($translation['term'], $translation['definition']);
                 }

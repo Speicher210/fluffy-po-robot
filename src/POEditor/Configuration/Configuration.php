@@ -154,6 +154,22 @@ class Configuration
     }
 
     /**
+     * Get the mapping for a language.
+     *
+     * @param string $language
+     * @return string
+     * @throws \OutOfBoundsException If language is not mapped.
+     */
+    public function languageMap(string $language) : string
+    {
+        if (array_key_exists($language, $this->languages)) {
+            return $this->languages[$language];
+        }
+
+        throw new \OutOfBoundsException('Language not defined.');
+    }
+
+    /**
      * @return array
      */
     public function files() : array
