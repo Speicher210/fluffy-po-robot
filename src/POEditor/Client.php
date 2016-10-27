@@ -126,12 +126,20 @@ class Client
         );
 
         $content = file_get_contents($response['item']);
+        $translations = array();
+        // There can be no translations.
         if ($content !== '') {
-            // There can be no translations.
-            return \GuzzleHttp\json_decode(file_get_contents($response['item']), true);
+            $translations = \GuzzleHttp\json_decode(file_get_contents($response['item']), true);
+
+            uasort(
+                $translations,
+                function ($a, $b) {
+                    return strtolower($a['term']) <=> strtolower($b['term']);
+                }
+            );
         }
 
-        return array();
+        return $translations;
     }
 
     /**
