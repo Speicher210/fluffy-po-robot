@@ -69,6 +69,11 @@ abstract class AbstractApiCommand extends AbstractCommand
      */
     protected function buildTranslationFile(File $fileConfiguration, \SplFileInfo $sourceFile, string $languageCode) : string
     {
+        // If language code is for a reference language then we return path to the source.
+        if ($this->config->languageMap($this->config->referenceLanguage()) === $languageCode) {
+            return $sourceFile->getRealPath();
+        }
+
         return strtr(
             $fileConfiguration->translation(),
             array(
