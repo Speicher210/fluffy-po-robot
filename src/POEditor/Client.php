@@ -85,19 +85,21 @@ class Client
      *
      * @param int $idProject
      * @param string $language
-     * @param string $file
+     * @param array $translations
      * @return array
      */
-    public function upload(int $idProject, string $language, string $file) : array
+    public function upload(int $idProject, string $language, array $translations) : array
     {
+        if (count($translations) === 0) {
+            throw new \InvalidArgumentException('You must provide at least one translation.');
+        }
+
         $response = $this->callAction(
-            'upload',
+            'update_language',
             array(
                 'id' => $idProject,
                 'language' => $language,
-                'overwrite' => '1',
-                'updating' => 'definitions',
-                'file' => fopen($file, 'r')
+                'data' => \GuzzleHttp\json_encode($translations)
             )
         );
 

@@ -9,7 +9,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
-use Wingu\FluffyPoRobot\Translation\Dumper\PoDumper;
 
 /**
  * Command to upload the translations to POEditor.
@@ -92,9 +91,8 @@ class UploadCommand extends AbstractApiCommand
      */
     private function uploadTranslations(array $sourceFiles)
     {
-//        $languages = $this->config->languages();
+        $languages = $this->config->languages();
         // Temporary only upload source because of rate limiting.
-        $languages = array($this->config->referenceLanguage() => $this->config->languageMap($this->config->referenceLanguage()));
         foreach ($languages as $language => $mappedLanguage) {
             $this->io->section(sprintf('Uploading "%s" language from files ...', $language));
 
@@ -116,23 +114,29 @@ class UploadCommand extends AbstractApiCommand
             }
             $this->io->listing($translationFiles);
 
-            $dumper = new PoDumper();
-            $options = array(
-                'path' => uniqid(sys_get_temp_dir() . '/', true)
-            );
-            $dumper->dump($translator->getCatalogue($language), $options);
-            $file = $options['path'] . '/messages.' . $language . '.po';
+            $translations = array();
+            foreach ($translator->getCatalogue($language)->all('messages') as $term => $translation) {
+                $translations[] = array(
+                    'term' => array(
+                        'term' => $term
+                    ),
+                    'definition' => array(
+                        'forms' => (array)$translation,
+                        'fuzzy' => 0
+                    )
+                );
+            }
 
-            $response = $this->apiClient->upload(
-                $this->config->projectId(),
-                $language,
-                $file
-            );
-
-            // Remove the temporary file after upload.
-            unlink($file);
-
-            $this->io->table(array_keys($response['definitions']), array($response['definitions']));
+            if (count($translations) > 0) {
+                $response = $this->apiClient->upload(
+                    $this->config->projectId(),
+                    $language,
+                    $translations
+                );
+                $this->io->table(array_keys($response), array($response));
+            } else {
+                $this->io->note(sprintf('No translations found for %s language', $language));
+            }
         }
     }
 }
