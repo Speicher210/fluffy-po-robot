@@ -62,8 +62,12 @@ class UploadCommand extends AbstractApiCommand
             $fileFormat = FormatGuesser::formatFromFile($sourceTranslationFile);
             $fileLoader = FormatGuesser::fileLoaderFromFile($sourceTranslationFile->getFilename());
             $translator->addLoader($fileFormat, $fileLoader);
-            $translator->addResource($fileFormat, $sourceTranslationFile, $this->config->referenceLanguage(),
-                $file->tag());
+            $translator->addResource(
+                $fileFormat,
+                $sourceTranslationFile,
+                $this->config->referenceLanguage(),
+                $file->tag()
+            );
 
             $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->tag());
             foreach ($messages as $term => $message) {
