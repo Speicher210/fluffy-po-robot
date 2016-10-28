@@ -55,7 +55,8 @@ class Configuration
         string $referenceLanguage,
         array $languages,
         array $files
-    ) {
+    )
+    {
         $this->apiToken = $apiToken;
         $this->projectId = $projectId;
         $this->basePath = $basePath;
@@ -67,6 +68,7 @@ class Configuration
     /**
      * @param string $yamlFilePath
      * @return Configuration
+     * @throws \RuntimeException
      */
     public static function fromYamlFile(string $yamlFilePath) : Configuration
     {
@@ -78,6 +80,10 @@ class Configuration
         }
 
         $config['base_path'] = realpath($basePath);
+
+        if ($config['base_path'] === false) {
+            throw new \RuntimeException(sprintf('Base path "%s" is invalid. Check your config file.', $basePath));
+        }
 
         $config['files'] = array_map(
             function ($file) {
