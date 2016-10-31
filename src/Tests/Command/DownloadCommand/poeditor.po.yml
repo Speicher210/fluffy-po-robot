@@ -1,0 +1,10 @@
+project_id: 123
+api_token: test
+base_path: 'vfs://root'
+languages:
+    en: en
+    de: de
+reference_language: en
+files:
+    - { source: source_1.en.po, tag: tag_1, translation: '%original_path%/tmp/source_1/translation_%language_code%.%file_extension%' }
+    - { source: source_2.en.po, tag: tag_2, translation: '%original_path%/tmp/source_2/translation_%language_code%.%file_extension%' }

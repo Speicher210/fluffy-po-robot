@@ -1,0 +1,2 @@
+"some_other_term" = "some other definition English";
+"some_other_term_2" = "some other definition English 2";

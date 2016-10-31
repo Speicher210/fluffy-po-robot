@@ -1,0 +1,2 @@
+"some_other_term" = "some other definition German";
+"some_other_term_2" = "One German";

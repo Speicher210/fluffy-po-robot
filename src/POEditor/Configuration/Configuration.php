@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\POEditor\Configuration;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
 class Configuration
@@ -75,11 +76,12 @@ class Configuration
         $config = Yaml::parse(file_get_contents($yamlFilePath));
 
         $basePath = $config['base_path'];
-        if ($basePath[0] !== '/') {
-            $basePath = dirname($yamlFilePath) . '/' . $basePath;
-        }
 
-        $config['base_path'] = realpath($basePath);
+        $filesystem = new Filesystem();
+        if (!$filesystem->isAbsolutePath($basePath)) {
+            $basePath = dirname($yamlFilePath) . '/' . $basePath;
+            $config['base_path'] = realpath($basePath);
+        }
 
         if ($config['base_path'] === false) {
             throw new \RuntimeException(sprintf('Base path "%s" is invalid. Check your config file.', $basePath));

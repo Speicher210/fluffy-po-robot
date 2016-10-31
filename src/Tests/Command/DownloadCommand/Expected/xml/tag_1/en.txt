@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="some_term">"some definition English"</string>
+  <string name="some_term_2">"some definition English 2"</string>
+  <plurals name="some_term_3">
+    <item quantity="one">"One English"</item>
+    <item quantity="other">"Other English"</item>
+  </plurals>
+</resources>

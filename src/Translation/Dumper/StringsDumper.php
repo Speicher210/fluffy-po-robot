@@ -22,6 +22,7 @@ class StringsDumper extends IniFileDumper implements DumperInterface
         $output = '';
 
         foreach ($messages->all($domain) as $source => $target) {
+            $target = is_array($target) ? reset($target) : $target;
             $output .= '"' . $source . '" = "' . $target . "\";\n";
         }
 

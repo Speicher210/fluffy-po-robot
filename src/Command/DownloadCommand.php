@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\MessageCatalogue;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
@@ -60,6 +61,11 @@ class DownloadCommand extends AbstractApiCommand
                 $catalog = new MessageCatalogue($originalLanguageCode);
                 foreach ($translations as $translation) {
                     $catalog->set($translation['term'], $translation['definition']);
+                }
+
+                if (!file_exists($filename)) {
+                    $filesystem = new Filesystem();
+                    $filesystem->mkdir(array(dirname($filename)));
                 }
 
                 $fileDumper->dumpToFile($catalog, 'messages', $filename);

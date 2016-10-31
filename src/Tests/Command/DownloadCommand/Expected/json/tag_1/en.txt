@@ -1,0 +1,8 @@
+{
+    "some_term": "some definition English",
+    "some_term_2": "some definition English 2",
+    "some_term_3": {
+        "one": "One English",
+        "other": "Other English"
+    }
+}

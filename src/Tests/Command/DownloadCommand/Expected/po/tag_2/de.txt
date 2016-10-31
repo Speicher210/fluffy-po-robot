@@ -1,0 +1,13 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+
+msgid "some_other_term"
+msgstr "some other definition German"
+msgid "some_other_term_2"
+msgid_plural "some_other_term_2"
+msgstr[0] "One German"
+msgstr[1] "Few German"
+msgstr[2] "Other German"

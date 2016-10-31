@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="some_other_term">"some other definition German"</string>
+  <plurals name="some_other_term_2">
+    <item quantity="one">"One German"</item>
+    <item quantity="few">"Few German"</item>
+    <item quantity="other">"Other German"</item>
+  </plurals>
+</resources>

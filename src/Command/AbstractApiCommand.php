@@ -51,7 +51,7 @@ abstract class AbstractApiCommand extends AbstractCommand
             return 0;
         }
         $this->config = Configuration::fromYamlFile($configFile);
-        $this->apiClient = new Client($this->config->apiToken());
+        $this->apiClient = $this->initializeApiClient($this->config->apiToken());
 
         return $this->doRun();
     }
@@ -60,6 +60,15 @@ abstract class AbstractApiCommand extends AbstractCommand
      * @return integer
      */
     abstract protected function doRun();
+
+    /**
+     * @param string $apiToken
+     * @return Client
+     */
+    protected function initializeApiClient(string $apiToken) : Client
+    {
+        return new Client($apiToken);
+    }
 
     /**
      * @param File $fileConfiguration
@@ -71,7 +80,7 @@ abstract class AbstractApiCommand extends AbstractCommand
     {
         // If language code is for a reference language then we return path to the source.
         if ($this->config->languageMap($this->config->referenceLanguage()) === $languageCode) {
-            return $sourceFile->getRealPath();
+            return $sourceFile->getPathname();
         }
 
         return strtr(
