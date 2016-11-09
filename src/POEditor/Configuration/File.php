@@ -19,18 +19,18 @@ class File
     /**
      * @var string
      */
-    protected $tag;
+    protected $context;
 
     /**
      * @param string $source
      * @param string $translation
-     * @param string $tag
+     * @param string $context
      */
-    public function __construct(string $source, string $translation, string $tag)
+    public function __construct(string $source, string $translation, string $context)
     {
         $this->source = $source;
         $this->translation = $translation;
-        $this->tag = $tag;
+        $this->context = $context;
     }
 
     /**
@@ -52,8 +52,8 @@ class File
     /**
      * @return string
      */
-    public function tag(): string
+    public function context(): string
     {
-        return $this->tag;
+        return $this->context;
     }
 }

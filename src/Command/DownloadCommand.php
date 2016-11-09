@@ -53,7 +53,7 @@ class DownloadCommand extends AbstractApiCommand
                 $translations = $this->apiClient->export(
                     $this->config->projectId(),
                     $originalLanguageCode,
-                    $file->tag()
+                    $file->context()
                 );
 
                 $filename = $this->buildTranslationFile($file, $item, $mappedLanguageCode);

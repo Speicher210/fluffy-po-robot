@@ -7,6 +7,7 @@ namespace Wingu\FluffyPoRobot\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\VarDumper\VarDumper;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 
@@ -66,15 +67,15 @@ class UploadCommand extends AbstractApiCommand
                 $fileFormat,
                 $sourceTranslationFile,
                 $this->config->referenceLanguage(),
-                $file->tag()
+                $file->context()
             );
 
-            $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->tag());
+            $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->context());
             foreach ($messages as $term => $message) {
                 $terms[] = array(
                     'term' => $term,
                     'plural' => is_array($message) ? $term : null,
-                    'tags' => array($file->tag())
+                    'context' => $file->context()
                 );
             }
         }
@@ -114,21 +115,24 @@ class UploadCommand extends AbstractApiCommand
                 $fileLoader = FormatGuesser::fileLoaderFromFile($sourceFile['sourceTranslationFile']->getFilename());
 
                 $translator->addLoader($fileFormat, $fileLoader);
-                $translator->addResource($fileFormat, $translationFile, $language);
+                $translator->addResource($fileFormat, $translationFile, $language, $sourceFile['configFile']->context());
             }
             $this->io->listing($translationFiles);
 
             $translations = array();
-            foreach ($translator->getCatalogue($language)->all('messages') as $term => $translation) {
-                $translations[] = array(
-                    'term' => array(
-                        'term' => $term
-                    ),
-                    'definition' => array(
-                        'forms' => (array)$translation,
-                        'fuzzy' => 0
-                    )
-                );
+            foreach ($translator->getCatalogue($language)->all() as $context => $catalogTranslations) {
+                foreach ($catalogTranslations as $term => $translation) {
+                    $translations[] = array(
+                        'term' => array(
+                            'term' => $term,
+                            'context' => $context
+                        ),
+                        'definition' => array(
+                            'forms' => (array)$translation,
+                            'fuzzy' => 0
+                        )
+                    );
+                }
             }
 
             if (count($translations) > 0) {

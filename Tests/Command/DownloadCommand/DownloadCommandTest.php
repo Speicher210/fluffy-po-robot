@@ -46,47 +46,56 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
     public function testDownload(string $configFile, string $format)
     {
         $allTranslations = array(
-            $this->root->url() . '/source_1.en.' . $format => array(
-                'tag' => 'tag_1',
+            array(
+                'source' => $this->root->url() . '/source_1.en.' . $format,
+                'context' => 'context_1',
                 'language' => array(
                     'en' => array(
                         'terms' => array(
-                            self::createTranslation('some_term', 'some definition English'),
-                            self::createTranslation('some_term_2', 'some definition English 2'),
-                            self::createTranslation('some_term_3', array(
-                                'one' => 'One English',
-                                'other' => 'Other English'
-                            )),
-
+                            self::createTranslation('some_term', 'some definition English', 'context_1'),
+                            self::createTranslation('some_term_2', 'some definition English 2', 'context_1'),
+                            self::createTranslation(
+                                'some_term_3',
+                                array(
+                                    'one' => 'One English',
+                                    'other' => 'Other English'
+                                ),
+                                'context_1'
+                            ),
                         ),
                         'translationFile' => $this->root->url() . '/source_1.en.' . $format
                     ),
                     'de' => array(
                         'terms' => array(
-                            self::createTranslation('some_term', 'some definition German')
+                            self::createTranslation('some_term', 'some definition German', 'context_1')
                         ),
                         'translationFile' => $this->root->url() . '/tmp/source_1/translation_de.' . $format
                     )
                 )
             ),
-            $this->root->url() . '/source_2.en.' . $format => array(
-                'tag' => 'tag_2',
+            array(
+                'source' => $this->root->url() . '/source_2.en.' . $format,
+                'context' => 'context_2',
                 'language' => array(
                     'en' => array(
                         'terms' => array(
-                            self::createTranslation('some_other_term', 'some other definition English'),
-                            self::createTranslation('some_other_term_2', 'some other definition English 2')
+                            self::createTranslation('some_other_term', 'some other definition English', 'context_2'),
+                            self::createTranslation('some_other_term_2', 'some other definition English 2', 'context_2')
                         ),
                         'translationFile' => $this->root->url() . '/source_2.en.' . $format
                     ),
                     'de' => array(
                         'terms' => array(
-                            self::createTranslation('some_other_term', 'some other definition German'),
-                            self::createTranslation('some_other_term_2', array(
-                                'one' => 'One German',
-                                'few' => 'Few German',
-                                'other' => 'Other German'
-                            )),
+                            self::createTranslation('some_other_term', 'some other definition German', 'context_2'),
+                            self::createTranslation(
+                                'some_other_term_2',
+                                array(
+                                    'one' => 'One German',
+                                    'few' => 'Few German',
+                                    'other' => 'Other German'
+                                ),
+                                'context_2'
+                            ),
                         ),
                         'translationFile' => $this->root->url() . '/tmp/source_2/translation_de.' . $format
                     )
@@ -100,14 +109,16 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $term
      * @param string|array $translation
+     * @param string $context
      * @return array
      */
-    private static function createTranslation(string $term, $translation) : array
+    private static function createTranslation(string $term, $translation, string $context) : array
     {
         return array(
             'term' => $term,
             'definition' => $translation,
-            'term_plural' => is_array($translation) ? $term : ''
+            'term_plural' => is_array($translation) ? $term : '',
+            'context' => $context
         );
     }
 
@@ -125,11 +136,11 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
 
         $i = 0;
         $translationFiles = array();
-        foreach ($allTranslations as $source => $translationSuite) {
-            touch($source);
+        foreach ($allTranslations as $translationSuite) {
+            touch($translationSuite['source']);
 
             foreach ($translationSuite['language'] as $language => $translations) {
-                $key = __DIR__ . '/Expected/' . $format . '/' . $translationSuite['tag'] . '/' . $language . '.txt';
+                $key = __DIR__ . '/Expected/' . $format . '/' . $translationSuite['context'] . '/' . $language . '.txt';
                 $translationFiles[$key] = $translations['translationFile'];
 
                 $apiClientMock
@@ -138,7 +149,7 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
                     ->with(
                         $this->projectId,
                         $language,
-                        $translationSuite['tag']
+                        $translationSuite['context']
                     )
                     ->willReturn($translations['terms']);
 

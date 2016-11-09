@@ -6,5 +6,5 @@ languages:
     de: de
 reference_language: en
 files:
-    - { source: source_1.en.json, tag: tag_1, translation: '%original_path%/tmp/source_1/translation_%language_code%.%file_extension%' }
-    - { source: source_2.en.json, tag: tag_2, translation: '%original_path%/tmp/source_2/translation_%language_code%.%file_extension%' }
+    - { source: source_1.en.json, context: context_1, translation: '%original_path%/tmp/source_1/translation_%language_code%.%file_extension%' }
+    - { source: source_2.en.json, context: context_2, translation: '%original_path%/tmp/source_2/translation_%language_code%.%file_extension%' }

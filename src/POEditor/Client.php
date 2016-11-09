@@ -111,10 +111,10 @@ class Client
      *
      * @param int $idProject
      * @param string $language
-     * @param string $tag
+     * @param string $context
      * @return array
      */
-    public function export(int $idProject, string $language, string $tag) : array
+    public function export(int $idProject, string $language, string $context) : array
     {
         $response = $this->callAction(
             'export',
@@ -122,8 +122,7 @@ class Client
                 'id' => $idProject,
                 'language' => $language,
                 'type' => 'json',
-                'filters' => 'translated',
-                'tags' => $tag
+                'filters' => 'translated'
             )
         );
 
@@ -132,6 +131,13 @@ class Client
         // There can be no translations.
         if ($content !== '') {
             $translations = \GuzzleHttp\json_decode(file_get_contents($response['item']), true);
+
+            $translations = array_filter(
+                $translations,
+                function ($translation) use ($context) {
+                    return $translation['context'] === $context;
+                }
+            );
 
             uasort(
                 $translations,

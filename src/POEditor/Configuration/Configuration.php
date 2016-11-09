@@ -89,7 +89,7 @@ class Configuration
 
         $config['files'] = array_map(
             function ($file) {
-                return new File($file['source'], $file['translation'], $file['tag']);
+                return new File($file['source'], $file['translation'], $file['context']);
             },
             $config['files']
         );

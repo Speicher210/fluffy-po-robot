@@ -128,7 +128,7 @@ class InitCommand extends AbstractCommand
     private function getFiles() : array
     {
         $files = array();
-        $tags = array();
+        $contexts = array();
 
         while (true) {
             $source = $this->io->ask(
@@ -148,25 +148,25 @@ class InitCommand extends AbstractCommand
                 break;
             }
 
-            $tag = $this->io->ask(
-                'Tag',
+            $context = $this->io->ask(
+                'Context',
                 pathinfo($source, PATHINFO_FILENAME),
-                function ($input) use ($tags) {
-                    if (in_array($input, $tags, true)) {
-                        throw new \InvalidArgumentException(sprintf('The tag "%s" must be unique', $input));
+                function ($input) use ($contexts) {
+                    if (in_array($input, $contexts, true)) {
+                        throw new \InvalidArgumentException(sprintf('The context "%s" must be unique', $input));
                     }
 
                     return $input;
                 }
             );
 
-            $tags[] = $tag;
+            $contexts[] = $context;
 
             $translation = $this->io->ask('Translation');
 
             $files[] = array(
                 'source' => $source,
-                'tag' => $tag,
+                'context' => $context,
                 'translation' => $translation
             );
         }
