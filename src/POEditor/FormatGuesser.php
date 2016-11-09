@@ -18,6 +18,7 @@ use Wingu\FluffyPoRobot\Translation\Dumper\YamlDumper;
 use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
+use Wingu\FluffyPoRobot\Translation\Loader\YamlFileLoader;
 
 /**
  * Try to guess the format from the filename.
@@ -59,6 +60,8 @@ class FormatGuesser
                 return new JsonFileLoader();
             case 'android_strings':
                 return new XmlLoader();
+            case 'yml':
+                return new YamlFileLoader();
         }
 
         throw new \RuntimeException('Can not find a file loader.');
