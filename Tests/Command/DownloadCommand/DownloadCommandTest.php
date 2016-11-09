@@ -27,12 +27,12 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
         $this->root = vfsStream::setup();
     }
 
-
     public static function dataProviderTestDownload()
     {
         return array(
             array(__DIR__ . '/poeditor.po.yml', 'po'),
             array(__DIR__ . '/poeditor.xml.yml', 'xml'),
+            array(__DIR__ . '/poeditor.yml.yml', 'yml'),
             array(__DIR__ . '/poeditor.json.yml', 'json'),
             array(__DIR__ . '/poeditor.strings.yml', 'strings'),
         );

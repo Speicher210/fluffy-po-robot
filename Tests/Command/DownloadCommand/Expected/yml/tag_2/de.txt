@@ -1,0 +1,5 @@
+some_other_term: 'some other definition German'
+some_other_term_2:
+    one: 'One German'
+    few: 'Few German'
+    other: 'Other German'
