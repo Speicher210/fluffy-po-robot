@@ -1,29 +1,30 @@
 {
   "name": "wingu/fluffy-po-robot",
-  "description": "The missing link between sanity and POEditor.",
+  "description": "Command line tool for POEditor.com",
   "license": "MIT",
   "type": "project",
   "keywords": [
     "poeditor",
     "poeditor.com",
+    "translation",
     "android strings",
-    "ios strings",
-    "translation"
+    "ios strings"
   ],
   "require": {
     "php": "~7.0",
+    "roave/security-advisories": "dev-master",
 
-    "symfony/console": "^3.1",
+    "symfony/console": "^3.2",
     "kherge/amend": "dev-master",
     "guzzlehttp/guzzle": "^6.2",
-    "symfony/yaml": "^3.1",
-    "symfony/finder": "^3.1",
-    "symfony/translation": "^3.1",
-    "symfony/filesystem": "^3.1"
+    "symfony/yaml": "^3.2",
+    "symfony/finder": "^3.2",
+    "symfony/translation": "^3.2",
+    "symfony/filesystem": "^3.2"
   },
   "require-dev": {
-    "symfony/var-dumper": "^3.1",
-    "phpunit/phpunit": "^5.6",
+    "symfony/var-dumper": "^3.2",
+    "phpunit/phpunit": "^5.7",
     "mikey179/vfsStream": "^1.6"
   },
   "autoload": {
