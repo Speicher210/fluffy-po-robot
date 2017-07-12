@@ -33,7 +33,7 @@ abstract class AbstractApiCommand extends AbstractCommand
                 'config-file',
                 InputArgument::OPTIONAL,
                 'Configuration for the translations.',
-                getcwd() . '/poeditor.yml'
+                \getcwd() . '/poeditor.yml'
             );
     }
 
@@ -45,8 +45,8 @@ abstract class AbstractApiCommand extends AbstractCommand
         parent::execute($input, $output);
 
         $configFile = $this->input->getArgument('config-file');
-        if (!file_exists($configFile)) {
-            $this->io->error(sprintf('Configuration file "%s" not found', $configFile));
+        if (!\file_exists($configFile)) {
+            $this->io->error(\sprintf('Configuration file "%s" not found', $configFile));
 
             return 0;
         }

@@ -73,21 +73,21 @@ class Configuration
      */
     public static function fromYamlFile(string $yamlFilePath) : Configuration
     {
-        $config = Yaml::parse(file_get_contents($yamlFilePath));
+        $config = Yaml::parse(\file_get_contents($yamlFilePath));
 
         $basePath = $config['base_path'];
 
         $filesystem = new Filesystem();
         if (!$filesystem->isAbsolutePath($basePath)) {
-            $basePath = dirname($yamlFilePath) . '/' . $basePath;
-            $config['base_path'] = realpath($basePath);
+            $basePath = \dirname($yamlFilePath) . '/' . $basePath;
+            $config['base_path'] = \realpath($basePath);
         }
 
         if ($config['base_path'] === false) {
-            throw new \RuntimeException(sprintf('Base path "%s" is invalid. Check your config file.', $basePath));
+            throw new \RuntimeException(\sprintf('Base path "%s" is invalid. Check your config file.', $basePath));
         }
 
-        $config['files'] = array_map(
+        $config['files'] = \array_map(
             function ($file) {
                 return new File($file['source'], $file['translation'], $file['context']);
             },
@@ -170,7 +170,7 @@ class Configuration
      */
     public function languageMap(string $language) : string
     {
-        if (array_key_exists($language, $this->languages)) {
+        if (\array_key_exists($language, $this->languages)) {
             return $this->languages[$language];
         }
 

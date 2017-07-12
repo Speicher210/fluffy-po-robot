@@ -14,7 +14,7 @@ class XmlLoader extends FileLoader
      */
     protected function loadResource(string $resource): array
     {
-        $xml = simplexml_load_file($resource);
+        $xml = \simplexml_load_file($resource);
 
         $data = array();
 
@@ -41,7 +41,7 @@ class XmlLoader extends FileLoader
      * @param string $attributeName
      * @return string
      */
-    private function getAttribute(\SimpleXMLElement $element, string $attributeName)
+    private function getAttribute(\SimpleXMLElement $element, string $attributeName): string
     {
         $attributes = $element->attributes();
 
@@ -54,10 +54,10 @@ class XmlLoader extends FileLoader
      */
     private function cleanTranslation(string $translation) : string
     {
-        if (0 === strpos($translation, '"') && substr($translation, -1) === '"' && substr($translation, -2) !== '\"') {
-            $translation = substr($translation, 1, -1);
+        if (0 === \strpos($translation, '"') && \substr($translation, -1) === '"' && \substr($translation, -2) !== '\"') {
+            $translation = \substr($translation, 1, -1);
         }
 
-        return stripcslashes($translation);
+        return \stripcslashes($translation);
     }
 }

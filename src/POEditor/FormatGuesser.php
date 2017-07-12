@@ -27,7 +27,7 @@ class FormatGuesser
 {
     public static function formatFromFile($filename) : string
     {
-        $extension = pathinfo((string)$filename, PATHINFO_EXTENSION);
+        $extension = \pathinfo((string)$filename, PATHINFO_EXTENSION);
 
         switch ($extension) {
             case 'csv':

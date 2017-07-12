@@ -17,7 +17,7 @@ trait DumperTrait
      */
     public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath)
     {
-        file_put_contents($filePath, $this->formatCatalogue($messages, $domain));
+        \file_put_contents($filePath, $this->formatCatalogue($messages, $domain));
     }
 
     /**

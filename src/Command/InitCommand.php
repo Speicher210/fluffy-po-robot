@@ -38,7 +38,7 @@ class InitCommand extends AbstractCommand
                 'f',
                 InputOption::VALUE_REQUIRED,
                 'The file where to dump the config.',
-                getcwd() . '/poeditor.yml'
+                \getcwd() . '/poeditor.yml'
             );
     }
 
@@ -67,7 +67,7 @@ class InitCommand extends AbstractCommand
             $this->getFiles()
         );
 
-        file_put_contents($this->input->getOption('output-file'), $config->toYaml());
+        \file_put_contents($this->input->getOption('output-file'), $config->toYaml());
     }
 
     /**
@@ -82,15 +82,15 @@ class InitCommand extends AbstractCommand
             $projectInput = $this->io->ask('Project name or ID');
         }
 
-        if (ctype_digit($projectInput)) {
+        if (\ctype_digit($projectInput)) {
             return (int)$projectInput;
         }
-        $projectInput = strtolower($projectInput);
+        $projectInput = \strtolower($projectInput);
 
         $projects = $this->apiClient->listProjects();
 
         foreach ($projects as $project) {
-            if (strtolower($project['name']) === $projectInput) {
+            if (\strtolower($project['name']) === $projectInput) {
                 return (int)$project['id'];
             }
         }
@@ -108,12 +108,12 @@ class InitCommand extends AbstractCommand
     {
         $languages = $this->apiClient->listProjectLanguages($idProject);
 
-        $languagesMap = array_combine($languages, $languages);
+        $languagesMap = \array_combine($languages, $languages);
 
         if ($this->io->confirm('Do you want to map your languages?') === true) {
             $languagesMap = array();
             foreach ($languages as $language) {
-                $languagesMap[$language] = $this->io->ask(sprintf('Enter map for language "%s"', $language), $language);
+                $languagesMap[$language] = $this->io->ask(\sprintf('Enter map for language "%s"', $language), $language);
             }
         }
 
@@ -135,7 +135,7 @@ class InitCommand extends AbstractCommand
                 'Source (leave empty to skip)',
                 null,
                 function ($input) use ($files) {
-                    $hasSource = count($files) > 0;
+                    $hasSource = \count($files) > 0;
                     if ($input === null && $hasSource === false) {
                         throw new \InvalidArgumentException('At least one source file is needed.');
                     }
@@ -150,10 +150,10 @@ class InitCommand extends AbstractCommand
 
             $context = $this->io->ask(
                 'Context',
-                pathinfo($source, PATHINFO_FILENAME),
+                \pathinfo($source, \PATHINFO_FILENAME),
                 function ($input) use ($contexts) {
-                    if (in_array($input, $contexts, true)) {
-                        throw new \InvalidArgumentException(sprintf('The context "%s" must be unique', $input));
+                    if (\in_array($input, $contexts, true)) {
+                        throw new \InvalidArgumentException(\sprintf('The context "%s" must be unique', $input));
                     }
 
                     return $input;

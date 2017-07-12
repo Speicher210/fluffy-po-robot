@@ -6,6 +6,7 @@ namespace Wingu\FluffyPoRobot\Tests\Command\DownloadCommand;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Wingu\FluffyPoRobot\Command\DownloadCommand;
 use Wingu\FluffyPoRobot\POEditor\Client;
@@ -13,7 +14,7 @@ use Wingu\FluffyPoRobot\POEditor\Client;
 /**
  * Test case for download command
  */
-class DownloadCommandTest extends \PHPUnit_Framework_TestCase
+class DownloadCommandTest extends TestCase
 {
     private $projectId = '123';
 
@@ -112,12 +113,12 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
      * @param string $context
      * @return array
      */
-    private static function createTranslation(string $term, $translation, string $context) : array
+    private static function createTranslation(string $term, $translation, string $context): array
     {
         return array(
             'term' => $term,
             'definition' => $translation,
-            'term_plural' => is_array($translation) ? $term : '',
+            'term_plural' => \is_array($translation) ? $term : '',
             'context' => $context
         );
     }
@@ -137,7 +138,7 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
         $i = 0;
         $translationFiles = array();
         foreach ($allTranslations as $translationSuite) {
-            touch($translationSuite['source']);
+            \touch($translationSuite['source']);
 
             foreach ($translationSuite['language'] as $language => $translations) {
                 $key = __DIR__ . '/Expected/' . $format . '/' . $translationSuite['context'] . '/' . $language . '.txt';
@@ -171,7 +172,7 @@ class DownloadCommandTest extends \PHPUnit_Framework_TestCase
                 parent::__construct();
             }
 
-            protected function initializeApiClient(string $apiToken) : Client
+            protected function initializeApiClient(string $apiToken): Client
             {
                 return $this->apiClientMock;
             }

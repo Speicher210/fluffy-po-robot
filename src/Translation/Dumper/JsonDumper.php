@@ -21,7 +21,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
     {
         $json = \GuzzleHttp\json_decode(parent::formatCatalogue($messages, $domain, $options), true);
 
-        return \GuzzleHttp\json_encode($this->convertToNestedArray($json), JSON_PRETTY_PRINT);
+        return \GuzzleHttp\json_encode($this->convertToNestedArray($json), \JSON_PRETTY_PRINT);
     }
 
     /**
@@ -43,7 +43,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
 
     private function assignArrayByPath(&$arr, $path, $value)
     {
-        $keys = explode('.', $path);
+        $keys = \explode('.', $path);
 
         foreach ($keys as $key) {
             $arr = &$arr[$key];

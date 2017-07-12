@@ -19,7 +19,7 @@ class StringsLoader extends CsvFileLoader
 
         $data = array();
         foreach ($content as $key => $value) {
-            $data[trim($key)] = substr($value, 0, -1);
+            $data[\trim($key)] = \substr($value, 0, -1);
         }
 
         return $data;

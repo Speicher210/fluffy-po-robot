@@ -28,19 +28,19 @@ class PoDumper extends PoFileDumper implements DumperInterface
         $output[] = '';
 
         foreach ($messages->all($domain) as $source => $target) {
-            $output[] = sprintf('msgid "%s"', $this->escape($source));
-            if (is_array($target)) {
-                $output[] = sprintf('msgid_plural "%s"', $this->escape($source));
+            $output[] = \sprintf('msgid "%s"', $this->escape($source));
+            if (\is_array($target)) {
+                $output[] = \sprintf('msgid_plural "%s"', $this->escape($source));
                 $i = 0;
                 foreach ($target as $plural) {
-                    $output[] = sprintf('msgstr[%d] "%s"', $i++, $this->escape($plural));
+                    $output[] = \sprintf('msgstr[%d] "%s"', $i++, $this->escape($plural));
                 }
             } else {
-                $output[] = sprintf('msgstr "%s"', $this->escape($target));
+                $output[] = \sprintf('msgstr "%s"', $this->escape($target));
             }
         }
 
-        return implode("\n", $output);
+        return \implode("\n", $output);
     }
 
     /**
@@ -49,6 +49,6 @@ class PoDumper extends PoFileDumper implements DumperInterface
      */
     private function escape($str)
     {
-        return addcslashes($str, "\0..\37\42\134");
+        return \addcslashes($str, "\0..\37\42\134");
     }
 }

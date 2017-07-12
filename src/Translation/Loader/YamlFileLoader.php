@@ -21,14 +21,14 @@ class YamlFileLoader extends FileLoader
     {
         try {
             $yamlParser = new YamlParser();
-            $translations = $yamlParser->parse(file_get_contents($resource), Yaml::DUMP_OBJECT_AS_MAP);
+            $translations = $yamlParser->parse(\file_get_contents($resource), Yaml::DUMP_OBJECT_AS_MAP);
         } catch (ParseException $e) {
-            throw new InvalidResourceException(sprintf('Error parsing YAML, invalid file "%s"', $resource), 0, $e);
+            throw new InvalidResourceException(\sprintf('Error parsing YAML, invalid file "%s"', $resource), 0, $e);
         }
 
         $messages = array();
         foreach ($translations as $key => $message) {
-            $messages[$key] = is_array($message) ? array_values($message) : $message;
+            $messages[$key] = \is_array($message) ? \array_values($message) : $message;
         }
 
         return $messages;

@@ -21,12 +21,12 @@ abstract class FileLoader extends ArrayLoader
     {
         $resource = (string)$resource;
 
-        if (!stream_is_local($resource)) {
-            throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
+        if (!\stream_is_local($resource)) {
+            throw new InvalidResourceException(\sprintf('This is not a local file "%s".', $resource));
         }
 
-        if (!file_exists($resource)) {
-            throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
+        if (!\file_exists($resource)) {
+            throw new NotFoundResourceException(\sprintf('File "%s" not found.', $resource));
         }
 
         $messages = $this->loadResource($resource);
@@ -37,8 +37,8 @@ abstract class FileLoader extends ArrayLoader
         }
 
         // not an array
-        if (!is_array($messages)) {
-            throw new InvalidResourceException(sprintf('Unable to load file "%s".', $resource));
+        if (!\is_array($messages)) {
+            throw new InvalidResourceException(\sprintf('Unable to load file "%s".', $resource));
         }
 
         $catalogue = new MessageCatalogue($locale);

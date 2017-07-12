@@ -7,7 +7,6 @@ namespace Wingu\FluffyPoRobot\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\VarDumper\VarDumper;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 
@@ -46,9 +45,9 @@ class UploadCommand extends AbstractApiCommand
             $finder = Finder::create()->in($this->config->basePath())->path($file->source());
             if ($finder->count() !== 1) {
                 if ($finder->count() === 0) {
-                    throw new \RuntimeException(sprintf('No source file found for "%s".', $file->source()));
+                    throw new \RuntimeException(\sprintf('No source file found for "%s".', $file->source()));
                 } else {
-                    throw new \RuntimeException(sprintf('More than one source file found for "%s"', $file->source()));
+                    throw new \RuntimeException(\sprintf('More than one source file found for "%s"', $file->source()));
                 }
             }
             $iterator = $finder->getIterator();
@@ -74,7 +73,7 @@ class UploadCommand extends AbstractApiCommand
             foreach ($messages as $term => $message) {
                 $terms[] = array(
                     'term' => $term,
-                    'plural' => is_array($message) ? $term : null,
+                    'plural' => \is_array($message) ? $term : null,
                     'context' => $file->context()
                 );
             }
@@ -99,7 +98,7 @@ class UploadCommand extends AbstractApiCommand
         $languages = $this->config->languages();
         // Temporary only upload source because of rate limiting.
         foreach ($languages as $language => $mappedLanguage) {
-            $this->io->section(sprintf('Uploading "%s" language from files ...', $language));
+            $this->io->section(\sprintf('Uploading "%s" language from files ...', $language));
 
             $translator = new Translator($language);
             $translationFiles = array();
@@ -135,15 +134,15 @@ class UploadCommand extends AbstractApiCommand
                 }
             }
 
-            if (count($translations) > 0) {
+            if (\count($translations) > 0) {
                 $response = $this->apiClient->upload(
                     $this->config->projectId(),
                     $language,
                     $translations
                 );
-                $this->io->table(array_keys($response), array($response));
+                $this->io->table(\array_keys($response), array($response));
             } else {
-                $this->io->note(sprintf('No translations found for %s language', $language));
+                $this->io->note(\sprintf('No translations found for %s language', $language));
             }
         }
     }

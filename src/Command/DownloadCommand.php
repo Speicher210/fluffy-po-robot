@@ -63,14 +63,14 @@ class DownloadCommand extends AbstractApiCommand
                     $catalog->set($translation['term'], $translation['definition']);
                 }
 
-                if (!file_exists($filename)) {
+                if (!\file_exists($filename)) {
                     $filesystem = new Filesystem();
-                    $filesystem->mkdir(array(dirname($filename)));
+                    $filesystem->mkdir(array(\dirname($filename)));
                 }
 
                 $fileDumper->dumpToFile($catalog, 'messages', $filename);
 
-                $this->io->text(sprintf('Updated file: %s', $filename));
+                $this->io->text(\sprintf('Updated file: %s', $filename));
             }
         }
     }

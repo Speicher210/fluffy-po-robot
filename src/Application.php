@@ -8,20 +8,17 @@ use KevinGH\Amend;
 use Symfony\Component\Console\Application as BaseApplication;
 use Wingu\FluffyPoRobot\Command;
 
-class Application extends BaseApplication
+final class Application extends BaseApplication
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct($name = 'Fluffy PO Robot', $version = '@git-version@')
+    public function __construct()
     {
-        parent::__construct($name, $version);
+        parent::__construct('Fluffy PO Robot', '@git-version@');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
 

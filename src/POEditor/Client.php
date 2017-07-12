@@ -61,7 +61,7 @@ class Client
     {
         $projects = $this->callAction('list_languages', array('id' => $idProject));
 
-        return array_column($projects['list'], 'code');
+        return \array_column($projects['list'], 'code');
     }
 
     /**
@@ -90,7 +90,7 @@ class Client
      */
     public function upload(int $idProject, string $language, array $translations) : array
     {
-        if (count($translations) === 0) {
+        if (\count($translations) === 0) {
             throw new \InvalidArgumentException('You must provide at least one translation.');
         }
 
@@ -126,23 +126,23 @@ class Client
             )
         );
 
-        $content = file_get_contents($response['item']);
+        $content = \file_get_contents($response['item']);
         $translations = array();
         // There can be no translations.
         if ($content !== '') {
-            $translations = \GuzzleHttp\json_decode(file_get_contents($response['item']), true);
+            $translations = \GuzzleHttp\json_decode(\file_get_contents($response['item']), true);
 
-            $translations = array_filter(
+            $translations = \array_filter(
                 $translations,
                 function ($translation) use ($context) {
                     return $translation['context'] === $context;
                 }
             );
 
-            uasort(
+            \uasort(
                 $translations,
                 function ($a, $b) {
-                    return strtolower($a['term']) <=> strtolower($b['term']);
+                    return \strtolower($a['term']) <=> \strtolower($b['term']);
                 }
             );
         }
@@ -165,7 +165,7 @@ class Client
         $response = $this->client->post(
             null,
             [
-                'multipart' => $this->parseFormParams(array_merge($formParams, $parameters))
+                'multipart' => $this->parseFormParams(\array_merge($formParams, $parameters))
             ]
         );
 
