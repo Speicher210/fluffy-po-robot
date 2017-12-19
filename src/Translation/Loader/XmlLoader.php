@@ -14,9 +14,9 @@ class XmlLoader extends FileLoader
      */
     protected function loadResource(string $resource): array
     {
-        $xml = \simplexml_load_file($resource);
+        $xml = \simplexml_load_string(\file_get_contents($resource));
 
-        $data = array();
+        $data = [];
 
         /** @var \SimpleXMLElement $element */
         foreach ($xml as $element) {
@@ -25,7 +25,7 @@ class XmlLoader extends FileLoader
             if ($element->getName() === 'string') {
                 $data[$name] = $this->cleanTranslation((string)$element[0]);
             } elseif ($element->getName() === 'plurals') {
-                $plurals = array();
+                $plurals = [];
                 foreach ($element->item as $item) {
                     $plurals[] = $this->cleanTranslation((string)$item);
                 }

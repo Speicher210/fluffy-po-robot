@@ -13,11 +13,11 @@ class StringsLoader extends CsvFileLoader
      */
     protected function loadResource($resource)
     {
-        $this->setCsvControl('=', '"', '\\');
+        $this->setCsvControl('=');
 
         $content = parent::loadResource($resource);
 
-        $data = array();
+        $data = [];
         foreach ($content as $key => $value) {
             $data[\trim($key)] = \substr($value, 0, -1);
         }

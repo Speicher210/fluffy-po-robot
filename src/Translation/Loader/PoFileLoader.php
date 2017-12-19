@@ -11,7 +11,7 @@ namespace Wingu\FluffyPoRobot\Translation\Loader;
  */
 class PoFileLoader extends FileLoader
 {
-    protected function loadResource(string $resource):array
+    protected function loadResource(string $resource): array
     {
         $stream = \fopen($resource, 'rb');
 
@@ -33,7 +33,7 @@ class PoFileLoader extends FileLoader
                     $this->addMessage($messages, $item);
                 }
                 $item = $defaults;
-                $flags = array();
+                $flags = [];
             } elseif (\substr($line, 0, 2) === '#,') {
                 $flags = \array_map('\trim', \explode(',', \substr($line, 2)));
             } elseif (\substr($line, 0, 7) === 'msgid "') {

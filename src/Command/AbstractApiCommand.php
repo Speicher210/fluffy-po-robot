@@ -56,9 +56,6 @@ abstract class AbstractApiCommand extends AbstractCommand
         return $this->doRun();
     }
 
-    /**
-     * @return integer
-     */
     abstract protected function doRun();
 
     /**
@@ -85,13 +82,13 @@ abstract class AbstractApiCommand extends AbstractCommand
 
         return strtr(
             $fileConfiguration->translation(),
-            array(
+            [
                 '%base_path%' => $this->config->basePath(),
                 '%original_path%' => $sourceFile->getPath(),
                 '%language_code%' => $languageCode,
                 '%file_name%' => $sourceFile->getFilename(),
                 '%file_extension%' => $sourceFile->getExtension()
-            )
+            ]
         );
     }
 }

@@ -33,7 +33,7 @@ abstract class FileLoader extends ArrayLoader
 
         // empty resource
         if (null === $messages) {
-            $messages = array();
+            $messages = [];
         }
 
         // not an array

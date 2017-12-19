@@ -17,7 +17,7 @@ class StringsDumper extends IniFileDumper implements DumperInterface
     /**
      * {@inheritdoc}
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
     {
         $output = '';
 

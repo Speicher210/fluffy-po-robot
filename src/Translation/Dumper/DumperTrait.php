@@ -29,7 +29,7 @@ trait DumperTrait
      *
      * @return string representation
      */
-    abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array());
+    abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = []);
 
     /**
      * @return string

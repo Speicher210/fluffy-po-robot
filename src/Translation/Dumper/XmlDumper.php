@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
+use DOMElement;
 use Symfony\Component\Translation\Dumper\FileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
@@ -22,7 +23,7 @@ class XmlDumper extends FileDumper implements DumperInterface
     /**
      * {@inheritdoc}
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
     {
         $this->domDoc = new \DOMDocument('1.0', 'utf-8');
         $this->domDoc->formatOutput = true;
@@ -67,9 +68,9 @@ class XmlDumper extends FileDumper implements DumperInterface
      * @param string $name
      * @param string $attributeName
      * @param string $attributeValue
-     * @return \DOMElement
+     * @return DOMElement
      */
-    private function createTranslationElement(string $name, string $attributeName, string $attributeValue)
+    private function createTranslationElement(string $name, string $attributeName, string $attributeValue): DOMElement
     {
         $translationElement = $this->domDoc->createElement($name);
         $attribute = $this->domDoc->createAttribute($attributeName);

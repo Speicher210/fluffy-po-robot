@@ -17,7 +17,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
     /**
      * {@inheritdoc}
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
     {
         $json = \GuzzleHttp\json_decode(parent::formatCatalogue($messages, $domain, $options), true);
 
@@ -32,7 +32,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
      */
     private function convertToNestedArray(array $json) : array
     {
-        $result = array();
+        $result = [];
 
         foreach ($json as $key => $value) {
             $this->assignArrayByPath($result, $key, $value);

@@ -111,7 +111,7 @@ class InitCommand extends AbstractCommand
         $languagesMap = \array_combine($languages, $languages);
 
         if ($this->io->confirm('Do you want to map your languages?') === true) {
-            $languagesMap = array();
+            $languagesMap = [];
             foreach ($languages as $language) {
                 $languagesMap[$language] = $this->io->ask(\sprintf('Enter map for language "%s"', $language), $language);
             }
@@ -127,8 +127,8 @@ class InitCommand extends AbstractCommand
      */
     private function getFiles() : array
     {
-        $files = array();
-        $contexts = array();
+        $files = [];
+        $contexts = [];
 
         while (true) {
             $source = $this->io->ask(
@@ -164,11 +164,11 @@ class InitCommand extends AbstractCommand
 
             $translation = $this->io->ask('Translation');
 
-            $files[] = array(
+            $files[] = [
                 'source' => $source,
                 'context' => $context,
                 'translation' => $translation
-            );
+            ];
         }
 
         return $files;

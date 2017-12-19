@@ -46,6 +46,7 @@ class DownloadCommand extends AbstractApiCommand
      */
     private function downloadFile(File $file)
     {
+        /** @var Finder $finder */
         $finder = Finder::create()->in($this->config->basePath())->path($file->source());
         foreach ($finder as $item) {
             $fileDumper = FormatGuesser::fileDumperFromFile($item->getFilename());
@@ -65,7 +66,7 @@ class DownloadCommand extends AbstractApiCommand
 
                 if (!\file_exists($filename)) {
                     $filesystem = new Filesystem();
-                    $filesystem->mkdir(array(\dirname($filename)));
+                    $filesystem->mkdir([\dirname($filename)]);
                 }
 
                 $fileDumper->dumpToFile($catalog, 'messages', $filename);

@@ -56,8 +56,7 @@ class Configuration
         string $referenceLanguage,
         array $languages,
         array $files
-    )
-    {
+    ) {
         $this->apiToken = $apiToken;
         $this->projectId = $projectId;
         $this->basePath = $basePath;
@@ -71,7 +70,7 @@ class Configuration
      * @return Configuration
      * @throws \RuntimeException
      */
-    public static function fromYamlFile(string $yamlFilePath) : Configuration
+    public static function fromYamlFile(string $yamlFilePath): Configuration
     {
         $config = Yaml::parse(\file_get_contents($yamlFilePath));
 
@@ -104,59 +103,41 @@ class Configuration
         );
     }
 
-    /**
-     * @return string
-     */
-    public function toYaml()
+    public function toYaml(): string
     {
-        $config = array(
+        $config = [
             'api_token' => $this->apiToken,
             'project_id' => $this->projectId,
             'base_path' => $this->basePath,
             'reference_language' => $this->referenceLanguage,
             'languages' => $this->languages,
             'files' => $this->files
-        );
+        ];
 
         return Yaml::dump($config);
     }
 
-    /**
-     * @return string
-     */
-    public function apiToken() : string
+    public function apiToken(): string
     {
         return $this->apiToken;
     }
 
-    /**
-     * @return int
-     */
-    public function projectId() : int
+    public function projectId(): int
     {
         return $this->projectId;
     }
 
-    /**
-     * @return string
-     */
-    public function basePath() : string
+    public function basePath(): string
     {
         return $this->basePath;
     }
 
-    /**
-     * @return string
-     */
-    public function referenceLanguage() : string
+    public function referenceLanguage(): string
     {
         return $this->referenceLanguage;
     }
 
-    /**
-     * @return array
-     */
-    public function languages() : array
+    public function languages(): array
     {
         return $this->languages;
     }
@@ -168,7 +149,7 @@ class Configuration
      * @return string
      * @throws \OutOfBoundsException If language is not mapped.
      */
-    public function languageMap(string $language) : string
+    public function languageMap(string $language): string
     {
         if (\array_key_exists($language, $this->languages)) {
             return $this->languages[$language];
@@ -180,7 +161,7 @@ class Configuration
     /**
      * @return array
      */
-    public function files() : array
+    public function files(): array
     {
         return $this->files;
     }

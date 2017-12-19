@@ -17,9 +17,9 @@ class PoDumper extends PoFileDumper implements DumperInterface
     /**
      * {@inheritdoc}
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = array())
+    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
     {
-        $output = array();
+        $output = [];
         $output[] = 'msgid ""';
         $output[] = 'msgstr ""';
         $output[] = '"Content-Type: text/plain; charset=UTF-8\n"';
@@ -47,7 +47,7 @@ class PoDumper extends PoFileDumper implements DumperInterface
      * @param string $str
      * @return string
      */
-    private function escape($str)
+    private function escape($str): string
     {
         return \addcslashes($str, "\0..\37\42\134");
     }

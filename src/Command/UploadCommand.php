@@ -38,8 +38,8 @@ class UploadCommand extends AbstractApiCommand
      */
     protected function doRun()
     {
-        $terms = array();
-        $sourceFiles = array();
+        $terms = [];
+        $sourceFiles = [];
         foreach ($this->config->files() as $file) {
             /** @var File $file */
             $finder = Finder::create()->in($this->config->basePath())->path($file->source());
@@ -53,10 +53,10 @@ class UploadCommand extends AbstractApiCommand
             $iterator = $finder->getIterator();
             $iterator->rewind();
             $sourceTranslationFile = $iterator->current();
-            $sourceFiles[] = array(
+            $sourceFiles[] = [
                 'sourceTranslationFile' => $sourceTranslationFile,
                 'configFile' => $file
-            );
+            ];
 
             $translator = new Translator($this->config->referenceLanguage());
             $fileFormat = FormatGuesser::formatFromFile($sourceTranslationFile);
@@ -71,17 +71,17 @@ class UploadCommand extends AbstractApiCommand
 
             $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->context());
             foreach ($messages as $term => $message) {
-                $terms[] = array(
+                $terms[] = [
                     'term' => $term,
                     'plural' => \is_array($message) ? $term : null,
                     'context' => $file->context()
-                );
+                ];
             }
         }
 
         $this->io->section('Synchronizing terms ... ');
         $result = $this->apiClient->sync($this->config->projectId(), $terms);
-        $this->io->table(array('Parsed', 'Added', 'Updated', 'Deleted'), array($result));
+        $this->io->table(['Parsed', 'Added', 'Updated', 'Deleted'], [$result]);
 
         if ($this->input->getOption('include-reference-language')) {
             $this->uploadTranslations($sourceFiles);
@@ -101,7 +101,7 @@ class UploadCommand extends AbstractApiCommand
             $this->io->section(\sprintf('Uploading "%s" language from files ...', $language));
 
             $translator = new Translator($language);
-            $translationFiles = array();
+            $translationFiles = [];
             foreach ($sourceFiles as $sourceFile) {
                 $translationFile = $this->buildTranslationFile(
                     $sourceFile['configFile'],
@@ -118,19 +118,19 @@ class UploadCommand extends AbstractApiCommand
             }
             $this->io->listing($translationFiles);
 
-            $translations = array();
+            $translations = [];
             foreach ($translator->getCatalogue($language)->all() as $context => $catalogTranslations) {
                 foreach ($catalogTranslations as $term => $translation) {
-                    $translations[] = array(
-                        'term' => array(
+                    $translations[] = [
+                        'term' => [
                             'term' => $term,
                             'context' => $context
-                        ),
-                        'definition' => array(
+                        ],
+                        'definition' => [
                             'forms' => (array)$translation,
                             'fuzzy' => 0
-                        )
-                    );
+                        ]
+                    ];
                 }
             }
 
@@ -140,7 +140,7 @@ class UploadCommand extends AbstractApiCommand
                     $language,
                     $translations
                 );
-                $this->io->table(\array_keys($response), array($response));
+                $this->io->table(\array_keys($response), [$response]);
             } else {
                 $this->io->note(\sprintf('No translations found for %s language', $language));
             }

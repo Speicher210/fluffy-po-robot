@@ -6,6 +6,7 @@ namespace Wingu\FluffyPoRobot;
 
 use KevinGH\Amend;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Helper\HelperSet;
 use Wingu\FluffyPoRobot\Command;
 
 final class Application extends BaseApplication
@@ -38,7 +39,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultHelperSet()
+    protected function getDefaultHelperSet(): HelperSet
     {
         $helperSet = parent::getDefaultHelperSet();
         if (('@' . 'git-version@') !== $this->getVersion()) {

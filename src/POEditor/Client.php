@@ -32,9 +32,9 @@ class Client
         );
     }
 
-    public function projectDetails(int $idProject) : array
+    public function projectDetails(int $idProject): array
     {
-        $response = $this->callAction('view_project', array('id' => $idProject));
+        $response = $this->callAction('view_project', ['id' => $idProject]);
 
         return $response['item'];
     }
@@ -44,7 +44,7 @@ class Client
      *
      * @return array
      */
-    public function listProjects() : array
+    public function listProjects(): array
     {
         $response = $this->callAction('list_projects');
 
@@ -57,9 +57,9 @@ class Client
      * @param int $idProject
      * @return array
      */
-    public function listProjectLanguages(int $idProject) : array
+    public function listProjectLanguages(int $idProject): array
     {
-        $projects = $this->callAction('list_languages', array('id' => $idProject));
+        $projects = $this->callAction('list_languages', ['id' => $idProject]);
 
         return \array_column($projects['list'], 'code');
     }
@@ -71,11 +71,9 @@ class Client
      * @param array $terms
      * @return array
      */
-    public function sync(int $idProject, array $terms) : array
+    public function sync(int $idProject, array $terms): array
     {
-        $terms = \GuzzleHttp\json_encode($terms);
-
-        $response = $this->callAction('sync_terms', array('id' => $idProject, 'data' => $terms));
+        $response = $this->callAction('sync_terms', ['id' => $idProject, 'data' => \GuzzleHttp\json_encode($terms)]);
 
         return $response['details'];
     }
@@ -88,7 +86,7 @@ class Client
      * @param array $translations
      * @return array
      */
-    public function upload(int $idProject, string $language, array $translations) : array
+    public function upload(int $idProject, string $language, array $translations): array
     {
         if (\count($translations) === 0) {
             throw new \InvalidArgumentException('You must provide at least one translation.');
@@ -96,11 +94,11 @@ class Client
 
         $response = $this->callAction(
             'update_language',
-            array(
+            [
                 'id' => $idProject,
                 'language' => $language,
                 'data' => \GuzzleHttp\json_encode($translations)
-            )
+            ]
         );
 
         return $response['details'];
@@ -114,20 +112,20 @@ class Client
      * @param string $context
      * @return array
      */
-    public function export(int $idProject, string $language, string $context) : array
+    public function export(int $idProject, string $language, string $context): array
     {
         $response = $this->callAction(
             'export',
-            array(
+            [
                 'id' => $idProject,
                 'language' => $language,
                 'type' => 'json',
                 'filters' => 'translated'
-            )
+            ]
         );
 
         $content = \file_get_contents($response['item']);
-        $translations = array();
+        $translations = [];
         // There can be no translations.
         if ($content !== '') {
             $translations = \GuzzleHttp\json_decode(\file_get_contents($response['item']), true);
@@ -155,12 +153,12 @@ class Client
      * @param array $parameters
      * @return array
      */
-    protected function callAction(string $action, array $parameters = array())
+    protected function callAction(string $action, array $parameters = []): array
     {
-        $formParams = array(
+        $formParams = [
             'api_token' => $this->apiToken,
             'action' => $action
-        );
+        ];
 
         $response = $this->client->post(
             null,
@@ -184,12 +182,12 @@ class Client
      */
     private function parseFormParams(array $formParams): array
     {
-        $params = array();
+        $params = [];
         foreach ($formParams as $paramName => $paramContents) {
-            $params[] = array(
+            $params[] = [
                 'name' => $paramName,
                 'contents' => $paramContents
-            );
+            ];
         }
 
         return $params;
