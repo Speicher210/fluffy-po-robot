@@ -11,11 +11,10 @@
     "ios strings"
   ],
   "require": {
-    "php": "^7.2.0",
+    "php": "^7.2",
     "roave/security-advisories": "dev-master",
 
     "symfony/console": "^3.4",
-    "kherge/amend": "^3.0.5",
     "guzzlehttp/guzzle": "^6.3",
     "symfony/yaml": "^3.4",
     "symfony/finder": "^3.4",
@@ -32,7 +31,9 @@
       "Wingu\\FluffyPoRobot\\": "src"
     }
   },
-  "bin": [
-    "bin/fpr"
-  ]
+  "autoload-dev": {
+    "psr-4": {
+      "Wingu\\FluffyPoRobot\\Tests\\": "Tests"
+    }
+  }
 }
