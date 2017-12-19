@@ -3,5 +3,5 @@
 ```bash
 docker run --rm --interactive --tty \
     --volume $PWD:/app \
-    fluffy list
+    wingu/fluffy list
 ```
