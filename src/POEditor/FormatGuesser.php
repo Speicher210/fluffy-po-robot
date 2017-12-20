@@ -23,9 +23,9 @@ use Wingu\FluffyPoRobot\Translation\Loader\YamlFileLoader;
 /**
  * Try to guess the format from the filename.
  */
-class FormatGuesser
+final class FormatGuesser
 {
-    public static function formatFromFile($filename) : string
+    public static function formatFromFile($filename): string
     {
         $extension = \pathinfo((string)$filename, PATHINFO_EXTENSION);
 
@@ -47,7 +47,7 @@ class FormatGuesser
         throw new \RuntimeException('Can not guess format.');
     }
 
-    public static function fileLoaderFromFile($filename) : LoaderInterface
+    public static function fileLoaderFromFile($filename): LoaderInterface
     {
         $format = self::formatFromFile($filename);
 
@@ -67,11 +67,7 @@ class FormatGuesser
         throw new \RuntimeException('Can not find a file loader.');
     }
 
-    /**
-     * @param string $filename
-     * @return DumperInterface
-     */
-    public static function fileDumperFromFile(string $filename) : DumperInterface
+    public static function fileDumperFromFile(string $filename): DumperInterface
     {
         $format = self::formatFromFile($filename);
 

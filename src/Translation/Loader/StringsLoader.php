@@ -11,7 +11,7 @@ class StringsLoader extends CsvFileLoader
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource)
+    protected function loadResource($resource): array
     {
         $this->setCsvControl('=');
 

@@ -15,7 +15,7 @@ trait DumperTrait
      * @param string $domain
      * @param string $filePath
      */
-    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath)
+    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath): void
     {
         \file_put_contents($filePath, $this->formatCatalogue($messages, $domain));
     }
@@ -31,16 +31,10 @@ trait DumperTrait
      */
     abstract public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = []);
 
-    /**
-     * @return string
-     */
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }
 
-    /**
-     * @return string
-     */
     abstract protected function getExtension();
 }

@@ -18,7 +18,7 @@ class DownloadCommand extends AbstractApiCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

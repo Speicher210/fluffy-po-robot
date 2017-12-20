@@ -23,7 +23,7 @@ class InitCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -75,7 +75,7 @@ class InitCommand extends AbstractCommand
      *
      * @return int
      */
-    private function getProjectID() : int
+    private function getProjectID(): int
     {
         $projectInput = $this->input->getOption('project');
         if (!$projectInput) {
@@ -104,7 +104,7 @@ class InitCommand extends AbstractCommand
      * @param integer $idProject
      * @return array
      */
-    private function getProjectLanguagesMap(int $idProject) : array
+    private function getProjectLanguagesMap(int $idProject): array
     {
         $languages = $this->apiClient->listProjectLanguages($idProject);
 
@@ -125,7 +125,7 @@ class InitCommand extends AbstractCommand
      *
      * @return array
      */
-    private function getFiles() : array
+    private function getFiles(): array
     {
         $files = [];
         $contexts = [];
@@ -177,7 +177,7 @@ class InitCommand extends AbstractCommand
     /**
      * @return string
      */
-    private function getBasePath() : string
+    private function getBasePath(): string
     {
         $basePath = $this->input->getOption('base-path');
         if (!$basePath) {
@@ -191,7 +191,7 @@ class InitCommand extends AbstractCommand
      * @param int $idProject
      * @return string
      */
-    private function getReferenceLanguage(int $idProject) : string
+    private function getReferenceLanguage(int $idProject): string
     {
         $details = $this->apiClient->projectDetails($idProject);
 

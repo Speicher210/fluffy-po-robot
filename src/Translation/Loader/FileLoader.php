@@ -17,7 +17,7 @@ abstract class FileLoader extends ArrayLoader
     /**
      * {@inheritdoc}
      */
-    public function load($resource, $locale, $domain = 'messages')
+    public function load($resource, $locale, $domain = 'messages'): MessageCatalogue
     {
         $resource = (string)$resource;
 
@@ -53,5 +53,5 @@ abstract class FileLoader extends ArrayLoader
      * @param string $resource
      * @return array
      */
-    abstract protected function loadResource(string $resource) : array;
+    abstract protected function loadResource(string $resource): array;
 }

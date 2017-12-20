@@ -11,12 +11,12 @@ class Client
     /**
      * @var ClientInterface
      */
-    protected $client;
+    private $client;
 
     /**
      * @var string
      */
-    protected $apiToken;
+    private $apiToken;
 
     /**
      * @param string $apiToken
@@ -148,12 +148,7 @@ class Client
         return $translations;
     }
 
-    /**
-     * @param string $action
-     * @param array $parameters
-     * @return array
-     */
-    protected function callAction(string $action, array $parameters = []): array
+    private function callAction(string $action, array $parameters = []): array
     {
         $formParams = [
             'api_token' => $this->apiToken,
@@ -176,10 +171,6 @@ class Client
         return $apiResponse;
     }
 
-    /**
-     * @param array $formParams
-     * @return array
-     */
     private function parseFormParams(array $formParams): array
     {
         $params = [];

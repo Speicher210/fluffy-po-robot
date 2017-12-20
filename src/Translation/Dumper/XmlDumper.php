@@ -56,9 +56,6 @@ class XmlDumper extends FileDumper implements DumperInterface
         return $this->domDoc->saveXML();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getExtension()
     {
         return 'xml';
@@ -100,7 +97,7 @@ class XmlDumper extends FileDumper implements DumperInterface
      * @param string $translation
      * @return string
      */
-    private function escapeTranslation(string $translation) : string
+    private function escapeTranslation(string $translation): string
     {
         return \addcslashes($translation, '"\'');
     }

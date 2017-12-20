@@ -13,7 +13,7 @@ interface DumperInterface extends \Symfony\Component\Translation\Dumper\DumperIn
      *
      * @return string
      */
-    public function getFileExtension() : string;
+    public function getFileExtension(): string;
 
     /**
      * Dump the translations to a file.

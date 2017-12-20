@@ -7,48 +7,26 @@ namespace Wingu\FluffyPoRobot\POEditor\Configuration;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 
-class Configuration
+final class Configuration
 {
-    /**
-     * @var string
-     */
-    protected $apiToken;
+    private $apiToken;
 
-    /**
-     * @var int
-     */
-    protected $projectId;
+    private $projectId;
 
     /**
      * Relative to the configuration file.
-     *
-     * @var string
      */
-    protected $basePath;
+    private $basePath;
 
-    /**
-     * @var string
-     */
-    protected $referenceLanguage;
+    private $referenceLanguage;
 
-    /**
-     * @var array
-     */
-    protected $languages;
+    private $languages;
 
     /**
      * @var File[]
      */
-    protected $files;
+    private $files;
 
-    /**
-     * @param string $apiToken
-     * @param int $projectId
-     * @param string $basePath
-     * @param string $referenceLanguage
-     * @param array $languages
-     * @param array $files
-     */
     public function __construct(
         string $apiToken,
         int $projectId,
@@ -65,11 +43,6 @@ class Configuration
         $this->files = $files;
     }
 
-    /**
-     * @param string $yamlFilePath
-     * @return Configuration
-     * @throws \RuntimeException
-     */
     public static function fromYamlFile(string $yamlFilePath): Configuration
     {
         $config = Yaml::parse(\file_get_contents($yamlFilePath));
@@ -142,13 +115,6 @@ class Configuration
         return $this->languages;
     }
 
-    /**
-     * Get the mapping for a language.
-     *
-     * @param string $language
-     * @return string
-     * @throws \OutOfBoundsException If language is not mapped.
-     */
     public function languageMap(string $language): string
     {
         if (\array_key_exists($language, $this->languages)) {
@@ -158,9 +124,6 @@ class Configuration
         throw new \OutOfBoundsException('Language not defined.');
     }
 
-    /**
-     * @return array
-     */
     public function files(): array
     {
         return $this->files;

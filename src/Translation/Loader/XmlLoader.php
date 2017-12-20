@@ -48,11 +48,7 @@ class XmlLoader extends FileLoader
         return (string)$attributes[$attributeName];
     }
 
-    /**
-     * @param string $translation
-     * @return string
-     */
-    private function cleanTranslation(string $translation) : string
+    private function cleanTranslation(string $translation): string
     {
         if (0 === \strpos($translation, '"') && \substr($translation, -1) === '"' && \substr($translation, -2) !== '\"') {
             $translation = \substr($translation, 1, -1);

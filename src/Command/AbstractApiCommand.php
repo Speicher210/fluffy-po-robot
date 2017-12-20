@@ -26,7 +26,7 @@ abstract class AbstractApiCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addArgument(
@@ -62,7 +62,7 @@ abstract class AbstractApiCommand extends AbstractCommand
      * @param string $apiToken
      * @return Client
      */
-    protected function initializeApiClient(string $apiToken) : Client
+    protected function initializeApiClient(string $apiToken): Client
     {
         return new Client($apiToken);
     }
@@ -73,7 +73,7 @@ abstract class AbstractApiCommand extends AbstractCommand
      * @param string $languageCode
      * @return string
      */
-    protected function buildTranslationFile(File $fileConfiguration, \SplFileInfo $sourceFile, string $languageCode) : string
+    protected function buildTranslationFile(File $fileConfiguration, \SplFileInfo $sourceFile, string $languageCode): string
     {
         // If language code is for a reference language then we return path to the source.
         if ($this->config->languageMap($this->config->referenceLanguage()) === $languageCode) {
