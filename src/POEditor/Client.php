@@ -4,12 +4,14 @@ declare(strict_types = 1);
 
 namespace Wingu\FluffyPoRobot\POEditor;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {
+    private const BASE_URI = 'https://poeditor.com/api/';
+
     /**
-     * @var ClientInterface
+     * @var GuzzleClient
      */
     private $client;
 
@@ -25,9 +27,9 @@ class Client
     {
         $this->apiToken = $apiToken;
 
-        $this->client = new \GuzzleHttp\Client(
+        $this->client = new GuzzleClient(
             [
-                'base_uri' => 'https://poeditor.com/api/'
+                'base_uri' => self::BASE_URI
             ]
         );
     }
@@ -156,7 +158,7 @@ class Client
         ];
 
         $response = $this->client->post(
-            null,
+            self::BASE_URI,
             [
                 'multipart' => $this->parseFormParams(\array_merge($formParams, $parameters))
             ]

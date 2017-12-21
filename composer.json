@@ -24,7 +24,9 @@
   "require-dev": {
     "symfony/var-dumper": "^4.0",
     "phpunit/phpunit": "^6.5",
-    "mikey179/vfsStream": "^1.6"
+    "mikey179/vfsStream": "^1.6",
+    "phpstan/phpstan": "^0.9",
+    "squizlabs/php_codesniffer": "^3.2"
   },
   "autoload": {
     "psr-4": {
@@ -35,5 +37,18 @@
     "psr-4": {
       "Wingu\\FluffyPoRobot\\Tests\\": "Tests"
     }
+  },
+  "scripts": {
+    "cs-check": "phpcs --warning-severity=0",
+    "cs-fix": "phpcbf --warning-severity=0",
+    "phpstan": [
+      "phpstan analyse src tests --level 7"
+    ],
+    "test": "phpunit --colors=always",
+    "check": [
+      "@cs-check",
+      "@phpstan",
+      "@test"
+    ]
   }
 }

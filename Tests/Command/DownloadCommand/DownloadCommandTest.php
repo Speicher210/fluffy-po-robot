@@ -30,13 +30,13 @@ class DownloadCommandTest extends TestCase
 
     public static function dataProviderTestDownload()
     {
-        return array(
-            array(__DIR__ . '/poeditor.po.yml', 'po'),
-            array(__DIR__ . '/poeditor.xml.yml', 'xml'),
-            array(__DIR__ . '/poeditor.yml.yml', 'yml'),
-            array(__DIR__ . '/poeditor.json.yml', 'json'),
-            array(__DIR__ . '/poeditor.strings.yml', 'strings'),
-        );
+        return [
+            [__DIR__ . '/poeditor.po.yml', 'po'],
+            [__DIR__ . '/poeditor.xml.yml', 'xml'],
+            [__DIR__ . '/poeditor.yml.yml', 'yml'],
+            [__DIR__ . '/poeditor.json.yml', 'json'],
+            [__DIR__ . '/poeditor.strings.yml', 'strings'],
+        ];
     }
 
     /**
@@ -46,63 +46,63 @@ class DownloadCommandTest extends TestCase
      */
     public function testDownload(string $configFile, string $format)
     {
-        $allTranslations = array(
-            array(
+        $allTranslations = [
+            [
                 'source' => $this->root->url() . '/source_1.en.' . $format,
                 'context' => 'context_1',
-                'language' => array(
-                    'en' => array(
-                        'terms' => array(
+                'language' => [
+                    'en' => [
+                        'terms' => [
                             self::createTranslation('some_term', 'some definition English', 'context_1'),
                             self::createTranslation('some_term_2', 'some definition English 2', 'context_1'),
                             self::createTranslation(
                                 'some_term_3',
-                                array(
+                                [
                                     'one' => 'One English',
                                     'other' => 'Other English'
-                                ),
+                                ],
                                 'context_1'
                             ),
-                        ),
+                        ],
                         'translationFile' => $this->root->url() . '/source_1.en.' . $format
-                    ),
-                    'de' => array(
-                        'terms' => array(
+                    ],
+                    'de' => [
+                        'terms' => [
                             self::createTranslation('some_term', 'some definition German', 'context_1')
-                        ),
+                        ],
                         'translationFile' => $this->root->url() . '/tmp/source_1/translation_de.' . $format
-                    )
-                )
-            ),
-            array(
+                    ]
+                ]
+            ],
+            [
                 'source' => $this->root->url() . '/source_2.en.' . $format,
                 'context' => 'context_2',
-                'language' => array(
-                    'en' => array(
-                        'terms' => array(
+                'language' => [
+                    'en' => [
+                        'terms' => [
                             self::createTranslation('some_other_term', 'some other definition English', 'context_2'),
                             self::createTranslation('some_other_term_2', 'some other definition English 2', 'context_2')
-                        ),
+                        ],
                         'translationFile' => $this->root->url() . '/source_2.en.' . $format
-                    ),
-                    'de' => array(
-                        'terms' => array(
+                    ],
+                    'de' => [
+                        'terms' => [
                             self::createTranslation('some_other_term', 'some other definition German', 'context_2'),
                             self::createTranslation(
                                 'some_other_term_2',
-                                array(
+                                [
                                     'one' => 'One German',
                                     'few' => 'Few German',
                                     'other' => 'Other German'
-                                ),
+                                ],
                                 'context_2'
                             ),
-                        ),
+                        ],
                         'translationFile' => $this->root->url() . '/tmp/source_2/translation_de.' . $format
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
 
         $this->assertDownload($configFile, $allTranslations, $format);
     }
@@ -115,12 +115,12 @@ class DownloadCommandTest extends TestCase
      */
     private static function createTranslation(string $term, $translation, string $context): array
     {
-        return array(
+        return [
             'term' => $term,
             'definition' => $translation,
             'term_plural' => \is_array($translation) ? $term : '',
             'context' => $context
-        );
+        ];
     }
 
     /**
@@ -132,11 +132,11 @@ class DownloadCommandTest extends TestCase
     {
         $apiClientMock = $this->getMockBuilder(Client::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('export'))
+            ->setMethods(['export'])
             ->getMock();
 
         $i = 0;
-        $translationFiles = array();
+        $translationFiles = [];
         foreach ($allTranslations as $translationSuite) {
             \touch($translationSuite['source']);
 
@@ -179,7 +179,7 @@ class DownloadCommandTest extends TestCase
         };
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array('config-file' => $configFile));
+        $commandTester->execute(['config-file' => $configFile]);
 
         foreach ($translationFiles as $expected => $translationFile) {
             $this->assertFileExists($translationFile);
