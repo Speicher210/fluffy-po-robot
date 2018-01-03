@@ -35,14 +35,14 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Wingu\\FluffyPoRobot\\Tests\\": "Tests"
+      "Wingu\\FluffyPoRobot\\Tests\\": "tests"
     }
   },
   "scripts": {
     "cs-check": "phpcs --warning-severity=0",
     "cs-fix": "phpcbf --warning-severity=0",
     "phpstan": [
-      "phpstan analyse src tests --level 7"
+      "phpstan analyse src tests --level max"
     ],
     "test": "phpunit --colors=always",
     "check": [
