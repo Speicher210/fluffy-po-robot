@@ -1,33 +1,37 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Loader;
 
-/**
- * Xml loader.
- */
+use SimpleXMLElement;
+use function Safe\file_get_contents;
+use function Safe\simplexml_load_string;
+use function Safe\substr;
+use function stripcslashes;
+use function strpos;
+
 class XmlLoader extends FileLoader
 {
     /**
      * {@inheritdoc}
      */
-    protected function loadResource(string $resource): array
+    protected function loadResource(string $resource) : array
     {
-        $xml = \simplexml_load_string(\file_get_contents($resource));
+        $xml = simplexml_load_string(file_get_contents($resource));
 
         $data = [];
 
-        /** @var \SimpleXMLElement $element */
+        /** @var SimpleXMLElement $element */
         foreach ($xml as $element) {
             $name = $this->getAttribute($element, 'name');
 
             if ($element->getName() === 'string') {
-                $data[$name] = $this->cleanTranslation((string)$element[0]);
+                $data[$name] = $this->cleanTranslation((string) $element[0]);
             } elseif ($element->getName() === 'plurals') {
                 $plurals = [];
                 foreach ($element->item as $item) {
-                    $plurals[] = $this->cleanTranslation((string)$item);
+                    $plurals[] = $this->cleanTranslation((string) $item);
                 }
                 $data[$name] = $plurals;
             }
@@ -36,24 +40,19 @@ class XmlLoader extends FileLoader
         return $data;
     }
 
-    /**
-     * @param \SimpleXMLElement $element
-     * @param string $attributeName
-     * @return string
-     */
-    private function getAttribute(\SimpleXMLElement $element, string $attributeName): string
+    private function getAttribute(SimpleXMLElement $element, string $attributeName) : string
     {
         $attributes = $element->attributes();
 
-        return (string)$attributes[$attributeName];
+        return (string) $attributes[$attributeName];
     }
 
-    private function cleanTranslation(string $translation): string
+    private function cleanTranslation(string $translation) : string
     {
-        if (0 === \strpos($translation, '"') && \substr($translation, -1) === '"' && \substr($translation, -2) !== '\"') {
-            $translation = \substr($translation, 1, -1);
+        if (strpos($translation, '"') === 0 && substr($translation, -1) === '"' && substr($translation, -2) !== '\"') {
+            $translation = substr($translation, 1, -1);
         }
 
-        return \stripcslashes($translation);
+        return stripcslashes($translation);
     }
 }

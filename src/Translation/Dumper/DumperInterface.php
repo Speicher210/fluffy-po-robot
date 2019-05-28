@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
@@ -10,17 +10,11 @@ interface DumperInterface extends \Symfony\Component\Translation\Dumper\DumperIn
 {
     /**
      * Get the file extension.
-     *
-     * @return string
      */
-    public function getFileExtension(): string;
+    public function getFileExtension() : string;
 
     /**
      * Dump the translations to a file.
-     *
-     * @param MessageCatalogue $messages
-     * @param string $domain
-     * @param string $filePath
      */
-    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath);
+    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath) : void;
 }

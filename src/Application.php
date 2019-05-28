@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot;
 
 use Symfony\Component\Console\Application as BaseApplication;
-use Wingu\FluffyPoRobot\Command;
 
 final class Application extends BaseApplication
 {
@@ -19,7 +18,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands(): array
+    protected function getDefaultCommands() : array
     {
         $commands = parent::getDefaultCommands();
 

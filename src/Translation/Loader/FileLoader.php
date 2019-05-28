@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Loader;
 
@@ -8,25 +8,25 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
+use function file_exists;
+use function Safe\sprintf;
+use function stream_is_local;
 
-/**
- * Abstract file loader.
- */
 abstract class FileLoader extends ArrayLoader
 {
     /**
      * {@inheritdoc}
      */
-    public function load($resource, $locale, $domain = 'messages'): MessageCatalogue
+    public function load($resource, $locale, $domain = 'messages') : MessageCatalogue
     {
-        $resource = (string)$resource;
+        $resource = (string) $resource;
 
-        if (!\stream_is_local($resource)) {
-            throw new InvalidResourceException(\sprintf('This is not a local file "%s".', $resource));
+        if (! stream_is_local($resource)) {
+            throw new InvalidResourceException(sprintf('This is not a local file "%s".', $resource));
         }
 
-        if (!\file_exists($resource)) {
-            throw new NotFoundResourceException(\sprintf('File "%s" not found.', $resource));
+        if (! file_exists($resource)) {
+            throw new NotFoundResourceException(sprintf('File "%s" not found.', $resource));
         }
 
         $messages = $this->loadResource($resource);
@@ -38,10 +38,7 @@ abstract class FileLoader extends ArrayLoader
     }
 
     /**
-     * Load the resource.
-     *
-     * @param string $resource
-     * @return array
+     * @return mixed[]
      */
-    abstract protected function loadResource(string $resource): array;
+    abstract protected function loadResource(string $resource) : array;
 }

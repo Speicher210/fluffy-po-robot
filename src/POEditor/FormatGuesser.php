@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\POEditor;
 
+use RuntimeException;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
 use Wingu\FluffyPoRobot\Translation\Dumper\CsvDumper;
@@ -19,15 +20,20 @@ use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\YamlFileLoader;
+use const PATHINFO_EXTENSION;
+use function pathinfo;
 
 /**
  * Try to guess the format from the filename.
  */
 final class FormatGuesser
 {
-    public static function formatFromFile($filename): string
+    /**
+     * @param mixed $filename
+     */
+    public static function formatFromFile($filename) : string
     {
-        $extension = \pathinfo((string)$filename, PATHINFO_EXTENSION);
+        $extension = pathinfo((string) $filename, PATHINFO_EXTENSION);
 
         switch ($extension) {
             case 'csv':
@@ -44,10 +50,13 @@ final class FormatGuesser
                 return 'android_strings';
         }
 
-        throw new \RuntimeException('Can not guess format.');
+        throw new RuntimeException('Can not guess format.');
     }
 
-    public static function fileLoaderFromFile($filename): LoaderInterface
+    /**
+     * @param mixed $filename
+     */
+    public static function fileLoaderFromFile($filename) : LoaderInterface
     {
         $format = self::formatFromFile($filename);
 
@@ -64,10 +73,10 @@ final class FormatGuesser
                 return new YamlFileLoader();
         }
 
-        throw new \RuntimeException('Can not find a file loader.');
+        throw new RuntimeException('Can not find a file loader.');
     }
 
-    public static function fileDumperFromFile(string $filename): DumperInterface
+    public static function fileDumperFromFile(string $filename) : DumperInterface
     {
         $format = self::formatFromFile($filename);
 
@@ -90,6 +99,6 @@ final class FormatGuesser
                 return new XmlDumper();
         }
 
-        throw new \RuntimeException('Can not find a dumper.');
+        throw new RuntimeException('Can not find a dumper.');
     }
 }

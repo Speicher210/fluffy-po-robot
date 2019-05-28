@@ -1,15 +1,14 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\IniFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
+use function is_array;
+use function reset;
 
-/**
- * Strings dumper.
- */
 class StringsDumper extends IniFileDumper implements DumperInterface
 {
     use DumperTrait;
@@ -22,17 +21,14 @@ class StringsDumper extends IniFileDumper implements DumperInterface
         $output = '';
 
         foreach ($messages->all($domain) as $source => $target) {
-            $target = \is_array($target) ? \reset($target) : $target;
+            $target  = is_array($target) ? reset($target) : $target;
             $output .= '"' . $source . '" = "' . $target . "\";\n";
         }
 
         return $output;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getExtension()
+    public function getFileExtension() : string
     {
         return 'strings';
     }

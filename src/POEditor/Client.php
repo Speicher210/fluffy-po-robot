@@ -1,40 +1,47 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\POEditor;
 
 use GuzzleHttp\Client as GuzzleClient;
+use InvalidArgumentException;
+use RuntimeException;
+use function array_column;
+use function array_filter;
+use function array_merge;
+use function count;
+use function Safe\file_get_contents;
+use function Safe\json_decode;
+use function Safe\json_encode;
+use function Safe\uasort;
+use function strtolower;
 
 class Client
 {
     private const BASE_URI = 'https://poeditor.com/api/';
 
-    /**
-     * @var GuzzleClient
-     */
+    /** @var GuzzleClient */
     private $client;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $apiToken;
 
-    /**
-     * @param string $apiToken
-     */
     public function __construct(string $apiToken)
     {
         $this->apiToken = $apiToken;
 
         $this->client = new GuzzleClient(
             [
-                'base_uri' => self::BASE_URI
+                'base_uri' => self::BASE_URI,
             ]
         );
     }
 
-    public function projectDetails(int $idProject): array
+    /**
+     * @return mixed[]
+     */
+    public function projectDetails(int $idProject) : array
     {
         $response = $this->callAction('view_project', ['id' => $idProject]);
 
@@ -44,9 +51,9 @@ class Client
     /**
      * Get the list of projects.
      *
-     * @return array
+     * @return mixed[]
      */
-    public function listProjects(): array
+    public function listProjects() : array
     {
         $response = $this->callAction('list_projects');
 
@@ -56,42 +63,38 @@ class Client
     /**
      * Get the list of languages of a project.
      *
-     * @param int $idProject
-     * @return array
+     * @return mixed[]
      */
-    public function listProjectLanguages(int $idProject): array
+    public function listProjectLanguages(int $idProject) : array
     {
         $projects = $this->callAction('list_languages', ['id' => $idProject]);
 
-        return \array_column($projects['list'], 'code');
+        return array_column($projects['list'], 'code');
     }
 
     /**
      * Sync terms.
      *
-     * @param int $idProject
-     * @param array $terms
-     * @return array
+     * @param mixed[] $terms
+     *
+     * @return mixed[]
      */
-    public function sync(int $idProject, array $terms): array
+    public function sync(int $idProject, array $terms) : array
     {
-        $response = $this->callAction('sync_terms', ['id' => $idProject, 'data' => \GuzzleHttp\json_encode($terms)]);
+        $response = $this->callAction('sync_terms', ['id' => $idProject, 'data' => json_encode($terms)]);
 
         return $response['details'];
     }
 
     /**
-     * Upload a file.
+     * @param mixed[] $translations
      *
-     * @param int $idProject
-     * @param string $language
-     * @param array $translations
-     * @return array
+     * @return mixed[]
      */
-    public function upload(int $idProject, string $language, array $translations): array
+    public function upload(int $idProject, string $language, array $translations) : array
     {
-        if (\count($translations) === 0) {
-            throw new \InvalidArgumentException('You must provide at least one translation.');
+        if (count($translations) === 0) {
+            throw new InvalidArgumentException('You must provide at least one translation.');
         }
 
         $response = $this->callAction(
@@ -99,7 +102,7 @@ class Client
             [
                 'id' => $idProject,
                 'language' => $language,
-                'data' => \GuzzleHttp\json_encode($translations)
+                'data' => json_encode($translations),
             ]
         );
 
@@ -109,12 +112,9 @@ class Client
     /**
      * Export file.
      *
-     * @param int $idProject
-     * @param string $language
-     * @param string $context
-     * @return array
+     * @return mixed[]
      */
-    public function export(int $idProject, string $language, string $context): array
+    public function export(int $idProject, string $language, string $context) : array
     {
         $response = $this->callAction(
             'export',
@@ -122,27 +122,27 @@ class Client
                 'id' => $idProject,
                 'language' => $language,
                 'type' => 'json',
-                'filters' => 'translated'
+                'filters' => 'translated',
             ]
         );
 
-        $content = \file_get_contents($response['item']);
+        $content      = file_get_contents($response['item']);
         $translations = [];
         // There can be no translations.
         if ($content !== '') {
-            $translations = \GuzzleHttp\json_decode(\file_get_contents($response['item']), true);
+            $translations = json_decode(file_get_contents($response['item']), true);
 
-            $translations = \array_filter(
+            $translations = array_filter(
                 $translations,
-                function ($translation) use ($context) {
+                static function ($translation) use ($context) {
                     return $translation['context'] === $context;
                 }
             );
 
-            \uasort(
+            uasort(
                 $translations,
-                function ($a, $b) {
-                    return \strtolower($a['term']) <=> \strtolower($b['term']);
+                static function ($a, $b) {
+                    return strtolower($a['term']) <=> strtolower($b['term']);
                 }
             );
         }
@@ -150,36 +150,46 @@ class Client
         return $translations;
     }
 
-    private function callAction(string $action, array $parameters = []): array
+    /**
+     * @param mixed[] $parameters
+     *
+     * @return mixed[]
+     */
+    private function callAction(string $action, array $parameters = []) : array
     {
         $formParams = [
             'api_token' => $this->apiToken,
-            'action' => $action
+            'action' => $action,
         ];
 
         $response = $this->client->post(
             self::BASE_URI,
             [
-                'multipart' => $this->parseFormParams(\array_merge($formParams, $parameters))
+                'multipart' => $this->parseFormParams(array_merge($formParams, $parameters)),
             ]
         );
 
-        $apiResponse = \GuzzleHttp\json_decode($response->getBody()->getContents(), true);
+        $apiResponse = json_decode($response->getBody()->getContents(), true);
 
-        if ((int)$apiResponse['response']['code'] !== 200) {
-            throw new \RuntimeException($apiResponse['response']['message'], (int)$apiResponse['response']['code']);
+        if ((int) $apiResponse['response']['code'] !== 200) {
+            throw new RuntimeException($apiResponse['response']['message'], (int) $apiResponse['response']['code']);
         }
 
         return $apiResponse;
     }
 
-    private function parseFormParams(array $formParams): array
+    /**
+     * @param mixed[] $formParams
+     *
+     * @return mixed[]
+     */
+    private function parseFormParams(array $formParams) : array
     {
         $params = [];
         foreach ($formParams as $paramName => $paramContents) {
             $params[] = [
                 'name' => $paramName,
-                'contents' => $paramContents
+                'contents' => $paramContents,
             ];
         }
 

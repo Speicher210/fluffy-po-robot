@@ -1,29 +1,38 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
+use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
+use const PATHINFO_FILENAME;
+use function count;
+use function ctype_digit;
+use function in_array;
+use function pathinfo;
+use function Safe\array_combine;
+use function Safe\file_put_contents;
+use function Safe\getcwd;
+use function Safe\sprintf;
+use function strtolower;
 
 /**
  * Command to init the configuration.
  */
 class InitCommand extends AbstractCommand
 {
-    /**
-     * @var Client
-     */
+    /** @var Client */
     protected $apiClient;
 
     /**
      * {@inheritdoc}
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         parent::configure();
 
@@ -38,7 +47,7 @@ class InitCommand extends AbstractCommand
                 'f',
                 InputOption::VALUE_REQUIRED,
                 'The file where to dump the config.',
-                \getcwd() . '/poeditor.yml'
+                getcwd() . '/poeditor.yml'
             );
     }
 
@@ -50,7 +59,7 @@ class InitCommand extends AbstractCommand
         parent::execute($input, $output);
 
         $apiToken = $this->input->getOption('api-token');
-        if (!$apiToken) {
+        if (! $apiToken) {
             $apiToken = $this->io->askHidden('API token');
         }
 
@@ -67,53 +76,52 @@ class InitCommand extends AbstractCommand
             $this->getFiles()
         );
 
-        \file_put_contents($this->input->getOption('output-file'), $config->toYaml());
+        /** @var string $outputFile */
+        $outputFile = $this->input->getOption('output-file');
+        file_put_contents($outputFile, $config->toYaml());
     }
 
     /**
      * Get the project ID.
-     *
-     * @return int
      */
-    private function getProjectID(): int
+    private function getProjectID() : int
     {
         $projectInput = $this->input->getOption('project');
-        if (!$projectInput) {
+        if (! $projectInput) {
             $projectInput = $this->io->ask('Project name or ID');
         }
 
-        if (\ctype_digit($projectInput)) {
-            return (int)$projectInput;
+        if (ctype_digit($projectInput)) {
+            return (int) $projectInput;
         }
-        $projectInput = \strtolower($projectInput);
+        $projectInput = strtolower($projectInput);
 
         $projects = $this->apiClient->listProjects();
 
         foreach ($projects as $project) {
-            if (\strtolower($project['name']) === $projectInput) {
-                return (int)$project['id'];
+            if (strtolower($project['name']) === $projectInput) {
+                return (int) $project['id'];
             }
         }
 
-        throw new \InvalidArgumentException('Project not found.');
+        throw new InvalidArgumentException('Project not found.');
     }
 
     /**
      * Get the project languages map.
      *
-     * @param integer $idProject
-     * @return array
+     * @return mixed[]
      */
-    private function getProjectLanguagesMap(int $idProject): array
+    private function getProjectLanguagesMap(int $idProject) : array
     {
         $languages = $this->apiClient->listProjectLanguages($idProject);
 
-        $languagesMap = \array_combine($languages, $languages);
+        $languagesMap = array_combine($languages, $languages);
 
         if ($this->io->confirm('Do you want to map your languages?') === true) {
             $languagesMap = [];
             foreach ($languages as $language) {
-                $languagesMap[$language] = $this->io->ask(\sprintf('Enter map for language "%s"', $language), $language);
+                $languagesMap[$language] = $this->io->ask(sprintf('Enter map for language "%s"', $language), $language);
             }
         }
 
@@ -123,21 +131,21 @@ class InitCommand extends AbstractCommand
     /**
      * Get the files.
      *
-     * @return array
+     * @return mixed[]
      */
-    private function getFiles(): array
+    private function getFiles() : array
     {
-        $files = [];
+        $files    = [];
         $contexts = [];
 
         while (true) {
             $source = $this->io->ask(
                 'Source (leave empty to skip)',
                 null,
-                function ($input) use ($files) {
-                    $hasSource = \count($files) > 0;
+                static function ($input) use ($files) {
+                    $hasSource = count($files) > 0;
                     if ($input === null && $hasSource === false) {
-                        throw new \InvalidArgumentException('At least one source file is needed.');
+                        throw new InvalidArgumentException('At least one source file is needed.');
                     }
 
                     return $input ?: false;
@@ -150,10 +158,10 @@ class InitCommand extends AbstractCommand
 
             $context = $this->io->ask(
                 'Context',
-                \pathinfo($source, \PATHINFO_FILENAME),
-                function ($input) use ($contexts) {
-                    if (\in_array($input, $contexts, true)) {
-                        throw new \InvalidArgumentException(\sprintf('The context "%s" must be unique', $input));
+                pathinfo($source, PATHINFO_FILENAME),
+                static function ($input) use ($contexts) {
+                    if (in_array($input, $contexts, true)) {
+                        throw new InvalidArgumentException(sprintf('The context "%s" must be unique', $input));
                     }
 
                     return $input;
@@ -167,31 +175,24 @@ class InitCommand extends AbstractCommand
             $files[] = [
                 'source' => $source,
                 'context' => $context,
-                'translation' => $translation
+                'translation' => $translation,
             ];
         }
 
         return $files;
     }
 
-    /**
-     * @return string
-     */
-    private function getBasePath(): string
+    private function getBasePath() : string
     {
         $basePath = $this->input->getOption('base-path');
-        if (!$basePath) {
+        if (! $basePath) {
             $basePath = $this->io->ask('Base path name (absolute path or relative to the configuration file)', '.');
         }
 
         return $basePath;
     }
 
-    /**
-     * @param int $idProject
-     * @return string
-     */
-    private function getReferenceLanguage(int $idProject): string
+    private function getReferenceLanguage(int $idProject) : string
     {
         $details = $this->apiClient->projectDetails($idProject);
 

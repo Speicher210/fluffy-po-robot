@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
@@ -14,19 +14,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 abstract class AbstractCommand extends Command
 {
-    /**
-     * @var InputInterface
-     */
+    /** @var InputInterface */
     protected $input;
 
-    /**
-     * @var OutputInterface
-     */
+    /** @var OutputInterface */
     protected $output;
 
-    /**
-     * @var SymfonyStyle
-     */
+    /** @var SymfonyStyle */
     protected $io;
 
     /**
@@ -34,7 +28,7 @@ abstract class AbstractCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = $output;
 
         $this->io = new SymfonyStyle($input, $output);

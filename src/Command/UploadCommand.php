@@ -1,14 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
+use RuntimeException;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
+use function array_keys;
+use function count;
+use function is_array;
+use function Safe\sprintf;
 
 /**
  * Command to upload the translations to POEditor.
@@ -18,7 +23,7 @@ class UploadCommand extends AbstractApiCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         parent::configure();
 
@@ -36,26 +41,26 @@ class UploadCommand extends AbstractApiCommand
     /**
      * {@inheritdoc}
      */
-    protected function doRun()
+    protected function doRun() : void
     {
-        $terms = [];
+        $terms       = [];
         $sourceFiles = [];
         foreach ($this->config->files() as $file) {
             /** @var File $file */
             $finder = Finder::create()->in($this->config->basePath())->path($file->source());
             if ($finder->count() !== 1) {
                 if ($finder->count() === 0) {
-                    throw new \RuntimeException(\sprintf('No source file found for "%s".', $file->source()));
-                } else {
-                    throw new \RuntimeException(\sprintf('More than one source file found for "%s"', $file->source()));
+                    throw new RuntimeException(sprintf('No source file found for "%s".', $file->source()));
                 }
+
+                throw new RuntimeException(sprintf('More than one source file found for "%s"', $file->source()));
             }
             $iterator = $finder->getIterator();
             $iterator->rewind();
             $sourceTranslationFile = $iterator->current();
-            $sourceFiles[] = [
+            $sourceFiles[]         = [
                 'sourceTranslationFile' => $sourceTranslationFile,
-                'configFile' => $file
+                'configFile' => $file,
             ];
 
             $translator = new Translator($this->config->referenceLanguage());
@@ -73,8 +78,8 @@ class UploadCommand extends AbstractApiCommand
             foreach ($messages as $term => $message) {
                 $terms[] = [
                     'term' => $term,
-                    'plural' => \is_array($message) ? $term : null,
-                    'context' => $file->context()
+                    'plural' => is_array($message) ? $term : null,
+                    'context' => $file->context(),
                 ];
             }
         }
@@ -83,27 +88,27 @@ class UploadCommand extends AbstractApiCommand
         $result = $this->apiClient->sync($this->config->projectId(), $terms);
         $this->io->table(['Parsed', 'Added', 'Updated', 'Deleted'], [$result]);
 
-        if ($this->input->getOption('include-reference-language')) {
-            $this->uploadTranslations($sourceFiles);
+        if (! $this->input->getOption('include-reference-language')) {
+            return;
         }
+
+        $this->uploadTranslations($sourceFiles);
     }
 
     /**
-     * Upload the translations.
-     *
-     * @param array $sourceFiles
+     * @param mixed[] $sourceFiles
      */
-    private function uploadTranslations(array $sourceFiles)
+    private function uploadTranslations(array $sourceFiles) : void
     {
         $languages = $this->config->languages();
         // Temporary only upload source because of rate limiting.
         foreach ($languages as $language => $mappedLanguage) {
-            $this->io->section(\sprintf('Uploading "%s" language from files ...', $language));
+            $this->io->section(sprintf('Uploading "%s" language from files ...', $language));
 
-            $translator = new Translator($language);
+            $translator       = new Translator($language);
             $translationFiles = [];
             foreach ($sourceFiles as $sourceFile) {
-                $translationFile = $this->buildTranslationFile(
+                $translationFile    = $this->buildTranslationFile(
                     $sourceFile['configFile'],
                     $sourceFile['sourceTranslationFile'],
                     $mappedLanguage
@@ -124,25 +129,25 @@ class UploadCommand extends AbstractApiCommand
                     $translations[] = [
                         'term' => [
                             'term' => $term,
-                            'context' => $context
+                            'context' => $context,
                         ],
                         'definition' => [
-                            'forms' => (array)$translation,
-                            'fuzzy' => 0
-                        ]
+                            'forms' => (array) $translation,
+                            'fuzzy' => 0,
+                        ],
                     ];
                 }
             }
 
-            if (\count($translations) > 0) {
+            if (count($translations) > 0) {
                 $response = $this->apiClient->upload(
                     $this->config->projectId(),
                     $language,
                     $translations
                 );
-                $this->io->table(\array_keys($response), [$response]);
+                $this->io->table(array_keys($response), [$response]);
             } else {
-                $this->io->note(\sprintf('No translations found for %s language', $language));
+                $this->io->note(sprintf('No translations found for %s language', $language));
             }
         }
     }

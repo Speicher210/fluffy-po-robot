@@ -1,17 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Loader;
 
 use Symfony\Component\Translation\Loader\CsvFileLoader;
+use function Safe\substr;
+use function trim;
 
 class StringsLoader extends CsvFileLoader
 {
     /**
      * {@inheritdoc}
      */
-    protected function loadResource($resource): array
+    protected function loadResource($resource) : array
     {
         $this->setCsvControl('=');
 
@@ -19,7 +21,7 @@ class StringsLoader extends CsvFileLoader
 
         $data = [];
         foreach ($content as $key => $value) {
-            $data[\trim($key)] = \substr($value, 0, -1);
+            $data[trim($key)] = substr($value, 0, -1);
         }
 
         return $data;

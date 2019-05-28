@@ -1,32 +1,48 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\POEditor\Configuration;
 
+use OutOfBoundsException;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+use function array_key_exists;
+use function array_map;
+use function dirname;
+use function Safe\file_get_contents;
+use function Safe\realpath;
+use function Safe\sprintf;
 
 final class Configuration
 {
+    /** @var string */
     private $apiToken;
 
+    /** @var int */
     private $projectId;
 
     /**
      * Relative to the configuration file.
+     *
+     * @var string
      */
     private $basePath;
 
+    /** @var string */
     private $referenceLanguage;
 
+    /** @var mixed[] */
     private $languages;
 
-    /**
-     * @var File[]
-     */
+    /** @var File[] */
     private $files;
 
+    /**
+     * @param mixed[] $languages
+     * @param File[]  $files
+     */
     public function __construct(
         string $apiToken,
         int $projectId,
@@ -35,32 +51,32 @@ final class Configuration
         array $languages,
         array $files
     ) {
-        $this->apiToken = $apiToken;
-        $this->projectId = $projectId;
-        $this->basePath = $basePath;
+        $this->apiToken          = $apiToken;
+        $this->projectId         = $projectId;
+        $this->basePath          = $basePath;
         $this->referenceLanguage = $referenceLanguage;
-        $this->languages = $languages;
-        $this->files = $files;
+        $this->languages         = $languages;
+        $this->files             = $files;
     }
 
-    public static function fromYamlFile(string $yamlFilePath): Configuration
+    public static function fromYamlFile(string $yamlFilePath) : Configuration
     {
-        $config = Yaml::parse(\file_get_contents($yamlFilePath));
+        $config = Yaml::parse(file_get_contents($yamlFilePath));
 
         $basePath = $config['base_path'];
 
         $filesystem = new Filesystem();
-        if (!$filesystem->isAbsolutePath($basePath)) {
-            $basePath = \dirname($yamlFilePath) . '/' . $basePath;
-            $config['base_path'] = \realpath($basePath);
+        if (! $filesystem->isAbsolutePath($basePath)) {
+            $basePath            = dirname($yamlFilePath) . '/' . $basePath;
+            $config['base_path'] = realpath($basePath);
         }
 
         if ($config['base_path'] === false) {
-            throw new \RuntimeException(\sprintf('Base path "%s" is invalid. Check your config file.', $basePath));
+            throw new RuntimeException(sprintf('Base path "%s" is invalid. Check your config file.', $basePath));
         }
 
-        $config['files'] = \array_map(
-            function ($file) {
+        $config['files'] = array_map(
+            static function ($file) {
                 return new File($file['source'], $file['translation'], $file['context']);
             },
             $config['files']
@@ -68,7 +84,7 @@ final class Configuration
 
         return new static(
             $config['api_token'],
-            (int)$config['project_id'],
+            (int) $config['project_id'],
             $config['base_path'],
             $config['reference_language'],
             $config['languages'],
@@ -76,7 +92,7 @@ final class Configuration
         );
     }
 
-    public function toYaml(): string
+    public function toYaml() : string
     {
         $config = [
             'api_token' => $this->apiToken,
@@ -84,47 +100,53 @@ final class Configuration
             'base_path' => $this->basePath,
             'reference_language' => $this->referenceLanguage,
             'languages' => $this->languages,
-            'files' => $this->files
+            'files' => $this->files,
         ];
 
         return Yaml::dump($config);
     }
 
-    public function apiToken(): string
+    public function apiToken() : string
     {
         return $this->apiToken;
     }
 
-    public function projectId(): int
+    public function projectId() : int
     {
         return $this->projectId;
     }
 
-    public function basePath(): string
+    public function basePath() : string
     {
         return $this->basePath;
     }
 
-    public function referenceLanguage(): string
+    public function referenceLanguage() : string
     {
         return $this->referenceLanguage;
     }
 
-    public function languages(): array
+    /**
+     * @return mixed[]
+     */
+    public function languages() : array
     {
         return $this->languages;
     }
 
-    public function languageMap(string $language): string
+    public function languageMap(string $language) : string
     {
-        if (\array_key_exists($language, $this->languages)) {
+        if (array_key_exists($language, $this->languages)) {
             return $this->languages[$language];
         }
 
-        throw new \OutOfBoundsException('Language not defined.');
+        throw new OutOfBoundsException('Language not defined.');
     }
 
-    public function files(): array
+    /**
+     * @return File[]
+     */
+    public function files() : array
     {
         return $this->files;
     }

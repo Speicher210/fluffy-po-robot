@@ -1,19 +1,36 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Translation\Loader;
 
+use function array_fill;
+use function array_map;
+use function end;
+use function explode;
+use function fgets;
+use function in_array;
+use function is_array;
+use function key;
+use function Safe\fclose;
+use function Safe\fopen;
+use function Safe\ksort;
+use function Safe\substr;
+use function stripcslashes;
+use function strpos;
+use function trim;
+
 /**
- * Po loader.
- *
  * This is taken from the POFileLoader from Symfony translation.
  */
 class PoFileLoader extends FileLoader
 {
-    protected function loadResource(string $resource): array
+    /**
+     * @return mixed[]
+     */
+    protected function loadResource(string $resource) : array
     {
-        $stream = \fopen($resource, 'rb');
+        $stream = fopen($resource, 'rb');
 
         static $defaults = [
             'ids' => [],
@@ -21,50 +38,50 @@ class PoFileLoader extends FileLoader
         ];
 
         $messages = [];
-        $item = $defaults;
-        $flags = [];
+        $item     = $defaults;
+        $flags    = [];
 
-        while ($line = \fgets($stream)) {
-            $line = \trim($line);
+        while ($line = fgets($stream)) {
+            $line = trim($line);
 
             if ($line === '') {
                 // Whitespace indicated current item is done
-                if (!\in_array('fuzzy', $flags, true)) {
+                if (! in_array('fuzzy', $flags, true)) {
                     $this->addMessage($messages, $item);
                 }
-                $item = $defaults;
+                $item  = $defaults;
                 $flags = [];
-            } elseif (\substr($line, 0, 2) === '#,') {
-                $flags = \array_map('\trim', \explode(',', \substr($line, 2)));
-            } elseif (\substr($line, 0, 7) === 'msgid "') {
+            } elseif (substr($line, 0, 2) === '#,') {
+                $flags = array_map('\trim', explode(',', substr($line, 2)));
+            } elseif (substr($line, 0, 7) === 'msgid "') {
                 // We start a new msg so save previous
                 // TODO: this fails when comments or contexts are added
                 $this->addMessage($messages, $item);
-                $item = $defaults;
-                $item['ids']['singular'] = \substr($line, 7, -1);
-            } elseif (\substr($line, 0, 8) === 'msgstr "') {
-                $item['translated'] = \substr($line, 8, -1);
+                $item                    = $defaults;
+                $item['ids']['singular'] = substr($line, 7, -1);
+            } elseif (substr($line, 0, 8) === 'msgstr "') {
+                $item['translated'] = substr($line, 8, -1);
             } elseif ($line[0] === '"') {
                 $continues = isset($item['translated']) ? 'translated' : 'ids';
 
-                if (\is_array($item[$continues])) {
-                    \end($item[$continues]);
-                    $item[$continues][\key($item[$continues])] .= \substr($line, 1, -1);
+                if (is_array($item[$continues])) {
+                    end($item[$continues]);
+                    $item[$continues][key($item[$continues])] .= substr($line, 1, -1);
                 } else {
-                    $item[$continues] .= \substr($line, 1, -1);
+                    $item[$continues] .= substr($line, 1, -1);
                 }
-            } elseif (\substr($line, 0, 14) === 'msgid_plural "') {
-                $item['ids']['plural'] = \substr($line, 14, -1);
-            } elseif (\substr($line, 0, 7) === 'msgstr[') {
-                $size = \strpos($line, ']');
-                $item['translated'][(int)\substr($line, 7, 1)] = \substr($line, $size + 3, -1);
+            } elseif (substr($line, 0, 14) === 'msgid_plural "') {
+                $item['ids']['plural'] = substr($line, 14, -1);
+            } elseif (substr($line, 0, 7) === 'msgstr[') {
+                $size                                          = strpos($line, ']');
+                $item['translated'][(int) substr($line, 7, 1)] = substr($line, $size + 3, -1);
             }
         }
         // save last item
-        if (!\in_array('fuzzy', $flags, true)) {
+        if (! in_array('fuzzy', $flags, true)) {
             $this->addMessage($messages, $item);
         }
-        \fclose($stream);
+        fclose($stream);
 
         return $messages;
     }
@@ -75,34 +92,34 @@ class PoFileLoader extends FileLoader
      * A .po file could contain by error missing plural indexes. We need to
      * fix these before saving them.
      *
-     * @param array $messages
-     * @param array $item
+     * @param mixed[] $messages
+     * @param mixed[] $item
      */
-    private function addMessage(array &$messages, array $item)
+    private function addMessage(array &$messages, array $item) : void
     {
-        if (\is_array($item['translated'])) {
-            $messages[\stripcslashes($item['ids']['singular'])] = \stripcslashes($item['translated'][0]);
+        if (is_array($item['translated'])) {
+            $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated'][0]);
             if (isset($item['ids']['plural'])) {
                 $plurals = $item['translated'];
                 // PO are by definition indexed so sort by index.
-                \ksort($plurals);
+                ksort($plurals);
                 // Make sure every index is filled.
-                \end($plurals);
-                $count = \key($plurals);
+                end($plurals);
+                $count = key($plurals);
                 // Fill missing spots with '-'.
-                $empties = \array_fill(0, $count + 1, '-');
+                $empties  = array_fill(0, $count + 1, '-');
                 $plurals += $empties;
-                \ksort($plurals);
-                $plurals = \array_map(
-                    function ($text) {
-                        return \stripcslashes($text);
+                ksort($plurals);
+                $plurals                                         = array_map(
+                    static function ($text) {
+                        return stripcslashes($text);
                     },
                     $plurals
                 );
-                $messages[\stripcslashes($item['ids']['plural'])] = $plurals;
+                $messages[stripcslashes($item['ids']['plural'])] = $plurals;
             }
-        } elseif (!empty($item['ids']['singular'])) {
-            $messages[\stripcslashes($item['ids']['singular'])] = \stripcslashes($item['translated']);
+        } elseif (! empty($item['ids']['singular'])) {
+            $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated']);
         }
     }
 }

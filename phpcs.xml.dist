@@ -1,24 +1,35 @@
 <?xml version="1.0"?>
-<ruleset name="fluffy po robot coding standard">
-    <description>fluffy po robot coding standard</description>
+<ruleset
+        name="Fluffy po robot coding standard"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
+    <description>Fluffy po robot coding standard</description>
 
     <!-- display progress -->
-    <arg value="p" />
-    <arg name="colors" />
+    <arg name="basepath" value="."/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="80"/>
+    <arg name="colors"/>
+
+    <!-- Ignore warnings and show progress of the run -->
+    <arg value="np"/>
 
     <!-- inherit rules from: -->
-    <rule ref="PSR2" />
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
-        <properties>
-            <property name="ignoreBlankLines" value="false" />
-        </properties>
+    <rule ref="Doctrine">
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousAbstractClassNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousExceptionNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming"/>
+        <exclude name="SlevomatCodingStandard.Classes.SuperfluousTraitNaming"/>
     </rule>
     <rule ref="Generic.Files.LineLength">
         <properties>
             <property name="absoluteLineLimit" value="180" />
         </properties>
     </rule>
+
+    <!-- Project rules -->
+    <rule ref="Squiz.NamingConventions.ValidVariableName.NotCamelCaps"/>
+    <rule ref="Squiz.NamingConventions.ValidFunctionName.NotCamelCaps"/>
 
     <!-- Paths to check -->
     <file>src</file>

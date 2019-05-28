@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
@@ -9,16 +9,13 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\MessageCatalogue;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
+use function dirname;
+use function file_exists;
+use function Safe\sprintf;
 
-/**
- * Command to download from POEditor.
- */
 class DownloadCommand extends AbstractApiCommand
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure(): void
+    protected function configure() : void
     {
         parent::configure();
 
@@ -27,10 +24,7 @@ class DownloadCommand extends AbstractApiCommand
             ->setDescription('Download the translations from POEditor.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function doRun()
+    protected function doRun() : void
     {
         $this->io->text('Preparing download ... ');
 
@@ -41,10 +35,7 @@ class DownloadCommand extends AbstractApiCommand
         $this->io->success('Downloaded translations. ');
     }
 
-    /**
-     * @param File $file
-     */
-    private function downloadFile(File $file)
+    private function downloadFile(File $file) : void
     {
         /** @var Finder $finder */
         $finder = Finder::create()->in($this->config->basePath())->path($file->source());
@@ -64,14 +55,14 @@ class DownloadCommand extends AbstractApiCommand
                     $catalog->set($translation['term'], $translation['definition']);
                 }
 
-                if (!\file_exists($filename)) {
+                if (! file_exists($filename)) {
                     $filesystem = new Filesystem();
-                    $filesystem->mkdir([\dirname($filename)]);
+                    $filesystem->mkdir([dirname($filename)]);
                 }
 
                 $fileDumper->dumpToFile($catalog, 'messages', $filename);
 
-                $this->io->text(\sprintf('Updated file: %s', $filename));
+                $this->io->text(sprintf('Updated file: %s', $filename));
             }
         }
     }

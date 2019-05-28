@@ -1,39 +1,40 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\Command;
 
+use SplFileInfo;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
+use function file_exists;
+use function Safe\getcwd;
+use function Safe\sprintf;
+use function strtr;
 
 abstract class AbstractApiCommand extends AbstractCommand
 {
-    /**
-     * @var Client
-     */
+    /** @var Client */
     protected $apiClient;
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     protected $config;
 
     /**
      * {@inheritdoc}
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this
             ->addArgument(
                 'config-file',
                 InputArgument::OPTIONAL,
                 'Configuration for the translations.',
-                \getcwd() . '/poeditor.yml'
+                getcwd() . '/poeditor.yml'
             );
     }
 
@@ -46,35 +47,27 @@ abstract class AbstractApiCommand extends AbstractCommand
 
         /** @var string $configFile */
         $configFile = $this->input->getArgument('config-file');
-        if (!\file_exists($configFile)) {
-            $this->io->error(\sprintf('Configuration file "%s" not found', $configFile));
+        if (! file_exists($configFile)) {
+            $this->io->error(sprintf('Configuration file "%s" not found', $configFile));
 
-            return 0;
+            return 1;
         }
-        $this->config = Configuration::fromYamlFile($configFile);
+        $this->config    = Configuration::fromYamlFile($configFile);
         $this->apiClient = $this->initializeApiClient($this->config->apiToken());
 
-        return $this->doRun();
+        $this->doRun();
+
+        return 0;
     }
 
-    abstract protected function doRun();
+    abstract protected function doRun() : void;
 
-    /**
-     * @param string $apiToken
-     * @return Client
-     */
-    protected function initializeApiClient(string $apiToken): Client
+    protected function initializeApiClient(string $apiToken) : Client
     {
         return new Client($apiToken);
     }
 
-    /**
-     * @param File $fileConfiguration
-     * @param \SplFileInfo $sourceFile
-     * @param string $languageCode
-     * @return string
-     */
-    protected function buildTranslationFile(File $fileConfiguration, \SplFileInfo $sourceFile, string $languageCode): string
+    protected function buildTranslationFile(File $fileConfiguration, SplFileInfo $sourceFile, string $languageCode) : string
     {
         // If language code is for a reference language then we return path to the source.
         if ($this->config->languageMap($this->config->referenceLanguage()) === $languageCode) {
@@ -88,7 +81,7 @@ abstract class AbstractApiCommand extends AbstractCommand
                 '%original_path%' => $sourceFile->getPath(),
                 '%language_code%' => $languageCode,
                 '%file_name%' => $sourceFile->getFilename(),
-                '%file_extension%' => $sourceFile->getExtension()
+                '%file_extension%' => $sourceFile->getExtension(),
             ]
         );
     }
