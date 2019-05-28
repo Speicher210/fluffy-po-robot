@@ -23,7 +23,7 @@ COPY src /fluffy/src
 COPY bin /fluffy/bin
 COPY composer.json /fluffy
 COPY composer.lock /fluffy
-RUN composer install --working-dir=/fluffy
+RUN composer install --no-dev --working-dir=/fluffy
 
 WORKDIR /app
 
