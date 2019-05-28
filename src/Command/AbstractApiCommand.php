@@ -44,6 +44,7 @@ abstract class AbstractApiCommand extends AbstractCommand
     {
         parent::execute($input, $output);
 
+        /** @var string $configFile */
         $configFile = $this->input->getArgument('config-file');
         if (!\file_exists($configFile)) {
             $this->io->error(\sprintf('Configuration file "%s" not found', $configFile));

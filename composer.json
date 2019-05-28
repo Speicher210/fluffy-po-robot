@@ -11,22 +11,27 @@
     "ios strings"
   ],
   "require": {
-    "php": "^7.2",
-    "roave/security-advisories": "dev-master",
+    "php": "^7.3",
+    "ext-ctype": "*",
+    "ext-iconv": "*",
+    "ext-intl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*",
 
-    "symfony/console": "^4.0",
+    "symfony/console": "^4.2",
     "guzzlehttp/guzzle": "^6.3",
-    "symfony/yaml": "^4.0",
-    "symfony/finder": "^4.0",
-    "symfony/translation": "^4.0",
-    "symfony/filesystem": "^4.0"
+    "symfony/yaml": "^4.2",
+    "symfony/finder": "^4.2",
+    "symfony/translation": "^4.2",
+    "symfony/filesystem": "^4.2"
   },
   "require-dev": {
-    "symfony/var-dumper": "^4.0",
-    "phpunit/phpunit": "^6.5",
-    "mikey179/vfsStream": "^1.6",
+    "mikey179/vfsstream": "^1.6",
     "phpstan/phpstan": "^0.9",
-    "squizlabs/php_codesniffer": "^3.2"
+    "phpunit/phpunit": "^6.5",
+    "roave/security-advisories": "dev-master",
+    "squizlabs/php_codesniffer": "^3.2",
+    "symfony/var-dumper": "^4.2"
   },
   "autoload": {
     "psr-4": {
@@ -50,5 +55,8 @@
       "@phpstan",
       "@test"
     ]
+  },
+  "config": {
+    "sort-packages": true
   }
 }
