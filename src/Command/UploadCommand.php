@@ -127,12 +127,10 @@ class UploadCommand extends AbstractApiCommand
             foreach ($translator->getCatalogue($language)->all() as $context => $catalogTranslations) {
                 foreach ($catalogTranslations as $term => $translation) {
                     $translations[] = [
-                        'term' => [
-                            'term' => $term,
-                            'context' => $context,
-                        ],
-                        'definition' => [
-                            'forms' => (array) $translation,
+                        'term' => $term,
+                        'context' => $context,
+                        'translation' => [
+                            'content' => (array) $translation,
                             'fuzzy' => 0,
                         ],
                     ];

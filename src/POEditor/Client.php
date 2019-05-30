@@ -14,12 +14,10 @@ use function count;
 use function Safe\file_get_contents;
 use function Safe\json_decode;
 use function Safe\json_encode;
-use function Safe\uasort;
-use function strtolower;
 
 class Client
 {
-    private const BASE_URI = 'https://poeditor.com/api/';
+    private const BASE_URI = 'https://api.poeditor.com/v2/';
 
     /** @var GuzzleClient */
     private $client;
@@ -39,57 +37,51 @@ class Client
     }
 
     /**
-     * @return mixed[]
+     * @return array<string,mixed>
      */
     public function projectDetails(int $idProject) : array
     {
-        $response = $this->callAction('view_project', ['id' => $idProject]);
+        $response = $this->callAction('projects/view', ['id' => $idProject]);
 
-        return $response['item'];
+        return $response['result']['project'];
     }
 
     /**
-     * Get the list of projects.
-     *
      * @return mixed[]
      */
     public function listProjects() : array
     {
-        $response = $this->callAction('list_projects');
+        $response = $this->callAction('projects/list');
 
-        return $response['list'];
+        return $response['result']['projects'];
     }
 
     /**
-     * Get the list of languages of a project.
-     *
-     * @return mixed[]
+     * @return string[]
      */
     public function listProjectLanguages(int $idProject) : array
     {
-        $projects = $this->callAction('list_languages', ['id' => $idProject]);
+        $projects = $this->callAction('languages/list', ['id' => $idProject]);
 
-        return array_column($projects['list'], 'code');
+        return array_column($projects['result']['languages'], 'code');
     }
 
     /**
-     * Sync terms.
-     *
      * @param mixed[] $terms
      *
-     * @return mixed[]
+     * @return array<string,int>
      */
     public function sync(int $idProject, array $terms) : array
     {
-        $response = $this->callAction('sync_terms', ['id' => $idProject, 'data' => json_encode($terms)]);
+        $response = $this->callAction('projects/sync', ['id' => $idProject, 'data' => json_encode($terms)]);
 
-        return $response['details'];
+        return $response['result']['terms'];
     }
 
     /**
      * @param mixed[] $translations
      *
-     * @return mixed[]
+     * @return array<string,int>
      */
     public function upload(int $idProject, string $language, array $translations) : array
     {
@@ -98,7 +90,7 @@ class Client
         }
 
         $response = $this->callAction(
-            'update_language',
+            'languages/update',
             [
                 'id' => $idProject,
                 'language' => $language,
@@ -106,46 +98,38 @@ class Client
             ]
         );
 
-        return $response['details'];
+        return $response['result']['translations'];
     }
 
     /**
-     * Export file.
-     *
      * @return mixed[]
      */
     public function export(int $idProject, string $language, string $context) : array
     {
         $response = $this->callAction(
-            'export',
+            'projects/export',
             [
                 'id' => $idProject,
                 'language' => $language,
                 'type' => 'json',
                 'filters' => 'translated',
+                'order' => 'terms',
             ]
         );
 
-        $content      = file_get_contents($response['item']);
-        $translations = [];
-        // There can be no translations.
-        if ($content !== '') {
-            $translations = json_decode(file_get_contents($response['item']), true);
-
-            $translations = array_filter(
-                $translations,
-                static function ($translation) use ($context) {
-                    return $translation['context'] === $context;
-                }
-            );
-
-            uasort(
-                $translations,
-                static function ($a, $b) {
-                    return strtolower($a['term']) <=> strtolower($b['term']);
-                }
-            );
+        $content = file_get_contents($response['result']['url']);
+        if ($content === '') {
+            return [];
         }
+
+        $translations = json_decode($content, true);
+
+        $translations = array_filter(
+            $translations,
+            static function ($translation) use ($context) {
+                return $translation['context'] === $context;
+            }
+        );
 
         return $translations;
     }
@@ -157,13 +141,10 @@ class Client
      */
     private function callAction(string $action, array $parameters = []) : array
     {
-        $formParams = [
-            'api_token' => $this->apiToken,
-            'action' => $action,
-        ];
+        $formParams = ['api_token' => $this->apiToken];
 
         $response = $this->client->post(
-            self::BASE_URI,
+            self::BASE_URI . $action,
             [
                 'multipart' => $this->parseFormParams(array_merge($formParams, $parameters)),
             ]
