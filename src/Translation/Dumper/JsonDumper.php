@@ -11,12 +11,20 @@ use function explode;
 use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
 
-/**
- * JSON dumper.
- */
 class JsonDumper extends JsonFileDumper implements DumperInterface
 {
     use DumperTrait;
+
+    public const FORMAT_FLAT_KEY_VALUE   = 'FLAT_KEY_VALUE';
+    public const FORMAT_NESTED_KEY_VALUE = 'NESTED_KEY_VALUE';
+
+    /** @var string */
+    private $format;
+
+    public function __construct(string $format = self::FORMAT_FLAT_KEY_VALUE)
+    {
+        $this->format = $format;
+    }
 
     /**
      * {@inheritDoc}
@@ -37,13 +45,17 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
      */
     private function convertToNestedArray(array $json) : array
     {
-        $result = [];
+        if ($this->format === self::FORMAT_NESTED_KEY_VALUE) {
+            $result = [];
 
-        foreach ($json as $key => $value) {
-            $this->assignArrayByPath($result, $key, $value);
+            foreach ($json as $key => $value) {
+                $this->assignArrayByPath($result, $key, $value);
+            }
+
+            return $result;
         }
 
-        return $result;
+        return $json;
     }
 
     /**
