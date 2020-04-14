@@ -1,4 +1,4 @@
-FROM php:7.3-fpm
+FROM php:7.4.4-fpm
 
 RUN apt-get update \
     && apt-get install -y git libzip-dev zlib1g-dev unzip
