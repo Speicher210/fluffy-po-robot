@@ -28,7 +28,7 @@
     "thecodingmachine/safe": "^1.0"
   },
   "require-dev": {
-    "doctrine/coding-standard": "^6.0",
+    "doctrine/coding-standard": "^7.0",
     "mikey179/vfsstream": "^1.6",
     "phpstan/phpstan": "^0.12",
     "phpstan/phpstan-deprecation-rules": "^0.12",

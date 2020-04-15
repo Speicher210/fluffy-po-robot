@@ -20,8 +20,8 @@ use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\YamlFileLoader;
-use const PATHINFO_EXTENSION;
 use function pathinfo;
+use const PATHINFO_EXTENSION;
 
 /**
  * Try to guess the format from the filename.

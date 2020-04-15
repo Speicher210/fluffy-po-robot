@@ -5,12 +5,11 @@
         xsi:noNamespaceSchemaLocation="vendor/squizlabs/php_codesniffer/phpcs.xsd">
     <description>Fluffy po robot coding standard</description>
 
-    <!-- display progress -->
     <arg name="basepath" value="."/>
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="80"/>
+    <arg name="cache" value=".phpcs-cache"/>
     <arg name="colors"/>
-
     <!-- Ignore warnings and show progress of the run -->
     <arg value="np"/>
 

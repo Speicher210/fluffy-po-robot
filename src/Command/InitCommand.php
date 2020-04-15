@@ -10,28 +10,26 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
-use const PATHINFO_FILENAME;
+use function assert;
 use function count;
 use function ctype_digit;
 use function in_array;
+use function is_string;
 use function pathinfo;
 use function Safe\array_combine;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\sprintf;
 use function strtolower;
+use const PATHINFO_FILENAME;
 
 /**
  * Command to init the configuration.
  */
 class InitCommand extends AbstractCommand
 {
-    /** @var Client */
-    protected $apiClient;
+    protected Client $apiClient;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure() : void
     {
         parent::configure();
@@ -51,9 +49,6 @@ class InitCommand extends AbstractCommand
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         parent::execute($input, $output);
@@ -76,8 +71,8 @@ class InitCommand extends AbstractCommand
             $this->getFiles()
         );
 
-        /** @var string $outputFile */
         $outputFile = $this->input->getOption('output-file');
+        assert(is_string($outputFile));
         file_put_contents($outputFile, $config->toYaml());
 
         return 0;
@@ -96,6 +91,7 @@ class InitCommand extends AbstractCommand
         if (ctype_digit($projectInput)) {
             return (int) $projectInput;
         }
+
         $projectInput = strtolower($projectInput);
 
         $projects = $this->apiClient->listProjects();

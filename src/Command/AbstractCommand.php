@@ -14,18 +14,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 abstract class AbstractCommand extends Command
 {
-    /** @var InputInterface */
-    protected $input;
+    protected InputInterface $input;
 
-    /** @var OutputInterface */
-    protected $output;
+    protected OutputInterface $output;
 
-    /** @var SymfonyStyle */
-    protected $io;
+    protected SymfonyStyle $io;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $this->input  = $input;

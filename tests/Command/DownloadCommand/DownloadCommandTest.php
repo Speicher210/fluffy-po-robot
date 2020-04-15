@@ -18,11 +18,9 @@ use function Safe\touch;
  */
 class DownloadCommandTest extends TestCase
 {
-    /** @var string */
-    private $projectId = '123';
+    private string $projectId = '123';
 
-    /** @var vfsStreamDirectory */
-    private $root;
+    private vfsStreamDirectory $root;
 
     public function setUp() : void
     {
@@ -154,8 +152,7 @@ class DownloadCommandTest extends TestCase
 
         $command = new class ($apiClientMock) extends DownloadCommand
         {
-            /** @var Client */
-            private $apiClientMock;
+            private Client $apiClientMock;
 
             public function __construct(Client $apiClientMock)
             {

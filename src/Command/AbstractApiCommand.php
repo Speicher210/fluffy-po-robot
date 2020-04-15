@@ -11,22 +11,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
+use function assert;
 use function file_exists;
+use function is_string;
 use function Safe\getcwd;
 use function Safe\sprintf;
 use function strtr;
 
 abstract class AbstractApiCommand extends AbstractCommand
 {
-    /** @var Client */
-    protected $apiClient;
+    protected Client $apiClient;
 
-    /** @var Configuration */
-    protected $config;
+    protected Configuration $config;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configure() : void
     {
         $this
@@ -42,13 +39,14 @@ abstract class AbstractApiCommand extends AbstractCommand
     {
         parent::execute($input, $output);
 
-        /** @var string $configFile */
         $configFile = $this->input->getArgument('config-file');
+        assert(is_string($configFile));
         if (! file_exists($configFile)) {
             $this->io->error(sprintf('Configuration file "%s" not found', $configFile));
 
             return 1;
         }
+
         $this->config    = Configuration::fromYamlFile($configFile);
         $this->apiClient = $this->initializeApiClient($this->config->apiToken());
 

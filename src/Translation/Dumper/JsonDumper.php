@@ -6,10 +6,10 @@ namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
-use const JSON_PRETTY_PRINT;
 use function explode;
 use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
+use const JSON_PRETTY_PRINT;
 
 class JsonDumper extends JsonFileDumper implements DumperInterface
 {
@@ -18,8 +18,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
     public const FORMAT_FLAT_KEY_VALUE   = 'FLAT_KEY_VALUE';
     public const FORMAT_NESTED_KEY_VALUE = 'NESTED_KEY_VALUE';
 
-    /** @var string */
-    private $format;
+    private string $format;
 
     public function __construct(string $format = self::FORMAT_FLAT_KEY_VALUE)
     {

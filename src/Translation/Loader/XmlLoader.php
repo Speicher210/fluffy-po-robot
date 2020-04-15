@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Wingu\FluffyPoRobot\Translation\Loader;
 
 use SimpleXMLElement;
+use function assert;
 use function Safe\file_get_contents;
 use function Safe\simplexml_load_string;
 use function Safe\substr;
@@ -22,8 +23,8 @@ class XmlLoader extends FileLoader
 
         $data = [];
 
-        /** @var SimpleXMLElement $element */
         foreach ($xml as $element) {
+            assert($element instanceof SimpleXMLElement);
             $name = $this->getAttribute($element, 'name');
 
             if ($element->getName() === 'string') {
@@ -33,6 +34,7 @@ class XmlLoader extends FileLoader
                 foreach ($element->item as $item) {
                     $plurals[] = $this->cleanTranslation((string) $item);
                 }
+
                 $data[$name] = $plurals;
             }
         }

@@ -49,6 +49,7 @@ class PoFileLoader extends FileLoader
                 if (! in_array('fuzzy', $flags, true)) {
                     $this->addMessage($messages, $item);
                 }
+
                 $item  = $defaults;
                 $flags = [];
             } elseif (substr($line, 0, 2) === '#,') {
@@ -77,10 +78,12 @@ class PoFileLoader extends FileLoader
                 $item['translated'][(int) substr($line, 7, 1)] = substr($line, $size + 3, -1);
             }
         }
+
         // save last item
         if (! in_array('fuzzy', $flags, true)) {
             $this->addMessage($messages, $item);
         }
+
         fclose($stream);
 
         return $messages;

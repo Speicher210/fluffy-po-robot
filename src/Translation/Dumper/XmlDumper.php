@@ -20,8 +20,7 @@ class XmlDumper extends FileDumper implements DumperInterface
 {
     use DumperTrait;
 
-    /** @var DOMDocument */
-    private $domDoc;
+    private DOMDocument $domDoc;
 
     /**
      * @param mixed[] $options

@@ -19,11 +19,9 @@ class Client
 {
     private const BASE_URI = 'https://api.poeditor.com/v2/';
 
-    /** @var GuzzleClient */
-    private $client;
+    private GuzzleClient $client;
 
-    /** @var string */
-    private $apiToken;
+    private string $apiToken;
 
     public function __construct(string $apiToken)
     {

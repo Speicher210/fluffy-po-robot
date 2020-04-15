@@ -6,14 +6,11 @@ namespace Wingu\FluffyPoRobot\POEditor\Configuration;
 
 final class File
 {
-    /** @var string */
-    private $source;
+    private string $source;
 
-    /** @var string */
-    private $translation;
+    private string $translation;
 
-    /** @var string */
-    private $context;
+    private string $context;
 
     public function __construct(string $source, string $translation, string $context)
     {

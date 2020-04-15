@@ -20,9 +20,6 @@ use function Safe\sprintf;
  */
 class UploadCommand extends AbstractApiCommand
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configure() : void
     {
         parent::configure();
@@ -38,9 +35,6 @@ class UploadCommand extends AbstractApiCommand
             );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRun() : void
     {
         $terms       = [];
@@ -55,6 +49,7 @@ class UploadCommand extends AbstractApiCommand
 
                 throw new RuntimeException(sprintf('More than one source file found for "%s"', $file->source()));
             }
+
             $iterator = $finder->getIterator();
             $iterator->rewind();
             $sourceTranslationFile = $iterator->current();
@@ -121,6 +116,7 @@ class UploadCommand extends AbstractApiCommand
                 $translator->addLoader($fileFormat, $fileLoader);
                 $translator->addResource($fileFormat, $translationFile, $language, $sourceFile['configFile']->context());
             }
+
             $this->io->listing($translationFiles);
 
             $translations = [];

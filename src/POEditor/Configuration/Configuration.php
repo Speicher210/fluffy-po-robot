@@ -17,27 +17,22 @@ use function Safe\sprintf;
 
 final class Configuration
 {
-    /** @var string */
-    private $apiToken;
+    private string $apiToken;
 
-    /** @var int */
-    private $projectId;
+    private int $projectId;
 
     /**
      * Relative to the configuration file.
-     *
-     * @var string
      */
-    private $basePath;
+    private string $basePath;
 
-    /** @var string */
-    private $referenceLanguage;
+    private string $referenceLanguage;
 
     /** @var mixed[] */
-    private $languages;
+    private array $languages;
 
     /** @var File[] */
-    private $files;
+    private array $files;
 
     /**
      * @param mixed[] $languages
