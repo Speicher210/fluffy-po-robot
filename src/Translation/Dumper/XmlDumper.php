@@ -8,6 +8,7 @@ use DOMCdataSection;
 use DOMDocument;
 use DOMElement;
 use DOMText;
+use RuntimeException;
 use Symfony\Component\Translation\Dumper\FileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 use function addcslashes;
@@ -23,9 +24,9 @@ class XmlDumper extends FileDumper implements DumperInterface
     private $domDoc;
 
     /**
-     * {@inheritdoc}
+     * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
     {
         $this->domDoc               = new DOMDocument('1.0', 'utf-8');
         $this->domDoc->formatOutput = true;
@@ -55,7 +56,13 @@ class XmlDumper extends FileDumper implements DumperInterface
             }
         }
 
-        return $this->domDoc->saveXML();
+        $xml = $this->domDoc->saveXML();
+
+        if ($xml === false) {
+            throw new RuntimeException('Could not generate XML.');
+        }
+
+        return $xml;
     }
 
     private function createTranslationElement(string $name, string $attributeName, string $attributeValue) : DOMElement

@@ -14,9 +14,9 @@ class StringsDumper extends IniFileDumper implements DumperInterface
     use DumperTrait;
 
     /**
-     * {@inheritdoc}
+     * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = [])
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
     {
         $output = '';
 

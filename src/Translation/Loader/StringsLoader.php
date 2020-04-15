@@ -12,6 +12,8 @@ class StringsLoader extends CsvFileLoader
 {
     /**
      * {@inheritdoc}
+     *
+     * @return string[]
      */
     protected function loadResource($resource) : array
     {

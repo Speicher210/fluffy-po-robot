@@ -127,10 +127,7 @@ class DownloadCommandTest extends TestCase
      */
     private function assertDownload(string $configFile, array $allTranslations, string $format) : void
     {
-        $apiClientMock = $this->getMockBuilder(Client::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['export'])
-            ->getMock();
+        $apiClientMock = $this->createMock(Client::class);
 
         $i                = 0;
         $translationFiles = [];

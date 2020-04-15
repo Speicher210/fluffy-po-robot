@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Wingu\\\\FluffyPoRobot\\\\Translation\\\\Loader\\\\StringsLoader\\:\\:loadResource\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Translation/Loader/StringsLoader.php
+

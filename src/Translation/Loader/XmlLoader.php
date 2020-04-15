@@ -44,7 +44,7 @@ class XmlLoader extends FileLoader
     {
         $attributes = $element->attributes();
 
-        return (string) $attributes[$attributeName];
+        return (string) ($attributes[$attributeName] ?? '');
     }
 
     private function cleanTranslation(string $translation) : string

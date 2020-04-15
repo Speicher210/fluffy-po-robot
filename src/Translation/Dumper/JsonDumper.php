@@ -27,9 +27,9 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
     {
         $json = json_decode(parent::formatCatalogue($messages, $domain, $options), true);
 

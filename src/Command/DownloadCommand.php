@@ -52,7 +52,7 @@ class DownloadCommand extends AbstractApiCommand
 
                 $catalog = new MessageCatalogue($originalLanguageCode);
                 foreach ($translations as $translation) {
-                    $catalog->set($translation['term'], $translation['definition']);
+                    $catalog->add([$translation['term'] => $translation['definition']]);
                 }
 
                 if (! file_exists($filename)) {

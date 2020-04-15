@@ -26,11 +26,13 @@ abstract class AbstractCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $this->input  = $input;
         $this->output = $output;
 
         $this->io = new SymfonyStyle($input, $output);
+
+        return 0;
     }
 }

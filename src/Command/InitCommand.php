@@ -54,7 +54,7 @@ class InitCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         parent::execute($input, $output);
 
@@ -79,6 +79,8 @@ class InitCommand extends AbstractCommand
         /** @var string $outputFile */
         $outputFile = $this->input->getOption('output-file');
         file_put_contents($outputFile, $config->toYaml());
+
+        return 0;
     }
 
     /**
