@@ -23,9 +23,6 @@ use function Safe\sprintf;
 use function strtolower;
 use const PATHINFO_FILENAME;
 
-/**
- * Command to init the configuration.
- */
 class InitCommand extends AbstractCommand
 {
     protected Client $apiClient;

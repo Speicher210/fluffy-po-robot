@@ -9,9 +9,6 @@ use function Safe\file_put_contents;
 
 trait DumperTrait
 {
-    /**
-     * Dump the translations to a file.
-     */
     public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath) : void
     {
         file_put_contents($filePath, $this->formatCatalogue($messages, $domain));

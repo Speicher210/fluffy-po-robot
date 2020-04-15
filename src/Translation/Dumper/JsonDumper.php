@@ -72,9 +72,6 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
         $arr = $value;
     }
 
-    /**
-     * Get the file extension.
-     */
     public function getFileExtension() : string
     {
         return $this->getExtension();

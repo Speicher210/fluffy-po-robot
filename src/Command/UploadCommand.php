@@ -15,9 +15,6 @@ use function count;
 use function is_array;
 use function Safe\sprintf;
 
-/**
- * Command to upload the translations to POEditor.
- */
 class UploadCommand extends AbstractApiCommand
 {
     protected function configure() : void

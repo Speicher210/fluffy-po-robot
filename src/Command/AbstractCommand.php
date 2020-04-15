@@ -9,9 +9,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * Abstract command for POEditor communication.
- */
 abstract class AbstractCommand extends Command
 {
     protected InputInterface $input;
