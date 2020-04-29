@@ -27,6 +27,10 @@ class YamlFileLoader extends FileLoader
             throw new InvalidResourceException(sprintf('Error parsing YAML, invalid file "%s"', $resource), 0, $e);
         }
 
+        if ($translations === null) {
+            return [];
+        }
+
         $messages = [];
         foreach ($translations as $key => $message) {
             $messages[$key] = is_array($message) ? array_values($message) : $message;
