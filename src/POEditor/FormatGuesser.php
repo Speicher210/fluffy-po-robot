@@ -41,6 +41,7 @@ final class FormatGuesser
             case 'po':
             case 'xliff':
             case 'yml':
+            case 'yaml':
                 return $extension;
             case 'json':
                 return 'key_value_json';
@@ -70,6 +71,7 @@ final class FormatGuesser
             case 'android_strings':
                 return new XmlLoader();
             case 'yml':
+            case 'yaml':
                 return new YamlFileLoader();
         }
 
@@ -90,6 +92,7 @@ final class FormatGuesser
             case 'xliff':
                 return new XliffDumper();
             case 'yml':
+            case 'yaml':
                 return new YamlDumper();
             case 'apple_strings':
                 return new StringsDumper();
