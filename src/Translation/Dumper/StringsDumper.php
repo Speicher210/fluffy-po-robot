@@ -6,6 +6,7 @@ namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\IniFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
+
 use function is_array;
 use function reset;
 
@@ -16,7 +17,7 @@ class StringsDumper extends IniFileDumper implements DumperInterface
     /**
      * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $output = '';
 
@@ -28,7 +29,7 @@ class StringsDumper extends IniFileDumper implements DumperInterface
         return $output;
     }
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return 'strings';
     }

@@ -8,6 +8,7 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Yaml\Yaml;
+
 use function array_values;
 use function is_array;
 use function Safe\file_get_contents;
@@ -18,7 +19,7 @@ class YamlFileLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    protected function loadResource(string $resource) : array
+    protected function loadResource(string $resource): array
     {
         try {
             $yamlParser   = new YamlParser();

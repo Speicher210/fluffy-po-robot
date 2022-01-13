@@ -28,7 +28,7 @@ class PoFileLoader extends FileLoader
     /**
      * @return mixed[]
      */
-    protected function loadResource(string $resource) : array
+    protected function loadResource(string $resource): array
     {
         $stream = fopen($resource, 'rb');
 
@@ -98,7 +98,7 @@ class PoFileLoader extends FileLoader
      * @param mixed[] $messages
      * @param mixed[] $item
      */
-    private function addMessage(array &$messages, array $item) : void
+    private function addMessage(array &$messages, array $item): void
     {
         if (is_array($item['translated'])) {
             $messages[stripcslashes($item['ids']['singular'])] = stripcslashes($item['translated'][0]);

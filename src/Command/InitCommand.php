@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
+
 use function assert;
 use function count;
 use function ctype_digit;
@@ -21,13 +22,14 @@ use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\sprintf;
 use function strtolower;
+
 use const PATHINFO_FILENAME;
 
 class InitCommand extends AbstractCommand
 {
     protected Client $apiClient;
 
-    protected function configure() : void
+    protected function configure(): void
     {
         parent::configure();
 
@@ -46,7 +48,7 @@ class InitCommand extends AbstractCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
 
@@ -78,7 +80,7 @@ class InitCommand extends AbstractCommand
     /**
      * Get the project ID.
      */
-    private function getProjectID() : int
+    private function getProjectID(): int
     {
         $projectInput = $this->input->getOption('project');
         if (! $projectInput) {
@@ -107,7 +109,7 @@ class InitCommand extends AbstractCommand
      *
      * @return mixed[]
      */
-    private function getProjectLanguagesMap(int $idProject) : array
+    private function getProjectLanguagesMap(int $idProject): array
     {
         $languages = $this->apiClient->listProjectLanguages($idProject);
 
@@ -128,7 +130,7 @@ class InitCommand extends AbstractCommand
      *
      * @return mixed[]
      */
-    private function getFiles() : array
+    private function getFiles(): array
     {
         $files    = [];
         $contexts = [];
@@ -177,7 +179,7 @@ class InitCommand extends AbstractCommand
         return $files;
     }
 
-    private function getBasePath() : string
+    private function getBasePath(): string
     {
         $basePath = $this->input->getOption('base-path');
         if (! $basePath) {
@@ -187,7 +189,7 @@ class InitCommand extends AbstractCommand
         return $basePath;
     }
 
-    private function getReferenceLanguage(int $idProject) : string
+    private function getReferenceLanguage(int $idProject): string
     {
         $details = $this->apiClient->projectDetails($idProject);
 

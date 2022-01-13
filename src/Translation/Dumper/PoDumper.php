@@ -6,6 +6,7 @@ namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\PoFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
+
 use function addcslashes;
 use function implode;
 use function is_array;
@@ -18,7 +19,7 @@ class PoDumper extends PoFileDumper implements DumperInterface
     /**
      * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $output   = [];
         $output[] = 'msgid ""';
@@ -44,12 +45,12 @@ class PoDumper extends PoFileDumper implements DumperInterface
         return implode("\n", $output);
     }
 
-    private function escape(string $str) : string
+    private function escape(string $str): string
     {
         return addcslashes($str, "\0..\37\42\134");
     }
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }

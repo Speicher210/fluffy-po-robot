@@ -11,6 +11,7 @@ use DOMText;
 use RuntimeException;
 use Symfony\Component\Translation\Dumper\FileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
+
 use function addcslashes;
 use function is_array;
 use function is_string;
@@ -25,7 +26,7 @@ class XmlDumper extends FileDumper implements DumperInterface
     /**
      * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $this->domDoc               = new DOMDocument('1.0', 'utf-8');
         $this->domDoc->formatOutput = true;
@@ -64,7 +65,7 @@ class XmlDumper extends FileDumper implements DumperInterface
         return $xml;
     }
 
-    private function createTranslationElement(string $name, string $attributeName, string $attributeValue) : DOMElement
+    private function createTranslationElement(string $name, string $attributeName, string $attributeValue): DOMElement
     {
         $translationElement = $this->domDoc->createElement($name);
         $attribute          = $this->domDoc->createAttribute($attributeName);
@@ -74,10 +75,7 @@ class XmlDumper extends FileDumper implements DumperInterface
         return $translationElement;
     }
 
-    /**
-     * @return DOMCdataSection|DOMText
-     */
-    private function addTranslation(string $target)
+    private function addTranslation(string $target): DOMCdataSection|DOMText
     {
         // If there are tags in target we create a CDATA section.
         if ($target !== strip_tags($target)) {
@@ -89,17 +87,17 @@ class XmlDumper extends FileDumper implements DumperInterface
         return $translationValue;
     }
 
-    private function escapeTranslation(string $translation) : string
+    private function escapeTranslation(string $translation): string
     {
         return addcslashes($translation, '"\'');
     }
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }
 
-    protected function getExtension() : string
+    protected function getExtension(): string
     {
         return 'xml';
     }

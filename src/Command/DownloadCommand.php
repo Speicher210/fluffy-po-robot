@@ -9,13 +9,14 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\MessageCatalogue;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
+
 use function dirname;
 use function file_exists;
 use function Safe\sprintf;
 
 class DownloadCommand extends AbstractApiCommand
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         parent::configure();
 
@@ -24,7 +25,7 @@ class DownloadCommand extends AbstractApiCommand
             ->setDescription('Download the translations from POEditor.');
     }
 
-    protected function doRun() : void
+    protected function doRun(): void
     {
         $this->io->text('Preparing download ... ');
 
@@ -35,7 +36,7 @@ class DownloadCommand extends AbstractApiCommand
         $this->io->success('Downloaded translations. ');
     }
 
-    private function downloadFile(File $file) : void
+    private function downloadFile(File $file): void
     {
         $finder = Finder::create()->in($this->config->basePath())->path($file->source());
         foreach ($finder as $item) {

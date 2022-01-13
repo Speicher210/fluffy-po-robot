@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
+
 use function assert;
 use function file_exists;
 use function is_string;
@@ -24,7 +25,7 @@ abstract class AbstractApiCommand extends AbstractCommand
 
     protected Configuration $config;
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this
             ->addArgument(
@@ -35,7 +36,7 @@ abstract class AbstractApiCommand extends AbstractCommand
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         parent::execute($input, $output);
 
@@ -55,14 +56,14 @@ abstract class AbstractApiCommand extends AbstractCommand
         return 0;
     }
 
-    abstract protected function doRun() : void;
+    abstract protected function doRun(): void;
 
-    protected function initializeApiClient(string $apiToken) : Client
+    protected function initializeApiClient(string $apiToken): Client
     {
         return new Client($apiToken);
     }
 
-    protected function buildTranslationFile(File $fileConfiguration, SplFileInfo $sourceFile, string $languageCode) : string
+    protected function buildTranslationFile(File $fileConfiguration, SplFileInfo $sourceFile, string $languageCode): string
     {
         // If language code is for a reference language then we return path to the source.
         if ($this->config->languageMap($this->config->referenceLanguage()) === $languageCode) {

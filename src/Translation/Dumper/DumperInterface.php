@@ -8,7 +8,7 @@ use Symfony\Component\Translation\MessageCatalogue;
 
 interface DumperInterface extends \Symfony\Component\Translation\Dumper\DumperInterface
 {
-    public function getFileExtension() : string;
+    public function getFileExtension(): string;
 
-    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath) : void;
+    public function dumpToFile(MessageCatalogue $messages, string $domain, string $filePath): void;
 }

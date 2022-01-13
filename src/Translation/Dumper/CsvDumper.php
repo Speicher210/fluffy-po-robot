@@ -10,7 +10,7 @@ class CsvDumper extends CsvFileDumper implements DumperInterface
 {
     use DumperTrait;
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }

@@ -8,6 +8,7 @@ use OutOfBoundsException;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+
 use function array_key_exists;
 use function array_map;
 use function dirname;
@@ -54,7 +55,7 @@ final class Configuration
         $this->files             = $files;
     }
 
-    public static function fromYamlFile(string $yamlFilePath) : Configuration
+    public static function fromYamlFile(string $yamlFilePath): Configuration
     {
         $config = Yaml::parse(file_get_contents($yamlFilePath));
 
@@ -87,7 +88,7 @@ final class Configuration
         );
     }
 
-    public function toYaml() : string
+    public function toYaml(): string
     {
         $config = [
             'api_token' => $this->apiToken,
@@ -101,22 +102,22 @@ final class Configuration
         return Yaml::dump($config);
     }
 
-    public function apiToken() : string
+    public function apiToken(): string
     {
         return $this->apiToken;
     }
 
-    public function projectId() : int
+    public function projectId(): int
     {
         return $this->projectId;
     }
 
-    public function basePath() : string
+    public function basePath(): string
     {
         return $this->basePath;
     }
 
-    public function referenceLanguage() : string
+    public function referenceLanguage(): string
     {
         return $this->referenceLanguage;
     }
@@ -124,12 +125,12 @@ final class Configuration
     /**
      * @return mixed[]
      */
-    public function languages() : array
+    public function languages(): array
     {
         return $this->languages;
     }
 
-    public function languageMap(string $language) : string
+    public function languageMap(string $language): string
     {
         if (array_key_exists($language, $this->languages)) {
             return $this->languages[$language];
@@ -141,7 +142,7 @@ final class Configuration
     /**
      * @return File[]
      */
-    public function files() : array
+    public function files(): array
     {
         return $this->files;
     }

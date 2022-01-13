@@ -8,7 +8,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 final class Application extends BaseApplication
 {
-    public const VERSION = '0.8.0';
+    public const VERSION = '0.9.0';
 
     public function __construct()
     {
@@ -18,7 +18,7 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      */
-    protected function getDefaultCommands() : array
+    protected function getDefaultCommands(): array
     {
         $commands = parent::getDefaultCommands();
 

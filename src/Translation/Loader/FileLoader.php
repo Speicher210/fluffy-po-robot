@@ -8,16 +8,14 @@ use Symfony\Component\Translation\Exception\InvalidResourceException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
+
 use function file_exists;
 use function Safe\sprintf;
 use function stream_is_local;
 
 abstract class FileLoader extends ArrayLoader
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function load($resource, $locale, $domain = 'messages') : MessageCatalogue
+    public function load(mixed $resource, string $locale, string $domain = 'messages'): MessageCatalogue
     {
         $resource = (string) $resource;
 
@@ -40,5 +38,5 @@ abstract class FileLoader extends ArrayLoader
     /**
      * @return mixed[]
      */
-    abstract protected function loadResource(string $resource) : array;
+    abstract protected function loadResource(string $resource): array;
 }

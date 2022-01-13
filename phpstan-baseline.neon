@@ -1,7 +1,10 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method Wingu\\\\FluffyPoRobot\\\\Translation\\\\Loader\\\\StringsLoader\\:\\:loadResource\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: """
+				#^Call to deprecated method at\\(\\) of class PHPUnit\\\\Framework\\\\TestCase\\:
+				https\\://github\\.com/sebastianbergmann/phpunit/issues/4297$#
+			"""
 			count: 1
-			path: src/Translation/Loader/StringsLoader.php
+			path: tests/Command/DownloadCommand/DownloadCommandTest.php
 

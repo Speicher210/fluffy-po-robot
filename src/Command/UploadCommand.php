@@ -10,6 +10,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
 use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
+
 use function array_keys;
 use function count;
 use function is_array;
@@ -17,7 +18,7 @@ use function Safe\sprintf;
 
 class UploadCommand extends AbstractApiCommand
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         parent::configure();
 
@@ -32,7 +33,7 @@ class UploadCommand extends AbstractApiCommand
             );
     }
 
-    protected function doRun() : void
+    protected function doRun(): void
     {
         $terms       = [];
         $sourceFiles = [];
@@ -90,7 +91,7 @@ class UploadCommand extends AbstractApiCommand
     /**
      * @param mixed[] $sourceFiles
      */
-    private function uploadTranslations(array $sourceFiles) : void
+    private function uploadTranslations(array $sourceFiles): void
     {
         $languages = $this->config->languages();
         // Temporary only upload source because of rate limiting.

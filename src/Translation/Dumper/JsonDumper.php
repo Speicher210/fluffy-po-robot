@@ -6,9 +6,11 @@ namespace Wingu\FluffyPoRobot\Translation\Dumper;
 
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
+
 use function explode;
 use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
+
 use const JSON_PRETTY_PRINT;
 
 class JsonDumper extends JsonFileDumper implements DumperInterface
@@ -28,7 +30,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
     /**
      * @param mixed[] $options
      */
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []) : string
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
         $json = json_decode(parent::formatCatalogue($messages, $domain, $options), true);
 
@@ -42,7 +44,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
      *
      * @return mixed[]
      */
-    private function convertToNestedArray(array $json) : array
+    private function convertToNestedArray(array $json): array
     {
         if ($this->format === self::FORMAT_NESTED_KEY_VALUE) {
             $result = [];
@@ -59,9 +61,8 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
 
     /**
      * @param mixed[] $arr
-     * @param mixed   $value
      */
-    private function assignArrayByPath(array &$arr, string $path, $value) : void
+    private function assignArrayByPath(array &$arr, string $path, mixed $value): void
     {
         $keys = explode('.', $path);
 
@@ -72,7 +73,7 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
         $arr = $value;
     }
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }

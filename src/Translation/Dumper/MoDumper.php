@@ -10,7 +10,7 @@ class MoDumper extends MoFileDumper implements DumperInterface
 {
     use DumperTrait;
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }

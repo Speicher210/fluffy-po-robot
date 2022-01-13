@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Wingu\FluffyPoRobot\Command\DownloadCommand;
 use Wingu\FluffyPoRobot\POEditor\Client;
+
 use function is_array;
 use function Safe\touch;
 
@@ -22,7 +23,7 @@ class DownloadCommandTest extends TestCase
 
     private vfsStreamDirectory $root;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->root = vfsStream::setup();
     }
@@ -30,7 +31,7 @@ class DownloadCommandTest extends TestCase
     /**
      * @return mixed[]
      */
-    public static function dataProviderTestDownload() : array
+    public static function dataProviderTestDownload(): array
     {
         return [
             [__DIR__ . '/poeditor.po.yml', 'po'],
@@ -44,7 +45,7 @@ class DownloadCommandTest extends TestCase
     /**
      * @dataProvider dataProviderTestDownload
      */
-    public function testDownload(string $configFile, string $format) : void
+    public function testDownload(string $configFile, string $format): void
     {
         $allTranslations = [
             [
@@ -110,7 +111,7 @@ class DownloadCommandTest extends TestCase
      *
      * @return mixed[]
      */
-    private static function createTranslation(string $term, $translation, string $context) : array
+    private static function createTranslation(string $term, string|array $translation, string $context): array
     {
         return [
             'term' => $term,
@@ -123,7 +124,7 @@ class DownloadCommandTest extends TestCase
     /**
      * @param mixed[] $allTranslations
      */
-    private function assertDownload(string $configFile, array $allTranslations, string $format) : void
+    private function assertDownload(string $configFile, array $allTranslations, string $format): void
     {
         $apiClientMock = $this->createMock(Client::class);
 
@@ -161,7 +162,7 @@ class DownloadCommandTest extends TestCase
                 parent::__construct();
             }
 
-            protected function initializeApiClient(string $apiToken) : Client
+            protected function initializeApiClient(string $apiToken): Client
             {
                 return $this->apiClientMock;
             }

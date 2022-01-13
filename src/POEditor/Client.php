@@ -7,6 +7,7 @@ namespace Wingu\FluffyPoRobot\POEditor;
 use GuzzleHttp\Client as GuzzleClient;
 use InvalidArgumentException;
 use RuntimeException;
+
 use function array_column;
 use function array_filter;
 use function array_merge;
@@ -37,7 +38,7 @@ class Client
     /**
      * @return array<string,mixed>
      */
-    public function projectDetails(int $idProject) : array
+    public function projectDetails(int $idProject): array
     {
         $response = $this->callAction('projects/view', ['id' => $idProject]);
 
@@ -47,7 +48,7 @@ class Client
     /**
      * @return mixed[]
      */
-    public function listProjects() : array
+    public function listProjects(): array
     {
         $response = $this->callAction('projects/list');
 
@@ -57,7 +58,7 @@ class Client
     /**
      * @return string[]
      */
-    public function listProjectLanguages(int $idProject) : array
+    public function listProjectLanguages(int $idProject): array
     {
         $projects = $this->callAction('languages/list', ['id' => $idProject]);
 
@@ -69,7 +70,7 @@ class Client
      *
      * @return array<string,int>
      */
-    public function sync(int $idProject, array $terms) : array
+    public function sync(int $idProject, array $terms): array
     {
         $response = $this->callAction('projects/sync', ['id' => $idProject, 'data' => json_encode($terms)]);
 
@@ -81,7 +82,7 @@ class Client
      *
      * @return array<string,int>
      */
-    public function upload(int $idProject, string $language, array $translations) : array
+    public function upload(int $idProject, string $language, array $translations): array
     {
         if (count($translations) === 0) {
             throw new InvalidArgumentException('You must provide at least one translation.');
@@ -102,7 +103,7 @@ class Client
     /**
      * @return mixed[]
      */
-    public function export(int $idProject, string $language, string $context) : array
+    public function export(int $idProject, string $language, string $context): array
     {
         $response = $this->callAction(
             'projects/export',
@@ -137,7 +138,7 @@ class Client
      *
      * @return mixed[]
      */
-    private function callAction(string $action, array $parameters = []) : array
+    private function callAction(string $action, array $parameters = []): array
     {
         $formParams = ['api_token' => $this->apiToken];
 
@@ -162,7 +163,7 @@ class Client
      *
      * @return mixed[]
      */
-    private function parseFormParams(array $formParams) : array
+    private function parseFormParams(array $formParams): array
     {
         $params = [];
         foreach ($formParams as $paramName => $paramContents) {

@@ -20,7 +20,9 @@ use Wingu\FluffyPoRobot\Translation\Loader\PoFileLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\StringsLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\XmlLoader;
 use Wingu\FluffyPoRobot\Translation\Loader\YamlFileLoader;
+
 use function pathinfo;
+
 use const PATHINFO_EXTENSION;
 
 /**
@@ -28,10 +30,7 @@ use const PATHINFO_EXTENSION;
  */
 final class FormatGuesser
 {
-    /**
-     * @param mixed $filename
-     */
-    public static function formatFromFile($filename) : string
+    public static function formatFromFile(mixed $filename): string
     {
         $extension = pathinfo((string) $filename, PATHINFO_EXTENSION);
 
@@ -43,10 +42,13 @@ final class FormatGuesser
             case 'yml':
             case 'yaml':
                 return $extension;
+
             case 'json':
                 return 'key_value_json';
+
             case 'strings':
                 return 'apple_strings';
+
             case 'xml':
                 return 'android_strings';
         }
@@ -54,22 +56,23 @@ final class FormatGuesser
         throw new RuntimeException('Can not guess format.');
     }
 
-    /**
-     * @param mixed $filename
-     */
-    public static function fileLoaderFromFile($filename) : LoaderInterface
+    public static function fileLoaderFromFile(mixed $filename): LoaderInterface
     {
         $format = self::formatFromFile($filename);
 
         switch ($format) {
             case 'po':
                 return new PoFileLoader();
+
             case 'apple_strings':
                 return new StringsLoader();
+
             case 'key_value_json':
                 return new JsonFileLoader();
+
             case 'android_strings':
                 return new XmlLoader();
+
             case 'yml':
             case 'yaml':
                 return new YamlFileLoader();
@@ -78,26 +81,33 @@ final class FormatGuesser
         throw new RuntimeException('Can not find a file loader.');
     }
 
-    public static function fileDumperFromFile(string $filename) : DumperInterface
+    public static function fileDumperFromFile(string $filename): DumperInterface
     {
         $format = self::formatFromFile($filename);
 
         switch ($format) {
             case 'po':
                 return new PoDumper();
+
             case 'csv':
                 return new CsvDumper();
+
             case 'mo':
                 return new MoDumper();
+
             case 'xliff':
                 return new XliffDumper();
+
             case 'yml':
             case 'yaml':
                 return new YamlDumper();
+
             case 'apple_strings':
                 return new StringsDumper();
+
             case 'key_value_json':
                 return new JsonDumper();
+
             case 'android_strings':
                 return new XmlDumper();
         }

@@ -1,4 +1,4 @@
-FROM php:7.4.4-fpm
+FROM php:8.0.14-fpm
 
 RUN apt-get update \
     && apt-get install -y git libzip-dev zlib1g-dev unzip
@@ -13,11 +13,7 @@ RUN apt-get install -y libicu-dev \
     && docker-php-ext-configure intl --enable-intl \
     && docker-php-ext-install intl
 
-ENV COMPOSER_MEMORY_LIMIT=-1
-ENV COMPOSER_HOME /var/www/composer
-ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN chown -R www-data:www-data $COMPOSER_HOME
+COPY --from=composer:2.2 /usr/bin/composer /usr/local/bin/composer
 
 COPY src /fluffy/src
 COPY bin /fluffy/bin

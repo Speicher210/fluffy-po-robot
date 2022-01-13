@@ -10,7 +10,7 @@ class YamlDumper extends YamlFileDumper implements DumperInterface
 {
     use DumperTrait;
 
-    public function getFileExtension() : string
+    public function getFileExtension(): string
     {
         return $this->getExtension();
     }
