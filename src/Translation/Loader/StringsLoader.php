@@ -6,7 +6,7 @@ namespace Wingu\FluffyPoRobot\Translation\Loader;
 
 use Symfony\Component\Translation\Loader\CsvFileLoader;
 
-use function Safe\substr;
+use function substr;
 use function trim;
 
 class StringsLoader extends CsvFileLoader

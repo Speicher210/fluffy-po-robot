@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 use function array_values;
 use function is_array;
 use function Safe\file_get_contents;
-use function Safe\sprintf;
+use function sprintf;
 
 class YamlFileLoader extends FileLoader
 {

@@ -5,7 +5,8 @@ declare(strict_types=1);
 
 use Wingu\FluffyPoRobot\Application;
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
 
-$application = new Application();
-$application->run();
+return static function (): Application {
+    return new Application();
+};

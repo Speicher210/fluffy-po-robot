@@ -9,9 +9,9 @@ use SimpleXMLElement;
 use function assert;
 use function Safe\file_get_contents;
 use function Safe\simplexml_load_string;
-use function Safe\substr;
 use function stripcslashes;
 use function strpos;
+use function substr;
 
 class XmlLoader extends FileLoader
 {

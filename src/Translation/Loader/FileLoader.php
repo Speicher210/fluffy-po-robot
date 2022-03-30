@@ -10,7 +10,7 @@ use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
 
 use function file_exists;
-use function Safe\sprintf;
+use function sprintf;
 use function stream_is_local;
 
 abstract class FileLoader extends ArrayLoader

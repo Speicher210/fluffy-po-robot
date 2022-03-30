@@ -14,7 +14,7 @@ use function array_map;
 use function dirname;
 use function Safe\file_get_contents;
 use function Safe\realpath;
-use function Safe\sprintf;
+use function sprintf;
 
 final class Configuration
 {

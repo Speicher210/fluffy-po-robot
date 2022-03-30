@@ -12,12 +12,12 @@ use function fgets;
 use function in_array;
 use function is_array;
 use function key;
+use function ksort;
 use function Safe\fclose;
 use function Safe\fopen;
-use function Safe\ksort;
-use function Safe\substr;
 use function stripcslashes;
 use function strpos;
+use function substr;
 use function trim;
 
 /**
@@ -108,7 +108,7 @@ class PoFileLoader extends FileLoader
                 ksort($plurals);
                 // Make sure every index is filled.
                 end($plurals);
-                $count = key($plurals);
+                $count = (int) key($plurals);
                 // Fill missing spots with '-'.
                 $empties  = array_fill(0, $count + 1, '-');
                 $plurals += $empties;

@@ -10,7 +10,7 @@ use Symfony\Component\Translation\MessageCatalogue;
 use function addcslashes;
 use function implode;
 use function is_array;
-use function Safe\sprintf;
+use function sprintf;
 
 class PoDumper extends PoFileDumper implements DumperInterface
 {

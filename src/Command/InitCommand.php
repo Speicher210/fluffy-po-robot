@@ -20,7 +20,7 @@ use function pathinfo;
 use function Safe\array_combine;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
-use function Safe\sprintf;
+use function sprintf;
 use function strtolower;
 
 use const PATHINFO_FILENAME;

@@ -14,7 +14,7 @@ use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 use function array_keys;
 use function count;
 use function is_array;
-use function Safe\sprintf;
+use function sprintf;
 
 class UploadCommand extends AbstractApiCommand
 {

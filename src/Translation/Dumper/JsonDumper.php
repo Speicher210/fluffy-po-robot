@@ -8,10 +8,11 @@ use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\MessageCatalogue;
 
 use function explode;
-use function GuzzleHttp\json_decode;
-use function GuzzleHttp\json_encode;
+use function json_decode;
+use function json_encode;
 
 use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
 
 class JsonDumper extends JsonFileDumper implements DumperInterface
 {
@@ -32,9 +33,9 @@ class JsonDumper extends JsonFileDumper implements DumperInterface
      */
     public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
     {
-        $json = json_decode(parent::formatCatalogue($messages, $domain, $options), true);
+        $json = json_decode(parent::formatCatalogue($messages, $domain, $options), true, 512, JSON_THROW_ON_ERROR);
 
-        return json_encode($this->convertToNestedArray($json), JSON_PRETTY_PRINT);
+        return json_encode($this->convertToNestedArray($json), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
     /**

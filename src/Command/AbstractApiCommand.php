@@ -16,7 +16,7 @@ use function assert;
 use function file_exists;
 use function is_string;
 use function Safe\getcwd;
-use function Safe\sprintf;
+use function sprintf;
 use function strtr;
 
 abstract class AbstractApiCommand extends AbstractCommand

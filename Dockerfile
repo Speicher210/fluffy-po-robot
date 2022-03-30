@@ -1,4 +1,4 @@
-FROM php:8.0.14-fpm
+FROM php:8.1.4-fpm
 
 RUN apt-get update \
     && apt-get install -y git libzip-dev zlib1g-dev unzip
@@ -20,6 +20,7 @@ COPY bin /fluffy/bin
 COPY composer.json /fluffy
 COPY composer.lock /fluffy
 RUN composer install --no-dev --working-dir=/fluffy
+RUN composer check-platform-reqs --working-dir=/fluffy
 
 WORKDIR /app
 

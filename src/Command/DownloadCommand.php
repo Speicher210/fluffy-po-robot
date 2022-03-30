@@ -12,7 +12,7 @@ use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 
 use function dirname;
 use function file_exists;
-use function Safe\sprintf;
+use function sprintf;
 
 class DownloadCommand extends AbstractApiCommand
 {
