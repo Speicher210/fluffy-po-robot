@@ -11,13 +11,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Wingu\FluffyPoRobot\POEditor\Client;
 use Wingu\FluffyPoRobot\POEditor\Configuration\Configuration;
 
+use function array_combine;
 use function assert;
 use function count;
 use function ctype_digit;
 use function in_array;
 use function is_string;
 use function pathinfo;
-use function Safe\array_combine;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function sprintf;

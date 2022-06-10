@@ -128,8 +128,9 @@ class DownloadCommandTest extends TestCase
     {
         $apiClientMock = $this->createMock(Client::class);
 
-        $i                = 0;
-        $translationFiles = [];
+        $translationFiles   = [];
+        $consecutiveCalls   = [];
+        $consecutiveReturns = [];
         foreach ($allTranslations as $translationSuite) {
             touch($translationSuite['source']);
 
@@ -137,19 +138,19 @@ class DownloadCommandTest extends TestCase
                 $key                    = __DIR__ . '/Expected/' . $format . '/' . $translationSuite['context'] . '/' . $language . '.txt';
                 $translationFiles[$key] = $translations['translationFile'];
 
-                $apiClientMock
-                    ->expects(static::at($i))
-                    ->method('export')
-                    ->with(
-                        $this->projectId,
-                        $language,
-                        $translationSuite['context']
-                    )
-                    ->willReturn($translations['terms']);
-
-                $i++;
+                $consecutiveCalls[]   = [
+                    $this->projectId,
+                    $language,
+                    $translationSuite['context'],
+                ];
+                $consecutiveReturns[] = $translations['terms'];
             }
         }
+
+        $apiClientMock
+            ->method('export')
+            ->withConsecutive(...$consecutiveCalls)
+            ->willReturnOnConsecutiveCalls(...$consecutiveReturns);
 
         $command = new class ($apiClientMock) extends DownloadCommand
         {
