@@ -8,7 +8,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 
 final class Application extends BaseApplication
 {
-    public const VERSION = '0.9.2';
+    public const VERSION = '0.9.3';
 
     public function __construct()
     {
