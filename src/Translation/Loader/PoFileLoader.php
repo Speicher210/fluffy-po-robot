@@ -117,7 +117,7 @@ class PoFileLoader extends FileLoader
                     static function ($text) {
                         return stripcslashes($text);
                     },
-                    $plurals
+                    $plurals,
                 );
                 $messages[stripcslashes($item['ids']['plural'])] = $plurals;
             }

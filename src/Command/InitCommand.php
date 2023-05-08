@@ -44,7 +44,7 @@ class InitCommand extends AbstractCommand
                 'f',
                 InputOption::VALUE_REQUIRED,
                 'The file where to dump the config.',
-                getcwd() . '/poeditor.yml'
+                getcwd() . '/poeditor.yml',
             );
     }
 
@@ -67,7 +67,7 @@ class InitCommand extends AbstractCommand
             $this->getBasePath(),
             $this->getReferenceLanguage($idProject),
             $this->getProjectLanguagesMap($idProject),
-            $this->getFiles()
+            $this->getFiles(),
         );
 
         $outputFile = $this->input->getOption('output-file');
@@ -146,7 +146,7 @@ class InitCommand extends AbstractCommand
                     }
 
                     return $input ?: false;
-                }
+                },
             );
 
             if ($source === false) {
@@ -162,7 +162,7 @@ class InitCommand extends AbstractCommand
                     }
 
                     return $input;
-                }
+                },
             );
 
             $contexts[] = $context;

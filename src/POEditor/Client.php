@@ -31,7 +31,7 @@ class Client
         $this->client = new GuzzleClient(
             [
                 'base_uri' => self::BASE_URI,
-            ]
+            ],
         );
     }
 
@@ -94,7 +94,7 @@ class Client
                 'id' => $idProject,
                 'language' => $language,
                 'data' => json_encode($translations),
-            ]
+            ],
         );
 
         return $response['result']['translations'];
@@ -113,7 +113,7 @@ class Client
                 'type' => 'json',
                 'filters' => 'translated',
                 'order' => 'terms',
-            ]
+            ],
         );
 
         $content = file_get_contents($response['result']['url']);
@@ -127,7 +127,7 @@ class Client
             $translations,
             static function ($translation) use ($context) {
                 return $translation['context'] === $context;
-            }
+            },
         );
 
         return $translations;
@@ -146,7 +146,7 @@ class Client
             self::BASE_URI . $action,
             [
                 'multipart' => $this->parseFormParams(array_merge($formParams, $parameters)),
-            ]
+            ],
         );
 
         $apiResponse = json_decode($response->getBody()->getContents(), true);

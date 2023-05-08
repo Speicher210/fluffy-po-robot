@@ -62,7 +62,7 @@ class DownloadCommandTest extends TestCase
                                     'one' => 'One English',
                                     'other' => 'Other English',
                                 ],
-                                'context_1'
+                                'context_1',
                             ),
                         ],
                         'translationFile' => $this->root->url() . '/source_1.en.' . $format,
@@ -94,7 +94,7 @@ class DownloadCommandTest extends TestCase
                                     'few' => 'Few German',
                                     'other' => 'Other German',
                                 ],
-                                'context_2'
+                                'context_2',
                             ),
                         ],
                         'translationFile' => $this->root->url() . '/tmp/source_2/translation_de.' . $format,

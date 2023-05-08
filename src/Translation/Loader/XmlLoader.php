@@ -16,7 +16,7 @@ use function substr;
 class XmlLoader extends FileLoader
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function loadResource(string $resource): array
     {

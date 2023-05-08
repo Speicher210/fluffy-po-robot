@@ -16,7 +16,7 @@ final class Application extends BaseApplication
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getDefaultCommands(): array
     {

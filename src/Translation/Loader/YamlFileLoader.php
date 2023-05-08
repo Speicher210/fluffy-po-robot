@@ -17,7 +17,7 @@ use function sprintf;
 class YamlFileLoader extends FileLoader
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function loadResource(string $resource): array
     {

@@ -29,7 +29,7 @@ class UploadCommand extends AbstractApiCommand
                 'include-reference-language',
                 't',
                 InputOption::VALUE_NONE,
-                'Flag if the reference language should be uploaded'
+                'Flag if the reference language should be uploaded',
             );
     }
 
@@ -64,7 +64,7 @@ class UploadCommand extends AbstractApiCommand
                 $fileFormat,
                 $sourceTranslationFile,
                 $this->config->referenceLanguage(),
-                $file->context()
+                $file->context(),
             );
 
             $messages = $translator->getCatalogue($this->config->referenceLanguage())->all($file->context());
@@ -104,7 +104,7 @@ class UploadCommand extends AbstractApiCommand
                 $translationFile    = $this->buildTranslationFile(
                     $sourceFile['configFile'],
                     $sourceFile['sourceTranslationFile'],
-                    $mappedLanguage
+                    $mappedLanguage,
                 );
                 $translationFiles[] = $translationFile;
 
@@ -135,7 +135,7 @@ class UploadCommand extends AbstractApiCommand
                 $response = $this->apiClient->upload(
                     $this->config->projectId(),
                     $language,
-                    $translations
+                    $translations,
                 );
                 $this->io->table(array_keys($response), [$response]);
             } else {

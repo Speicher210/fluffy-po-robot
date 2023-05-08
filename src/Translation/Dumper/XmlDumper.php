@@ -39,7 +39,7 @@ class XmlDumper extends FileDumper implements DumperInterface
                 $translationElement = $this->createTranslationElement(
                     'string',
                     'name',
-                    $this->escapeTranslation($source)
+                    $this->escapeTranslation($source),
                 );
                 $translationNode    = $rootNode->appendChild($translationElement);
 

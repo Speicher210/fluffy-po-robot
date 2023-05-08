@@ -45,7 +45,7 @@ final class Configuration
         string $basePath,
         string $referenceLanguage,
         array $languages,
-        array $files
+        array $files,
     ) {
         $this->apiToken          = $apiToken;
         $this->projectId         = $projectId;
@@ -75,7 +75,7 @@ final class Configuration
             static function ($file) {
                 return new File($file['source'], $file['translation'], $file['context']);
             },
-            $config['files']
+            $config['files'],
         );
 
         return new static(
@@ -84,7 +84,7 @@ final class Configuration
             $config['base_path'],
             $config['reference_language'],
             $config['languages'],
-            $config['files']
+            $config['files'],
         );
     }
 
