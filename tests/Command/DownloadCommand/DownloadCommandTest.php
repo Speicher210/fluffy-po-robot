@@ -34,11 +34,11 @@ class DownloadCommandTest extends TestCase
     public static function dataProviderTestDownload(): array
     {
         return [
-            [__DIR__ . '/poeditor.po.yml', 'po'],
-            [__DIR__ . '/poeditor.xml.yml', 'xml'],
-            [__DIR__ . '/poeditor.yml.yml', 'yml'],
-            [__DIR__ . '/poeditor.json.yml', 'json'],
-            [__DIR__ . '/poeditor.strings.yml', 'strings'],
+            [__DIR__ . '/poeditor.po.yaml', 'po'],
+            [__DIR__ . '/poeditor.xml.yaml', 'xml'],
+            [__DIR__ . '/poeditor.yaml.yaml', 'yaml'],
+            [__DIR__ . '/poeditor.json.yaml', 'json'],
+            [__DIR__ . '/poeditor.strings.yaml', 'strings'],
         ];
     }
 

@@ -22,7 +22,7 @@ docker run --rm --interactive --tty \
 
 to initialize the configuration file in an interactive mode.
 
-Example configuration file (`poeditor.yml`):
+Example configuration file (`poeditor.yaml`):
 ```yaml
 api_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 project_id: 123456
@@ -33,7 +33,7 @@ languages:
     de: de
     ro: ro
 files:
-    - source: validators.en.yml
+    - source: validators.en.yaml
       context: validators
       translation: "%original_path%/validators.%language_code%.%file_extension%"
 ```

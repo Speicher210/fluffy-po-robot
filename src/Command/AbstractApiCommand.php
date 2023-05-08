@@ -32,7 +32,7 @@ abstract class AbstractApiCommand extends AbstractCommand
                 'config-file',
                 InputArgument::OPTIONAL,
                 'Configuration for the translations.',
-                getcwd() . '/poeditor.yml',
+                getcwd() . '/poeditor.yaml',
             );
     }
 

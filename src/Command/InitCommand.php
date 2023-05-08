@@ -44,7 +44,7 @@ class InitCommand extends AbstractCommand
                 'f',
                 InputOption::VALUE_REQUIRED,
                 'The file where to dump the config.',
-                getcwd() . '/poeditor.yml',
+                getcwd() . '/poeditor.yaml',
             );
     }
 
