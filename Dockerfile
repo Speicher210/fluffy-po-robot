@@ -1,4 +1,4 @@
-FROM php:8.1.7-fpm
+FROM php:8.2.5-fpm
 
 RUN apt-get update \
     && apt-get install -y git libzip-dev zlib1g-dev unzip
@@ -13,7 +13,7 @@ RUN apt-get install -y libicu-dev \
     && docker-php-ext-configure intl --enable-intl \
     && docker-php-ext-install intl
 
-COPY --from=composer:2.3 /usr/bin/composer /usr/local/bin/composer
+COPY --from=composer:2.5 /usr/bin/composer /usr/local/bin/composer
 
 COPY src /fluffy/src
 COPY bin /fluffy/bin
