@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Wingu\FluffyPoRobot\POEditor\Configuration;
 
+use function basename;
+use function dirname;
+
 final class File
 {
     private string $source;
@@ -22,6 +25,16 @@ final class File
     public function source(): string
     {
         return $this->source;
+    }
+
+    public function sourceDirectory(): string
+    {
+        return dirname($this->source);
+    }
+
+    public function sourceFileName(): string
+    {
+        return basename($this->source);
     }
 
     public function translation(): string

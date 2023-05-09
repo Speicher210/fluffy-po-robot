@@ -8,11 +8,11 @@ use RuntimeException;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Translation\Translator;
-use Wingu\FluffyPoRobot\POEditor\Configuration\File;
 use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 
 use function array_keys;
 use function count;
+use function implode;
 use function is_array;
 use function sprintf;
 
@@ -38,8 +38,8 @@ class UploadCommand extends AbstractApiCommand
         $terms       = [];
         $sourceFiles = [];
         foreach ($this->config->files() as $file) {
-            /** @var File $file */
-            $finder = Finder::create()->in($this->config->basePath())->path($file->source());
+            $in     = implode('/', [$this->config->basePath(), $file->sourceDirectory()]);
+            $finder = Finder::create()->in($in)->path($file->sourceFileName());
             if ($finder->count() !== 1) {
                 if ($finder->count() === 0) {
                     throw new RuntimeException(sprintf('No source file found for "%s".', $file->source()));
