@@ -12,6 +12,7 @@ use Wingu\FluffyPoRobot\POEditor\FormatGuesser;
 
 use function dirname;
 use function file_exists;
+use function implode;
 use function sprintf;
 
 class DownloadCommand extends AbstractApiCommand
@@ -38,7 +39,8 @@ class DownloadCommand extends AbstractApiCommand
 
     private function downloadFile(File $file): void
     {
-        $finder = Finder::create()->in($this->config->basePath())->path($file->source());
+        $in     = implode('/', [$this->config->basePath(), $file->sourceDirectory()]);
+        $finder = Finder::create()->in($in)->path($file->sourceFileName());
         foreach ($finder as $item) {
             $fileDumper = FormatGuesser::fileDumperFromFile($item->getFilename());
             foreach ($this->config->languages() as $originalLanguageCode => $mappedLanguageCode) {
