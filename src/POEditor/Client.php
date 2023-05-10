@@ -111,7 +111,7 @@ class Client
                 'id' => $idProject,
                 'language' => $language,
                 'type' => 'json',
-                'filters' => 'translated',
+                'filters' => "['translated', 'untranslated']", // @todo make it configurable
                 'order' => 'terms',
             ],
         );
