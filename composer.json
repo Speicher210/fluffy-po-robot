@@ -11,7 +11,7 @@
     "ios strings"
   ],
   "require": {
-    "php": "^8.2",
+    "php": "^8.3",
     "ext-ctype": "*",
     "ext-dom": "*",
     "ext-iconv": "*",
@@ -19,24 +19,24 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-simplexml": "*",
-    "guzzlehttp/guzzle": "^7.5.1",
-    "symfony/console": "^6.2.10",
-    "symfony/filesystem": "^6.2.10",
-    "symfony/finder": "^6.2.7",
-    "symfony/runtime": "^6.2.8",
-    "symfony/translation": "^6.2.8",
-    "symfony/yaml": "^6.2.10",
+    "guzzlehttp/guzzle": "^7.9.2",
+    "symfony/console": "^7.1.8",
+    "symfony/filesystem": "^7.1.6",
+    "symfony/finder": "^7.1.6",
+    "symfony/runtime": "^7.1.7",
+    "symfony/translation": "^7.1.6",
+    "symfony/yaml": "^7.1.6",
     "thecodingmachine/safe": "^2.5"
   },
   "require-dev": {
     "doctrine/coding-standard": "^12.0.0",
-    "mikey179/vfsstream": "^1.6.11",
-    "phpstan/phpstan": "^1.10.14",
-    "phpstan/phpstan-deprecation-rules": "^1.1.3",
-    "phpstan/phpstan-phpunit": "^1.3.11",
-    "phpstan/phpstan-strict-rules": "^1.5.1",
-    "phpunit/phpunit": "^9.6.7",
-    "symfony/var-dumper": "^6.2.10"
+    "mikey179/vfsstream": "^1.6.12",
+    "phpstan/phpstan": "^2.0",
+    "phpstan/phpstan-deprecation-rules": "^2.0",
+    "phpstan/phpstan-phpunit": "^2.0",
+    "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^11.4.3",
+    "symfony/var-dumper": "^7.1.8"
   },
   "autoload": {
     "psr-4": {
@@ -68,7 +68,7 @@
       "*": "dist"
     },
     "platform": {
-      "php": "8.2.5"
+      "php": "8.3.14"
     },
     "sort-packages": true
   }

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Wingu\FluffyPoRobot\Command\DownloadCommand;
 use Wingu\FluffyPoRobot\POEditor\Client;
+use Wingu\FluffyPoRobot\Tests\PHPUnitHelper;
 
 use function is_array;
 use function Safe\touch;
@@ -19,6 +20,8 @@ use function Safe\touch;
  */
 class DownloadCommandTest extends TestCase
 {
+    use PHPUnitHelper;
+
     private string $projectId = '123';
 
     private vfsStreamDirectory $root;
@@ -149,7 +152,9 @@ class DownloadCommandTest extends TestCase
 
         $apiClientMock
             ->method('export')
-            ->withConsecutive(...$consecutiveCalls)
+            ->with(
+                ...self::withConsecutive(...$consecutiveCalls),
+            )
             ->willReturnOnConsecutiveCalls(...$consecutiveReturns);
 
         $command = new class ($apiClientMock) extends DownloadCommand

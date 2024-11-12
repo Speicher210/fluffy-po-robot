@@ -6,7 +6,6 @@ namespace Wingu\FluffyPoRobot\Translation\Loader;
 
 use SimpleXMLElement;
 
-use function assert;
 use function Safe\file_get_contents;
 use function Safe\simplexml_load_string;
 use function stripcslashes;
@@ -25,7 +24,6 @@ class XmlLoader extends FileLoader
         $data = [];
 
         foreach ($xml as $element) {
-            assert($element instanceof SimpleXMLElement);
             $name = $this->getAttribute($element, 'name');
 
             if ($element->getName() === 'string') {

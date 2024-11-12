@@ -3,8 +3,7 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         cacheResult="false"
-         verbose="true">
+         cacheResult="false">
 
     <testsuites>
         <testsuite name="Speicher210 Fluffy PO Robot Test Suite">
@@ -12,10 +11,12 @@
         </testsuite>
     </testsuites>
 
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory>./src</directory>
         </include>
+    </source>
+    <coverage>
         <report>
             <html outputDirectory="build/coverage"/>
             <text outputFile="php://stdout" showOnlySummary="true"/>
